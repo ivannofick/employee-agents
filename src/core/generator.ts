@@ -59,5 +59,13 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
     const destinationAgentSkill = path.join(targetDir, '.agent', 'skills', 'myemployee', 'SKILL.md');
     await fs.ensureDir(path.dirname(destinationAgentSkill));
     await fs.copy(adapterSource, destinationAgentSkill);
+
+    // Install slash command workflows
+    const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
+    if (await fs.pathExists(workflowsSource)) {
+      const destinationWorkflows = path.join(targetDir, '.agent', 'workflows');
+      await fs.ensureDir(destinationWorkflows);
+      await fs.copy(workflowsSource, destinationWorkflows, { overwrite: true });
+    }
   }
 }

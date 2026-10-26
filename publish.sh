@@ -10,8 +10,49 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${CYAN}=====================================================${NC}"
-echo -e "${CYAN}      🚀 EMPLOYEE-AGENTS AUTOMATED RELEASE SCRIPT    ${NC}"
+echo -e "${CYAN}      🚀 EMPLOYEE-AGENTS RELEASE & TEST SCRIPT       ${NC}"
 echo -e "${CYAN}=====================================================${NC}"
+
+# Choose action / version bump type
+echo ""
+echo -e "Choose release or testing option:"
+echo -e "  ${GREEN}1) patch${NC}      (Bump patch & publish to npm + GitHub)"
+echo -e "  ${GREEN}2) minor${NC}      (Bump minor & publish to npm + GitHub)"
+echo -e "  ${GREEN}3) major${NC}      (Bump major & publish to npm + GitHub)"
+echo -e "  ${GREEN}4) current${NC}    (Publish current version to npm + GitHub)"
+echo -e "  ${YELLOW}5) test-local${NC} (Build, dry-run tarball & 'npm link' locally - NO PUBLISH)"
+read -p "Select option [1-5] (default: 5): " choice
+choice=${choice:-5}
+
+# ----------------------------------------------------
+# OPTION 5: LOCAL TEST ONLY
+# ----------------------------------------------------
+if [[ "$choice" == "5" ]]; then
+  echo ""
+  echo -e "${CYAN}--- RUNNING LOCAL TEST BUILD ---${NC}"
+  echo -e "${CYAN}1. Compiling TypeScript...${NC}"
+  npm run build
+  chmod +x dist/index.js
+
+  echo -e "${CYAN}2. Inspecting tarball contents (npm pack dry-run)...${NC}"
+  npm pack --dry-run
+
+  echo -e "${CYAN}3. Registering local binary via npm link...${NC}"
+  npm link
+
+  echo ""
+  echo -e "${GREEN}=====================================================${NC}"
+  echo -e "${GREEN}  ✔ LOCAL TEST READY! (No changes published to npm)  ${NC}"
+  echo -e "${GREEN}  You can test it right now in any directory:       ${NC}"
+  echo -e "${CYAN}  $ employee-agents                                  ${NC}"
+  echo -e "${CYAN}  $ employee-agents --lang id                        ${NC}"
+  echo -e "${GREEN}=====================================================${NC}"
+  exit 0
+fi
+
+# ----------------------------------------------------
+# OPTIONS 1-4: FULL RELEASE PIPELINE
+# ----------------------------------------------------
 
 # Check for uncommitted git changes
 if [[ -n $(git status -s) ]]; then
@@ -21,16 +62,6 @@ if [[ -n $(git status -s) ]]; then
   commit_msg=${commit_msg:-"chore: prepare release"}
   git commit -m "$commit_msg"
 fi
-
-# Choose version bump type
-echo ""
-echo -e "Choose release version bump type:"
-echo -e "  ${GREEN}1) patch${NC} (1.0.0 -> 1.0.1) [Bug fixes / minor adjustments]"
-echo -e "  ${GREEN}2) minor${NC} (1.0.0 -> 1.1.0) [New features / capabilities]"
-echo -e "  ${GREEN}3) major${NC} (1.0.0 -> 2.0.0) [Breaking architectural changes]"
-echo -e "  ${GREEN}4) current${NC} (Publish current version without bumping)"
-read -p "Select option [1-4] (default: 1): " choice
-choice=${choice:-1}
 
 case $choice in
   1)
@@ -58,6 +89,22 @@ esac
 echo -e "${CYAN}Compiling TypeScript and setting executable binary permissions...${NC}"
 npm run build
 chmod +x dist/index.js
+
+# Preview tarball & link locally for safety check
+echo -e "${CYAN}Inspecting tarball contents...${NC}"
+npm pack --dry-run
+npm link
+
+# Confirmation before pushing to the world
+echo ""
+echo -e "${YELLOW}Local build and npm link completed successfully.${NC}"
+read -p "Proceed to publish to npmjs.com and push to GitHub? [y/N]: " confirm_publish
+confirm_publish=${confirm_publish:-n}
+
+if [[ "$confirm_publish" != "y" && "$confirm_publish" != "Y" ]]; then
+  echo -e "${YELLOW}Publish aborted. Local build remains linked for your testing.${NC}"
+  exit 0
+fi
 
 # Publish to npm registry
 echo -e "${CYAN}Publishing package to npmjs.com (--access public)...${NC}"
