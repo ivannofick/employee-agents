@@ -92,15 +92,17 @@ This leads to:
 
 ## 🚀 Quick Start
 
-Initialize the squad into any repository with zero external CLI dependencies:
+Run directly in your project root using `npx`:
 
 ```bash
-# Default (English prompt wizard)
-npx employee-agents init
+# Direct run (English setup wizard)
+npx employee-agents
 
-# Or with Indonesian language prompt wizard
-npx employee-agents init --lang id
+# Or with Indonesian language setup wizard
+npx employee-agents --lang id
 ```
+
+*(You can also explicitly run `npx employee-agents init` or `npx employee-agents init --lang id`).*
 
 ### 3-Step Setup Wizard:
 1. **Target AI Environment**: Select your editor (Antigravity active, Cursor/Claude/Cline/Windsurf coming soon).
@@ -216,6 +218,13 @@ See our [ROADMAP.md](ROADMAP.md) for upcoming platform adapters (Cursor, Claude 
 - [Security Policy](SECURITY.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Contributing Guide](CONTRIBUTING.md)
+
+---
+
+## 🙏 Acknowledgments & Special Thanks
+
+- **[OpenSpec](https://github.com/Fission-AI/openspec)** by [Fission AI](https://github.com/Fission-AI): Tremendous gratitude to the OpenSpec project for pioneering the spec-driven change workflow that fundamentally inspired the architectural software development lifecycle inside `employee-agents`.
+- **[anti-slop](https://github.com/miqdadbadjuber/anti-slop)** by [Miqdad Badjuber](https://github.com/miqdadbadjuber): Special thanks for championing the anti-slop mindset across AI coding agents.
 
 ---
 
