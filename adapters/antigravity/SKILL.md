@@ -47,20 +47,33 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 
 ## Operational Workflows
 
+### 🛑 MANDATORY GATED WORKFLOW — NEVER WRITE CODE BEFORE TASK FILE
+Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the task tracking system on disk:
+1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk**:
+   - For new features/pages: `/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md`
+   - For bugs/regressions: `/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md`
+   - The task file MUST state the target file(s), acceptance criteria, and checklist items.
+2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
+   - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
+3. **Stanley (QA) verifies and Sandy Cheeks finalizes**:
+   - Stanley runs verification checks.
+   - Sandy Cheeks marks the task completed: rename to `[DONE]-TASK-DDMMYYYY-<slug>.md` (or `[DONE]-BUG-DDMMYYYY-<slug>.md`).
+⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with `write_to_file` before creating the corresponding `TASK-*.md` in `/myemployee/tasks/features/`! Doing so leaves Bos with orphaned files and zero progress tracking.
+
 ### 1. Intent Detection: Feature vs Bug
-- **If Bos requests a NEW FEATURE or scope addition**:
+- **If Bos requests a NEW FEATURE, PAGE, or scope addition**:
   1. Inspect `/myemployee/PRD.md` for project context.
   2. If `product-owner` is active: Patrick drafts `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria. (Otherwise Bos's prompt is used directly).
   3. If `ui-ux` is active: Squidward specifies design tokens and wireframes.
   4. If `tech-lead` is active: Garry drafts `/myemployee/features/<slug>/DESIGN.md`.
-  5. If `project-manager` is active: Sandy Cheeks creates `/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md` with mandatory target files and line ranges.
+  5. Sandy Cheeks (Project Manager) MUST create `/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md` on disk.
   6. Tn. Crab (Dev) implements clean code with zero slop.
   7. If `qa` is active: Stanley runs destructive verification. (Otherwise Dev self-verifies).
   8. Mark task as `[DONE]-TASK-DDMMYYYY-<slug>.md`.
 
 - **If Bos reports a BUG or urgent error**:
   1. **Bypass Master PRD reading** to save tokens and maintain speed!
-  2. Log `/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md` capturing error logs and suspected files.
+  2. Sandy Cheeks logs `/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md` capturing error logs and suspected files.
   3. Inspect ONLY that bug file and apply a surgical fix to the specified line numbers.
   4. Verify the fix and ensure zero regressions.
   5. Rename ticket to `[DONE]-BUG-DDMMYYYY-<slug>.md`.

@@ -114,20 +114,33 @@ Only the personas listed in the roster above are active in this workspace:
 
 ## Operational Workflows
 
+### 🛑 MANDATORY GATED WORKFLOW — NEVER WRITE CODE BEFORE TASK FILE
+Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the task tracking system on disk:
+1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk**:
+   - For new features/pages: \`/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md\`
+   - For bugs/regressions: \`/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md\`
+   - The task file MUST state the target file(s), acceptance criteria, and checklist items.
+2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
+   - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
+3. **Stanley (QA) verifies and Sandy Cheeks finalizes**:
+   - Stanley runs verification checks.
+   - Sandy Cheeks marks the task completed: rename to \`[DONE]-TASK-DDMMYYYY-<slug>.md\` (or \`[DONE]-BUG-DDMMYYYY-<slug>.md\`).
+⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with \`write_to_file\` before creating the corresponding \`TASK-*.md\` in \`/myemployee/tasks/features/\`! Doing so leaves Bos with orphaned files and zero progress tracking.
+
 ### 1. Intent Detection: Feature vs Bug
-- **If Bos requests a NEW FEATURE or scope addition**:
+- **If Bos requests a NEW FEATURE, PAGE, or scope addition**:
   1. Inspect \`/myemployee/PRD.md\` for project context.
-  2. If Product Owner is active: Patrick drafts feature PRD with Acceptance Criteria. Otherwise Bos's prompt is the spec.
+  2. If Product Owner is active: Patrick drafts feature PRD with Acceptance Criteria under \`/myemployee/features/<slug>/PRD.md\`.
   3. If UI/UX is active: Squidward specifies design tokens and wireframes.
   4. If Tech Lead is active: Garry drafts system design & ADRs.
-  5. If Project Manager is active: Sandy Cheeks creates task checklist with mandatory target file and line ranges.
-  6. If Developer is active: Tn. Crab implements clean code with zero slop.
-  7. If QA is active: Stanley runs destructive verification. Otherwise Developer self-tests.
+  5. Sandy Cheeks (Project Manager) MUST create \`/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md\` on disk.
+  6. Tn. Crab (Developer) implements the code cleanly.
+  7. If QA is active: Stanley runs destructive verification.
   8. Mark task completed with \`[DONE]-\` prefix.
 
 - **If Bos reports a BUG or urgent error**:
   1. **Bypass Master PRD reading** to save tokens and maintain speed!
-  2. Log bug ticket capturing error logs and suspected files.
+  2. Sandy Cheeks logs \`/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md\` capturing error logs and suspected files.
   3. Inspect ONLY that bug file and apply a surgical fix to the specified line numbers.
   4. Verify the fix and ensure zero regressions.
   5. Rename ticket with \`[DONE]-\` prefix.
