@@ -132,6 +132,17 @@ Or trigger it interactively inside your AI assistant chat room:
 /add-skill
 ```
 
+### 4. Scale Squad Roles (Add or Remove Roles Anytime)
+You can scale your squad up or down at any time. When a role is added or removed, your `.agent/skills/myemployee/SKILL.md` controller automatically regenerates and self-heals:
+
+```bash
+# Add a role to your squad:
+npx employee-agents add-role ui-ux
+
+# Remove a role from your squad:
+npx employee-agents remove-role developer
+```
+
 ---
 
 ## ⚡ Built-In Slash Commands (`/`)
