@@ -7,9 +7,9 @@ Garry (Tech Lead) and Sandy Cheeks (PM) perform a safe workspace upgrade.
 ## Instructions
 1. Run the local updater using `run_command`:
    ```bash
-   npx employee-agents update
+   npx employee-agents update-me
    ```
-   *(Or if running locally: `node dist/index.js update` or `employee-agents update`)*.
+   *(Or: `npx employee-agents update`)*.
 2. Confirm the update results:
    - Verify that `/myemployee/roles/` received the latest role instructions and anti-slop skills.
    - Verify that `.agent/workflows/` and `.agent/skills/` received the latest slash commands.

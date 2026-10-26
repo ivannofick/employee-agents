@@ -39,7 +39,7 @@ export const id: LocaleDictionary = {
     nextSteps: 'Workspace berhasil diinisialisasi. Buka sesi AI assistant Anda untuk memulai.',
   },
   updater: {
-    title: 'employee-agents: update',
+    title: 'employee-agents: update-me',
     starting: 'Memperbarui roles, skills, dan slash commands ke versi terbaru...',
     successMessage: 'Berhasil memperbarui roles, skills, dan slash commands!',
     safeNote: 'PRD.md, features/, tasks/, dan config.json kustom Anda tetap aman terjaga.',

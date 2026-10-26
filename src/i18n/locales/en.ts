@@ -39,7 +39,7 @@ export const en: LocaleDictionary = {
     nextSteps: 'Workspace initialized. Open your AI assistant chat to begin.',
   },
   updater: {
-    title: 'employee-agents: update',
+    title: 'employee-agents: update-me',
     starting: 'Updating roles, skills, and slash commands to latest version...',
     successMessage: 'Successfully updated roles, skills, and slash commands!',
     safeNote: 'Your custom PRD.md, features/, tasks/, and config.json were safely preserved.',

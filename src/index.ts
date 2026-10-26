@@ -286,8 +286,16 @@ program
   });
 
 program
-  .command('update')
+  .command('update-me')
   .description('Update roles, skills, and slash commands in an existing /myemployee workspace')
+  .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
+  .action(async (options) => {
+    await handleUpdate(options);
+  });
+
+program
+  .command('update')
+  .description('Update roles, skills, and slash commands in an existing /myemployee workspace (alias for update-me)')
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);

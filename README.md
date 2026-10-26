@@ -108,7 +108,8 @@ To safely upgrade an already initialized `/myemployee/` workspace to the latest 
 
 ```bash
 # Via terminal:
-npx employee-agents update
+npx employee-agents update-me
+# (or: npx employee-agents update)
 ```
 
 Or trigger it directly inside your AI assistant chat room:
