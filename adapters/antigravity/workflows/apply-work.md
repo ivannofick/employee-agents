@@ -4,6 +4,9 @@ description: Execute an active [PENDING]-TASK ticket, verify with QA, and finali
 
 Tn. Crab (Developer), Stanley (QA), and Sandy Cheeks (Project Manager) execute and verify pending task tickets.
 
+⚠️ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
+All written code, code comments, task checklist updates, and completion logs **MUST BE 100% STRICT ENGLISH**! Never write Indonesian comments or documentation.
+
 ## Instructions
 1. **Identify the Target Task**:
    - Inspect `/myemployee/tasks/features/` and `/myemployee/tasks/bugs/` for files starting with `[PENDING]-`.

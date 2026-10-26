@@ -6,14 +6,18 @@ Patrick (Product Owner), Squidward (UI/UX), Garry (Tech Lead), and Sandy Cheeks 
 
 > Also accepts alias `/share-knowladge`.
 
+⚠️ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
+All generated markdown files (`PRD.md`, `UIUX.md`, `DESIGN.md`, `[PENDING]-TASK-*.md`) **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
+Even when Bos converses in Indonesian or other languages in the chat room, the squad MUST ALWAYS write all markdown specifications, tickets, and code in English. Leaking Indonesian words into markdown files is strictly prohibited.
+
 ## Instructions
 1. **Listen & Clarify**:
    - Understand Bos's goal, user target, and desired outcome. Ask clarifying questions if requirements are underspecified.
-2. **Draft Feature Specs (if roles are active)**:
+2. **Draft Feature Specs (100% Strict English)**:
    - If `product-owner` is active: Patrick writes `/myemployee/features/<slug>/PRD.md` with User Stories and Acceptance Criteria.
    - If `ui-ux` is active: Squidward writes `/myemployee/features/<slug>/UIUX.md` with color tokens, typography, and layout vibe.
    - If `tech-lead` is active: Garry writes `/myemployee/features/<slug>/DESIGN.md` with system architecture, trade-offs, and target files.
-3. **Log Pending Task Ticket (Mandatory)**:
+3. **Log Pending Task Ticket (100% Strict English)**:
    - Sandy Cheeks (Project Manager) MUST create the ticket file on disk:
      `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md`
    - Include: Assignee (`Tn. Crab`), Reviewers (`Garry` & `Stanley`), Target files/lines, and concrete checklist items (`- [ ] ...`).
