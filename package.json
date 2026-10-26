@@ -12,6 +12,7 @@
     "templates",
     "adapters",
     "README.md",
+    "ACKNOWLEDGMENTS.md",
     "LICENSE"
   ],
   "scripts": {

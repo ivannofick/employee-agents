@@ -1,4 +1,4 @@
-# 🏢 employee-agents
+# employee-agents
 
 <div align="center">
 
@@ -8,33 +8,33 @@
 ![Antigravity](https://img.shields.io/badge/adapter-antigravity-orange.svg)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-**A Virtual Software Company Framework**: Run an autonomous agile engineering squad (PO, UI/UX, Tech Lead, PM, Dev, QA) directly inside your AI coding assistant.
+**A Virtual Software Engineering Team Framework**: Run an autonomous, multi-role engineering squad (Product Owner, UI/UX Designer, Tech Lead, Project Manager, Developer, QA Engineer) directly inside your AI coding assistant.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Dual Pipelines](#-dual-operational-pipelines) • [Architecture](#-directory-structure) • [About Us](#-about-us--the-inspiration) • [Roadmap](ROADMAP.md)
+[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Operational Lifecycle](#-operational-lifecycle) • [Directory Structure](#-directory-structure) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
 
 </div>
 
 ---
 
-## 💡 The Problem with "Solo" AI Coding
+## The Problem with "Solo" AI Coding
 
-When you ask a standard AI coding assistant to *"build a whole feature"*, it attempts to simultaneously act as the business analyst, UI designer, system architect, developer, and tester in a single context window.
+When you ask a standard AI coding assistant to *"build a whole feature"*, it attempts to simultaneously act as the business analyst, UI designer, system architect, developer, and tester within a single context window.
 
 This leads to:
-1. **Generic "AI Slop"**: Bloated code, uncurated colors, missing responsiveness, and useless comments.
-2. **Architecture Drift**: Code written with no architectural decision records (ADRs) or schema integrity.
+1. **Generic "AI Slop"**: Bloated code, uncurated color tokens, missing responsiveness, and noisy auto-generated comments.
+2. **Architecture Drift**: Code written without Architectural Decision Records (ADRs) or schema integrity.
 3. **Context Hallucination**: Massive token waste by repeatedly re-reading entire project histories.
 4. **Brownfield Damage**: Reckless refactoring and broken lines in existing codebases.
 
 ---
 
-## 🦀 The Solution: A Virtual Engineering Squad
+## The Solution: A Virtual Engineering Squad
 
-`employee-agents` reorganizes your AI into a **6-role engineering team** running natively inside your workspace. Operating on strict **Spec-Driven Development** principles, each role has a distinct persona, bounded responsibilities, and dedicated skill files.
+`employee-agents` organizes your AI into a **6-role engineering team** running natively inside your workspace. Operating on strict **Spec-Driven Development** principles, each role possesses bounded responsibilities, dedicated skill files, and clear operational gates.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                          BOS (Founder / User)                          │
+│                      LEAD ARCHITECT / FOUNDER (User)                   │
 │                   "Build feature X"  or  "Fix bug Y"                   │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
@@ -47,10 +47,10 @@ This leads to:
                                     │
                  ┌──────────────────┴──────────────────┐
                  ▼                                     ▼
-      [ NEW FEATURE PIPELINE ]               [ FAST BUG PIPELINE ]
+      [ PHASE 1: /share-knowledge ]          [ FAST BUG PIPELINE ]
                  │                                     │
-    1. Patrick (PO)                        1. Sandy Cheeks (PM)
-       -> features/<slug>/PRD.md              -> tasks/bugs/BUG-DDMMYYYY-slug.md
+    1. Patrick (Product Owner)             1. Sandy Cheeks (PM)
+       -> features/<slug>/PRD.md              -> tasks/bugs/[PENDING]-BUG-*.md
                  │                                     │
     2. Squidward (UI/UX)                   2. Garry & Tn. Crab
        -> Design tokens & wireframes          -> Surgical line fix
@@ -59,13 +59,16 @@ This leads to:
        -> features/<slug>/DESIGN.md                    ▼
                  │                         3. Stanley (QA)
     4. Sandy Cheeks (PM)                      -> Verification & regression check
-       -> tasks/features/TASK-DDMMYYYY.md              │
-          (Mandatory File & Line Range)                ▼
+       -> tasks/features/                              │
+          [PENDING]-TASK-DDMMYYYY-slug.md              ▼
                  │                         4. Sandy Cheeks (PM)
-    5. Tn. Crab (Devs)                        -> Renames ticket to:
-       -> Clean code, zero slop                  [DONE]-BUG-DDMMYYYY-slug.md
+                 ▼                            -> Renames ticket to:
+      [ PHASE 2: /apply-work ]                   [DONE]-BUG-DDMMYYYY-slug.md
                  │
-    6. Stanley (QA)
+    5. Tn. Crab (Developer)
+       -> Surgical code execution
+                 │
+    6. Stanley (QA Engineer)
        -> Destructive & edge-case testing
                  │
                  ▼
@@ -76,21 +79,20 @@ This leads to:
 
 ---
 
-## 👥 The Squad Roster
+## The Squad Roster
 
-| Role (Directory) | Persona | Calls User | Core Responsibility |
+| Role (Directory) | Persona | Responsibility | Target Artifact |
 |---|---|---|---|
-| **Founder / CEO** | **User** | **"Bos"** | The visionary leader making executive product calls. |
-| **`product-owner`** | **Patrick** | "Bos" | Researches user needs, writes User Stories, and defines Given-When-Then Acceptance Criteria in `/features/<slug>/PRD.md`. |
-| **`ui-ux`** | **Squidward** | "Bos" | Aesthetic connoisseur: layout reflows, design tokens, micro-interactions, responsive grids, and wireframes. Zero visual slop. |
-| **`tech-lead`** | **Garry** | "Bos" | The wise architect: creates ADRs in `/features/<slug>/DESIGN.md`, models schemas, enforces security, and guards brownfield code. |
-| **`project-manager`** | **Sandy Cheeks** | "Bos" | Tactical WBS task creator, emergency bug logger, and manager of the `[DONE]-*` completion lifecycle. |
-| **`developer`** | **Tn. Crab** | "Bos" | Cost-conscious executioner: clean implementation, anti-slop code, and surgical line editing on existing code. |
-| **`qa`** | **Stanley** | "Bos" | Destructive testing specialist: edge-case breaker, stress tester, and regression shield. |
+| **`product-owner`** | **Patrick** | User research, user journey mapping, and Acceptance Criteria. | `/features/<slug>/PRD.md` |
+| **`ui-ux`** | **Squidward** | Aesthetic systems, design tokens, micro-interactions, and responsive grids. | `/features/<slug>/UIUX.md` |
+| **`tech-lead`** | **Garry** | System architecture, ADRs, schema modeling, security, and brownfield code safety. | `/features/<slug>/DESIGN.md` |
+| **`project-manager`** | **Sandy Cheeks** | Work breakdown structure, sprint tracking, priority dashboard, and task lifecycles. | `/tasks/features/[PENDING]-TASK-*.md` |
+| **`developer`** | **Tn. Crab** | Clean execution, cost-conscious token usage, anti-slop code, and surgical line edits. | Source code files |
+| **`qa`** | **Stanley** | Destructive testing, edge-case discovery, stress simulation, and regression checks. | QA sign-offs & verification reports |
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Initialize a Workspace
 Run directly in your project root:
@@ -109,7 +111,7 @@ To safely upgrade an already initialized `/myemployee/` workspace to the latest 
 ```bash
 # Via terminal:
 npx employee-agents update-me
-# (or: npx employee-agents update)
+# (or alias: npx employee-agents update)
 ```
 
 Or trigger it directly inside your AI assistant chat room:
@@ -118,13 +120,13 @@ Or trigger it directly inside your AI assistant chat room:
 ```
 
 ### 3. Add Skills to an Employee (On-Demand Registry)
-Each role only comes with a lean `default-skill.md` out of the box to keep your context window light. Browse our full [Additional Skills Catalog](additional-skills/README.md) to selectively level up any employee:
+Each role comes with a lean `default-skill.md` out of the box to preserve context window capacity. Browse our full [Additional Skills Catalog](additional-skills/README.md) to selectively level up any employee:
 
 ```bash
 # Interactive CLI wizard:
 npx employee-agents add-skill
 
-# Or direct invocation from online catalog:
+# Direct installation from catalog:
 npx employee-agents add-skill developer docker-containerization
 ```
 
@@ -134,7 +136,7 @@ Or trigger it interactively inside your AI assistant chat room:
 ```
 
 ### 4. Scale Squad Roles (Add or Remove Roles Anytime)
-You can scale your squad up or down at any time. When a role is added or removed, your `.agent/skills/myemployee/SKILL.md` controller automatically regenerates and self-heals:
+Scale your squad up or down dynamically. When a role is added or removed, your `.agent/skills/myemployee/SKILL.md` controller automatically regenerates and self-heals:
 
 ```bash
 # Add a role to your squad:
@@ -146,14 +148,14 @@ npx employee-agents remove-role developer
 
 ---
 
-## ⚡ Built-In Slash Commands (`/`)
+## Built-In Slash Commands (`/`)
 
 When using Antigravity, the framework equips you with interactive slash commands in your chat room:
 
 | Slash Command | Handler | Description |
 |---|---|---|
-| **`/share-knowledge`** | Patrick, Squidward, Garry, Sandy | **Phase 1: Thinking & Spec**. Aligns on goals, drafts feature PRD, UI/UX tokens, and architecture, then logs `[PENDING]-TASK-*.md`. *(Also accepts alias `/share-knowladge`)*. |
-| **`/apply-work`** | Tn. Crab (Dev) & Stanley (QA) | **Phase 2: Execution**. Surgically implements active `[PENDING]-` tasks, runs QA validations, and transitions ticket to `[DONE]-`. |
+| **`/share-knowledge`** | Patrick, Squidward, Garry, Sandy | **Phase 1: Thinking & Spec**. Aligns on goals, drafts feature PRD, UI/UX tokens, and system architecture, then logs `[PENDING]-TASK-*.md`. Zero code is written in this phase. *(Also accepts alias `/share-knowladge`)*. |
+| **`/apply-work`** | Tn. Crab (Dev) & Stanley (QA) | **Phase 2: Execution**. Surgically implements active `[PENDING]-` tasks, executes QA validations, and transitions ticket to `[DONE]-`. |
 | **`/my-task`** | Sandy Cheeks (PM) | Displays priority task board. Shows top 5 pending tasks (hides completed if pending >= 5), or blends with recent completed tasks up to 5 items total. |
 | **`/done-task`** | Sandy Cheeks (PM) | Manually verifies sign-offs and marks a task as `[DONE]-*`. Supports targeted slug (e.g. `/done-task oauth`) or auto-detection. |
 | **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/myemployee/roles/<role>/skill/`. |
@@ -162,14 +164,14 @@ When using Antigravity, the framework equips you with interactive slash commands
 
 ---
 
-## 📁 Directory Structure (`/myemployee/`)
+## Directory Structure (`/myemployee/`)
 
 Each role possesses a clean **`role.md`** defining its identity, and an extensible **`skill/`** folder containing its technical capabilities:
 
 ```text
 myemployee/
 ├── PRD.md                         # Master Product Requirements Document (North Star)
-├── config.json                    # Project configuration & target AI setting
+├── config.json                    # Project configuration & active roles
 │
 ├── features/                      # Modular Feature Specs created during /share-knowledge
 │   └── <feature-slug>/
@@ -183,109 +185,103 @@ myemployee/
 │
 └── roles/                         # Modular Role Definitions & Capabilities
     ├── product-owner/
-    │   ├── role.md                # Persona: Patrick | Calls: Bos
+    │   ├── role.md                # Persona: Patrick | Focus: Product Vision & User Stories
     │   └── skill/
     │       └── default-skill.md   # PRD & User Story drafting
     ├── ui-ux/
-    │   ├── role.md                # Persona: Squidward | Calls: Bos
+    │   ├── role.md                # Persona: Squidward | Focus: Design Systems & Anti-Slop UI
     │   └── skill/
-    │       └── default-skill.md   # Ruthless Anti-Slop UI & wireframes
+    │       └── default-skill.md   # Modern UI guidelines & wireframes
     ├── tech-lead/
-    │   ├── role.md                # Persona: Garry | Calls: Bos
+    │   ├── role.md                # Persona: Garry | Focus: System Architecture & ADRs
     │   └── skill/
-    │       └── default-skill.md   # System design & ADRs
+    │       └── default-skill.md   # System design & stack enforcement
     ├── project-manager/
-    │   ├── role.md                # Persona: Sandy Cheeks | Calls: Bos
+    │   ├── role.md                # Persona: Sandy Cheeks | Focus: Task Tracking & Sprints
     │   └── skill/
     │       └── default-skill.md   # Task breakdown, bug tickets, [DONE]-*
     ├── developer/
-    │   ├── role.md                # Persona: Tn. Crab | Calls: Bos
+    │   ├── role.md                # Persona: Tn. Crab | Focus: Clean Code & Surgical Editing
     │   └── skill/
-    │       └── default-skill.md   # Clean code & surgical line editing
+    │       └── default-skill.md   # Anti-slop coding & minimal line diffs
     └── qa/
-        ├── role.md                # Persona: Stanley | Calls: Bos
+        ├── role.md                # Persona: Stanley | Focus: QA & Destructive Testing
         └── skill/
-            └── default-skill.md   # Destructive testing & regression shield
+            └── default-skill.md   # Regression testing & verification
 ```
 
 ---
 
-## ⚡ Dual Operational Pipelines
+## Operational Lifecycle
 
-### Pipeline 1: New Feature Workflow
-When Bos asks for a new capability (e.g. *"Team, please implement Google OAuth login"*):
-1. **Patrick (PO)** writes `/myemployee/features/google-oauth/PRD.md` with User Stories & Acceptance Criteria.
-2. **Squidward (UI/UX)** provides design tokens, layout wireframes, and ensures zero visual slop.
-3. **Garry (Tech Lead)** writes `/myemployee/features/google-oauth/DESIGN.md` defining libraries, schema, and security.
-4. **Sandy Cheeks (PM)** cuts tasks in `/myemployee/tasks/features/TASK-26102026-google-oauth.md` with **mandatory file and line ranges**:
+### 1. Two-Phase Feature Workflow (`/share-knowledge` ➔ `/apply-work`)
+
+To prevent AI from prematurely generating unreviewed code, features strictly follow a two-phase gated process:
+
+#### Phase 1: Thinking & Spec (`/share-knowledge`)
+1. **Patrick (PO)** writes `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria.
+2. **Squidward (UI/UX)** defines design tokens, layout hierarchy, and ensures zero visual slop.
+3. **Garry (Tech Lead)** writes `/myemployee/features/<slug>/DESIGN.md` defining libraries, schema, and security.
+4. **Sandy Cheeks (PM)** generates the task ticket on disk:
+   `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
    ```markdown
    - [ ] Implement Google OAuth Callback Handler
      - File: `src/api/auth/google/callback.ts`
    - [ ] Update User Session Store
      - File: `src/services/session.ts:L45-L60`
    ```
-5. **Tn. Crab (Dev)** implements the changes with zero slop.
-6. **Stanley (QA)** tests edge cases (timeouts, invalid tokens, network failures).
-7. **Sandy Cheeks (PM)** renames the task file to:
-   **`[DONE]-TASK-26102026-google-oauth.md`**.
+*Result: Specs and checklists are locked in. Zero application code has been written yet.*
+
+#### Phase 2: Execution & Verification (`/apply-work`)
+1. **Tn. Crab (Dev)** executes the checklist items surgically on the designated target files.
+2. **Stanley (QA)** runs destructive checks (edge cases, timeouts, invalid data, regressions).
+3. **Sandy Cheeks (PM)** verifies completion and renames the ticket:
+   **`[PENDING]-` ➔ `[DONE]-TASK-DDMMYYYY-<slug>.md`**.
 
 ---
 
-### Pipeline 2: Urgent Bug Workflow (Token Saver)
-When Bos reports an issue (e.g. *"Sandy, the registration form submission is failing with a 500 error!"*):
+### 2. Urgent Bug Workflow (Token Saver)
+
+When an error or regression is reported:
 1. **Sandy Cheeks (PM)** immediately creates:
-   `/myemployee/tasks/bugs/BUG-26102026-register-500.md`
-2. **Garry & Tn. Crab bypass reading the Master PRD**, read *only* that bug ticket, and perform a surgical fix directly on the targeted lines.
+   `/myemployee/tasks/bugs/[PENDING]-BUG-DDMMYYYY-<slug>.md`
+2. **Garry & Tn. Crab bypass reading the Master PRD**, inspect *only* the bug ticket, and apply a surgical line fix.
 3. **Stanley (QA)** reproduces the fix and verifies zero regressions on existing code.
 4. **Sandy Cheeks (PM)** renames the ticket to:
-   **`[DONE]-BUG-26102026-register-500.md`**.
+   **`[DONE]-BUG-DDMMYYYY-<slug>.md`**.
 
 ---
 
-## 🧠 Token Optimization & Fast Filtering
+## Token Optimization & Fast Filtering
 
-In active sessions, the AI agent filters out historical tasks instantaneously:
+During active sessions, the AI agent filters tasks instantaneously:
 ```typescript
-// AI scans task directory and ignores all files starting with [DONE]-
-const activeTasks = files.filter(f => !f.startsWith('[DONE]-'));
+// AI scans task directory for active items
+const pendingTasks = files.filter(f => f.startsWith('[PENDING]-'));
 ```
-- Active tasks are found in O(1) filename matching.
-- Finished tasks remain on disk for auditing and sprint retrospectives, without cluttering the agent's active context window.
+- Active tasks are identified in O(1) filename matching.
+- Completed tasks (`[DONE]-*`) remain on disk for auditing and retrospectives without consuming context tokens during daily development.
 
 ---
 
-## 🌐 Language Protocol
+## Language Protocol
 
-- **In the Chat Room**: Team members converse warmly with Bos in conversational English or Indonesian (addressing the user respectfully as **"Bos"**).
+- **In the Chat Room**: Team members converse warmly in conversational English or Indonesian.
 - **All Written Files & Markdown Blocks**: **100% Strict English!**
-  - All files (`PRD.md`, `DESIGN.md`, `TASK-*.md`, `BUG-*.md`, source code).
+  - All repository files (`PRD.md`, `DESIGN.md`, `TASK-*.md`, `BUG-*.md`, source code).
   - Any markdown preview blocks or tables rendered in chat are strictly in English.
 
 ---
 
-## 📖 About Us & The Inspiration
+## Acknowledgments & Heritage
 
-`employee-agents` was conceived by [Ivan Nofick](https://github.com/ivannofick) out of a real-world developer need: *coding with AI agents shouldn't feel like a chaotic, one-man monologue.*
+`employee-agents` builds upon the spec-driven software development methodology pioneered by [OpenSpec](https://github.com/Fission-AI/openspec), code quality principles from [anti-slop](https://github.com/miqdadbadjuber/anti-slop), and character homages inspired by the world of SpongeBob SquarePants.
 
-By combining the discipline of real-world software engineering with a playful, creative homage purely inspired by the legendary world of **SpongeBob SquarePants**, building software with AI becomes structured, memorable, and fun. Every persona represents a vital facet of good software development—from Patrick's product curiosity to Garry's calm architectural wisdom, Sandy's tactical discipline, Tn. Crab's cost-efficiency, Squidward's aesthetic eye, and Stanley's destructive quality checks.
-
----
-
-## 🙏 Acknowledgments & Inspiration
-
-- **[Nickelodeon](https://www.nick.com) & Stephen Hillenburg**: Sincere gratitude to Nickelodeon and the late Stephen Hillenburg for creating the timeless characters of SpongeBob SquarePants. The persona names used in this tool are a purely affectionate homage intended for non-commercial community developer education and enjoyment.
-- **[OpenSpec](https://github.com/Fission-AI/openspec)** by [Fission AI](https://github.com/Fission-AI): Tremendous gratitude to the OpenSpec project for pioneering the spec-driven change workflow that fundamentally inspired the architectural software development lifecycle inside `employee-agents`.
-- **[anti-slop](https://github.com/miqdadbadjuber/anti-slop)** by [Miqdad Badjuber](https://github.com/miqdadbadjuber): Special thanks for championing the anti-slop mindset across AI coding agents.
+For complete attributions, inspirational roots, and legal disclaimers, please see [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
 
 ---
 
-## ⚖️ Disclaimer
-
-> *`employee-agents` is an independent open-source project created for developer productivity and education. It is purely inspired by SpongeBob SquarePants and is NOT affiliated with, sponsored by, or officially endorsed by Nickelodeon, Viacom, or Paramount Global. All trademarks and character names belong entirely to their respective copyright owners.*
-
----
-
-## 🗺️ Roadmap & Community
+## Roadmap & Community
 
 See our [ROADMAP.md](ROADMAP.md) for upcoming platform adapters (Cursor, Claude Code, Cline, Windsurf), role level-up skills, and autonomous squad debate features.
 
@@ -295,6 +291,6 @@ See our [ROADMAP.md](ROADMAP.md) for upcoming platform adapters (Cursor, Claude 
 
 ---
 
-## 📄 License
+## License
 
 MIT © [Ivan Nofick](https://github.com/ivannofick)
