@@ -24,4 +24,14 @@ export const id: LocaleDictionary = {
     successMessage: 'Berhasil menginisialisasi workspace /myemployee!',
     nextSteps: 'Squad siap tempur, Bos! Buka chat AI assistant Anda untuk memulai.',
   },
+  updater: {
+    title: 'UPDATER EMPLOYEE-AGENTS',
+    starting: 'Memperbarui roles, skills, dan slash commands ke versi terbaru...',
+    successMessage: 'Berhasil memperbarui roles, skills, dan slash commands!',
+    safeNote: 'PRD.md, features/, tasks/, dan config.json kustom Anda tetap aman terjaga.',
+    outro: 'Squad Anda sudah versi terbaru, Bos!',
+    detectedPrompt: 'Workspace /myemployee yang sudah ada terdeteksi. Apa yang ingin Anda lakukan?',
+    optionUpdate: '1) Update roles, skills & slash commands (Aman, menjaga PRD dan task kustom Anda)',
+    optionReinit: '2) Jalankan ulang setup wizard dari awal',
+  },
 };

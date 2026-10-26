@@ -8,9 +8,9 @@
 ![Antigravity](https://img.shields.io/badge/adapter-antigravity-orange.svg)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-**The Bikini Bottom Tech Squad**: A standalone virtual multi-role engineering squad adapting native spec-driven workflows for AI coding assistants.
+**A Virtual Software Company Framework**: Run an autonomous agile engineering squad (PO, UI/UX, Tech Lead, PM, Dev, QA) directly inside your AI coding assistant.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Dual Pipelines](#-dual-operational-pipelines) • [Architecture](#-directory-structure) • [About Us](#-about-us--the-inspiration) • [Roadmap](ROADMAP.md)
+[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Dual Pipelines](#-dual-operational-pipelines) • [Architecture](#-directory-structure) • [About Us](#-about-us--the-inspiration) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -92,7 +92,8 @@ This leads to:
 
 ## 🚀 Quick Start
 
-Run directly in your project root using `npx`:
+### 1. Initialize a Workspace
+Run directly in your project root:
 
 ```bash
 # Direct run (English setup wizard)
@@ -102,12 +103,31 @@ npx employee-agents
 npx employee-agents --lang id
 ```
 
-### 3-Step Setup Wizard:
-1. **Target AI Environment**: Select your editor (Antigravity active, Cursor/Claude/Cline/Windsurf coming soon).
-2. **Project Type**:
-   - `New Project (Greenfield)`: Starts from scratch with a fresh Master PRD template.
-   - `Existing Codebase (Brownfield)`: Non-destructive init; audits existing manifests (`package.json`, `composer.json`, `go.mod`) and protects existing code from unauthorized edits.
-3. **Project Name**: Confirms your application identifier.
+### 2. Update an Existing Workspace
+To safely upgrade an already initialized `/myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
+
+```bash
+# Via terminal:
+npx employee-agents update
+```
+
+Or trigger it directly inside your AI assistant chat room:
+```text
+/update-me
+```
+
+---
+
+## ⚡ Built-In Slash Commands (`/`)
+
+When using Antigravity, the framework equips you with interactive slash commands in your chat room:
+
+| Slash Command | Handler | Description |
+|---|---|---|
+| **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
+| **`/status-token`** | Garry (Tech Lead) | Reports the active AI model, total context window capacity (1M tokens), estimated tokens consumed, remaining quota, and efficiency advice. |
+| **`/task-done`** | Sandy Cheeks (PM) | Verifies implementation and QA sign-offs, renames the active task with the `[DONE]-*` prefix, and appends a completion log. |
+| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill in `/myemployee/roles/<role>/skill/`. |
 
 ---
 
@@ -135,7 +155,7 @@ myemployee/
     ├── ui-ux/
     │   ├── role.md                # Persona: Squidward | Calls: Bos
     │   └── skill/
-    │       └── default-skill.md   # Design tokens & wireframes
+    │       └── default-skill.md   # Ruthless Anti-Slop UI & wireframes
     ├── tech-lead/
     │   ├── role.md                # Persona: Garry | Calls: Bos
     │   └── skill/
@@ -159,9 +179,9 @@ myemployee/
 ## ⚡ Dual Operational Pipelines
 
 ### Pipeline 1: New Feature Workflow
-When Bos asks for a new capability (e.g. *"Tim, bikin fitur Google OAuth login"*):
+When Bos asks for a new capability (e.g. *"Team, please implement Google OAuth login"*):
 1. **Patrick (PO)** writes `/myemployee/features/google-oauth/PRD.md` with User Stories & Acceptance Criteria.
-2. **Squidward (UI/UX)** provides design tokens and layout wireframes.
+2. **Squidward (UI/UX)** provides design tokens, layout wireframes, and ensures zero visual slop.
 3. **Garry (Tech Lead)** writes `/myemployee/features/google-oauth/DESIGN.md` defining libraries, schema, and security.
 4. **Sandy Cheeks (PM)** cuts tasks in `/myemployee/tasks/features/TASK-26102026-google-oauth.md` with **mandatory file and line ranges**:
    ```markdown
@@ -178,7 +198,7 @@ When Bos asks for a new capability (e.g. *"Tim, bikin fitur Google OAuth login"*
 ---
 
 ### Pipeline 2: Urgent Bug Workflow (Token Saver)
-When Bos reports an issue (e.g. *"Sandy, form submit registrasi error 500!"*):
+When Bos reports an issue (e.g. *"Sandy, the registration form submission is failing with a 500 error!"*):
 1. **Sandy Cheeks (PM)** immediately creates:
    `/myemployee/tasks/bugs/BUG-26102026-register-500.md`
 2. **Garry & Tn. Crab bypass reading the Master PRD**, read *only* that bug ticket, and perform a surgical fix directly on the targeted lines.
@@ -202,8 +222,8 @@ const activeTasks = files.filter(f => !f.startsWith('[DONE]-'));
 
 ## 🌐 Language Protocol
 
-- **In the Chat Room**: Team members converse warmly with Bos in **Bahasa Indonesia** or English (e.g. *"Siap Bos! Garry sudah review kodenya..."*).
-- **All Written Files & Markdown Blocks**: **100% English Murni!**
+- **In the Chat Room**: Team members converse warmly with Bos in conversational English or Indonesian (addressing the user respectfully as **"Bos"**).
+- **All Written Files & Markdown Blocks**: **100% Strict English!**
   - All files (`PRD.md`, `DESIGN.md`, `TASK-*.md`, `BUG-*.md`, source code).
   - Any markdown preview blocks or tables rendered in chat are strictly in English.
 

@@ -22,4 +22,14 @@ export interface LocaleDictionary {
     successMessage: string;
     nextSteps: string;
   };
+  updater: {
+    title: string;
+    starting: string;
+    successMessage: string;
+    safeNote: string;
+    outro: string;
+    detectedPrompt: string;
+    optionUpdate: string;
+    optionReinit: string;
+  };
 }

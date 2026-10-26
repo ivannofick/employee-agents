@@ -24,4 +24,14 @@ export const en: LocaleDictionary = {
     successMessage: 'Successfully initialized /myemployee workspace!',
     nextSteps: 'Your squad is ready, Bos! Open your AI assistant chat to begin.',
   },
+  updater: {
+    title: 'EMPLOYEE-AGENTS UPDATER',
+    starting: 'Updating roles, skills, and slash commands to latest version...',
+    successMessage: 'Successfully updated roles, skills, and slash commands!',
+    safeNote: 'Your custom PRD.md, features/, tasks/, and config.json were safely preserved.',
+    outro: 'Your squad is up-to-date, Bos!',
+    detectedPrompt: 'Existing /myemployee workspace detected. What would you like to do?',
+    optionUpdate: '1) Update roles, skills & slash commands (Safely preserves your PRDs and tasks)',
+    optionReinit: '2) Re-run full setup wizard from scratch',
+  },
 };
