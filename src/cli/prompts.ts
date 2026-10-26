@@ -24,8 +24,8 @@ export async function runSetupWizard(lang: string = 'en'): Promise<SetupAnswers>
   const dict = getDictionary(lang);
   const defaultProjectName = path.basename(process.cwd()) || 'my-app';
 
-  p.intro(pc.bgCyan(pc.black(` 🏢 ${dict.banner.title} `)));
-  p.note(dict.banner.subtitle, 'Framework Info');
+  p.intro(pc.cyan('employee-agents'));
+  p.note(dict.banner.subtitle, 'Info');
 
   const targetAi = await p.select({
     message: dict.wizard.selectAi,

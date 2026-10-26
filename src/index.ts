@@ -18,7 +18,7 @@ import { getDictionary } from './i18n/index.js';
 
 async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
   try {
-    p.intro(pc.bgCyan(pc.black(' ➕ ADD SQUAD ROLE ')));
+    p.intro(pc.cyan('employee-agents: add-role'));
     const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
@@ -34,8 +34,8 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
     ].filter((r) => !existing.includes(r));
 
     if (available.length === 0) {
-      p.note('All 6 roles are already active in your squad!', 'Squad Full');
-      p.outro(pc.cyan('No roles left to add, Bos!'));
+      p.note('All 6 roles are already active in your squad.', 'Squad Full');
+      p.outro(pc.green('All roles are active.'));
       return;
     }
 
@@ -57,7 +57,7 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
     const activeRoles = await addRoleToWorkspace(role, process.cwd());
     s.stop(pc.green(`✔ Activated role "${role}" successfully!`));
     p.note(`Active Squad: ${activeRoles.join(', ')}\nController .agent/skills/myemployee/SKILL.md is updated.`, 'Squad Updated');
-    p.outro(pc.cyan('Squad updated, Bos!'));
+    p.outro(pc.green('Squad updated successfully.'));
   } catch (err: any) {
     p.cancel(pc.red(`Failed to add role: ${err.message}`));
     process.exit(1);
@@ -66,7 +66,7 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
 
 async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
   try {
-    p.intro(pc.bgCyan(pc.black(' ➖ REMOVE SQUAD ROLE ')));
+    p.intro(pc.cyan('employee-agents: remove-role'));
     const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
@@ -74,7 +74,7 @@ async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
 
     if (existing.length === 0) {
       p.note('No roles currently exist in your workspace.', 'Empty Squad');
-      p.outro(pc.cyan('Nothing to remove, Bos!'));
+      p.outro(pc.yellow('No roles available to remove.'));
       return;
     }
 
@@ -96,7 +96,7 @@ async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
     const remaining = await removeRoleFromWorkspace(role, process.cwd());
     s.stop(pc.green(`✔ Role "${role}" removed successfully!`));
     p.note(`Remaining Squad: ${remaining.join(', ')}\nController .agent/skills/myemployee/SKILL.md is updated and self-healed.`, 'Squad Updated');
-    p.outro(pc.cyan('Squad updated, Bos!'));
+    p.outro(pc.green('Role removed successfully.'));
   } catch (err: any) {
     p.cancel(pc.red(`Failed to remove role: ${err.message}`));
     process.exit(1);
@@ -108,7 +108,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
     const lang = options?.lang || 'en';
     const dict = getDictionary(lang);
 
-    p.intro(pc.bgCyan(pc.black(` ⚡ ${dict.skillAdder.title} `)));
+    p.intro(pc.cyan(dict.skillAdder.title));
 
     let role = roleArg;
     if (!role) {
@@ -189,7 +189,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
     const filePath = await addSkillToRole(role, skillSlug, (description as string) || '');
     s.stop(pc.green(`✔ ${dict.skillAdder.success} ${role}!`));
     p.note(`Created: ${filePath}\nUpdated: /myemployee/roles/${role}/role.md`, 'Skill Registered');
-    p.outro(pc.cyan('💬 Ready for action, Bos!'));
+    p.outro(pc.green('Skill registered successfully.'));
   } catch (err: any) {
     p.cancel(pc.red(`Failed to add skill: ${err.message}`));
     process.exit(1);
@@ -201,7 +201,7 @@ async function handleUpdate(options?: { lang?: string }) {
     const lang = options?.lang || 'en';
     const dict = getDictionary(lang);
 
-    p.intro(pc.bgCyan(pc.black(` 🔄 ${dict.updater.title} `)));
+    p.intro(pc.cyan(dict.updater.title));
 
     const s = p.spinner();
     s.start(dict.updater.starting);
@@ -210,7 +210,7 @@ async function handleUpdate(options?: { lang?: string }) {
 
     s.stop(pc.green(`✔ ${dict.updater.successMessage}`));
     p.note(dict.updater.safeNote, 'Safe Update');
-    p.outro(pc.cyan(`💬 ${dict.updater.outro}`));
+    p.outro(pc.green(dict.updater.outro));
   } catch (err: any) {
     p.cancel(pc.red(`Update failed: ${err.message}`));
     process.exit(1);
@@ -225,7 +225,7 @@ async function handleInit(options: { lang?: string }) {
     // If an existing workspace is detected, offer to update or re-init
     const existingMyEmployee = path.join(process.cwd(), 'myemployee');
     if (await fs.pathExists(existingMyEmployee)) {
-      p.intro(pc.bgCyan(pc.black(` 🏢 ${dict.banner.title} `)));
+      p.intro(pc.cyan(dict.banner.title));
       const choice = await p.select({
         message: dict.updater.detectedPrompt,
         options: [
@@ -245,7 +245,7 @@ async function handleInit(options: { lang?: string }) {
         await updateWorkspace(process.cwd());
         s.stop(pc.green(`✔ ${dict.updater.successMessage}`));
         p.note(dict.updater.safeNote, 'Safe Update');
-        p.outro(pc.cyan(`💬 ${dict.updater.outro}`));
+        p.outro(pc.green(dict.updater.outro));
         return;
       }
     }
@@ -258,7 +258,7 @@ async function handleInit(options: { lang?: string }) {
     await generateWorkspace(answers);
 
     s.stop(pc.green(`✔ ${dict.wizard.successMessage}`));
-    p.outro(pc.cyan(`💬 ${dict.wizard.nextSteps}`));
+    p.outro(pc.green(dict.wizard.nextSteps));
   } catch (err: any) {
     p.cancel(pc.red(`Initialization failed: ${err.message}`));
     process.exit(1);
