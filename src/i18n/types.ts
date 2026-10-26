@@ -19,6 +19,20 @@ export interface LocaleDictionary {
     };
     projectNamePrompt: string;
     projectNameDefault: string;
+    selectSquadMode: string;
+    squadModeOptions: {
+      all: string;
+      custom: string;
+    };
+    selectRolesPrompt: string;
+    roleOptions: {
+      'product-owner': string;
+      'ui-ux': string;
+      'tech-lead': string;
+      'project-manager': string;
+      'developer': string;
+      'qa': string;
+    };
     successMessage: string;
     nextSteps: string;
   };
@@ -31,5 +45,12 @@ export interface LocaleDictionary {
     detectedPrompt: string;
     optionUpdate: string;
     optionReinit: string;
+  };
+  skillAdder: {
+    title: string;
+    selectRole: string;
+    skillNamePrompt: string;
+    skillDescPrompt: string;
+    success: string;
   };
 }

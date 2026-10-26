@@ -116,6 +116,22 @@ Or trigger it directly inside your AI assistant chat room:
 /update-me
 ```
 
+### 3. Add Skills to an Employee (On-Demand Registry)
+Each role only comes with a lean `default-skill.md` out of the box to keep your context window light. Browse our full [Additional Skills Catalog](additional-skills/README.md) to selectively level up any employee:
+
+```bash
+# Interactive CLI wizard:
+npx employee-agents add-skill
+
+# Or direct invocation from online catalog:
+npx employee-agents add-skill developer docker-containerization
+```
+
+Or trigger it interactively inside your AI assistant chat room:
+```text
+/add-skill
+```
+
 ---
 
 ## ⚡ Built-In Slash Commands (`/`)
@@ -124,10 +140,10 @@ When using Antigravity, the framework equips you with interactive slash commands
 
 | Slash Command | Handler | Description |
 |---|---|---|
-| **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
+| **`/done-task`** (or **`/task-done`**) | Sandy Cheeks (PM) | Marks a task completed and renames to `[DONE]-*`. Supports targeted slug (e.g. `/done-task oauth`) or auto-detection of pending tasks. |
+| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/myemployee/roles/<role>/skill/`. |
 | **`/status-token`** | Garry (Tech Lead) | Reports the active AI model, total context window capacity (1M tokens), estimated tokens consumed, remaining quota, and efficiency advice. |
-| **`/task-done`** | Sandy Cheeks (PM) | Verifies implementation and QA sign-offs, renames the active task with the `[DONE]-*` prefix, and appends a completion log. |
-| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill in `/myemployee/roles/<role>/skill/`. |
+| **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
 
 ---
 

@@ -21,6 +21,20 @@ export const en: LocaleDictionary = {
     },
     projectNamePrompt: 'Enter your project name:',
     projectNameDefault: 'my-app',
+    selectSquadMode: 'How would you like to assemble your squad?',
+    squadModeOptions: {
+      all: 'All Roles (Activate all 6 roles: PO, UI/UX, Tech Lead, PM, Dev, QA)',
+      custom: 'Custom (Select specific roles)',
+    },
+    selectRolesPrompt: 'Select squad roles to activate:',
+    roleOptions: {
+      'product-owner': 'product-owner (Patrick - Specs & User Stories)',
+      'ui-ux': 'ui-ux (Squidward - Anti-Slop UI & Wireframes)',
+      'tech-lead': 'tech-lead (Garry - Architecture & ADRs)',
+      'project-manager': 'project-manager (Sandy Cheeks - PM & Bug Tracking)',
+      'developer': 'developer (Tn. Crab - Clean Code Execution)',
+      'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
+    },
     successMessage: 'Successfully initialized /myemployee workspace!',
     nextSteps: 'Your squad is ready, Bos! Open your AI assistant chat to begin.',
   },
@@ -33,5 +47,12 @@ export const en: LocaleDictionary = {
     detectedPrompt: 'Existing /myemployee workspace detected. What would you like to do?',
     optionUpdate: '1) Update roles, skills & slash commands (Safely preserves your PRDs and tasks)',
     optionReinit: '2) Re-run full setup wizard from scratch',
+  },
+  skillAdder: {
+    title: 'ADD SQUAD SKILL',
+    selectRole: 'Select the role receiving the new skill:',
+    skillNamePrompt: 'Enter skill name (slug format, e.g. docker-setup, mobile-layout):',
+    skillDescPrompt: 'Enter a brief description of the skill capability:',
+    success: 'Successfully added new skill to',
   },
 };

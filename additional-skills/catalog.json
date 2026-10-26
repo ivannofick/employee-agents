@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "skills": {
+    "developer": [
+      {
+        "slug": "docker-containerization",
+        "name": "Docker Containerization",
+        "description": "Clean, multi-stage Dockerfile and docker-compose setup without bloat."
+      },
+      {
+        "slug": "micro-benchmark",
+        "name": "Micro Benchmark & Profiling",
+        "description": "Line-level execution time and memory profiling for critical hot paths."
+      },
+      {
+        "slug": "sql-query-optimizer",
+        "name": "SQL Query Optimizer",
+        "description": "Defensive query indexing, EXPLAIN plan analysis, and N+1 query elimination."
+      }
+    ],
+    "ui-ux": [
+      {
+        "slug": "mobile-responsive",
+        "name": "Mobile-First Responsive Layouts",
+        "description": "Fluid typography, CSS clamp(), viewport reflows, and touch-target standards."
+      },
+      {
+        "slug": "dark-mode-tokens",
+        "name": "Dark Mode Color Tokens",
+        "description": "Semantic HSL color token system supporting effortless light/dark switching."
+      },
+      {
+        "slug": "tailwind-system",
+        "name": "Tailwind Design System Tokens",
+        "description": "Curated Tailwind CSS design system with strict anti-slop color palettes."
+      }
+    ],
+    "tech-lead": [
+      {
+        "slug": "security-audit",
+        "name": "Security & Vulnerability Audit",
+        "description": "OWASP top 10 auditing, sanitization guards, and secret leak prevention."
+      },
+      {
+        "slug": "database-migration",
+        "name": "Defensive Database Migrations",
+        "description": "Zero-downtime schema migrations, backward compatibility, and rollback plans."
+      },
+      {
+        "slug": "adr-architecture",
+        "name": "Architectural Decision Records (ADR)",
+        "description": "Structured ADR documentation for major library, database, and system choices."
+      }
+    ],
+    "qa": [
+      {
+        "slug": "load-stress-testing",
+        "name": "Load & Stress Testing",
+        "description": "Concurrency benchmarking, rate limit threshold checks, and failure recovery."
+      },
+      {
+        "slug": "e2e-playwright",
+        "name": "E2E Playwright Automation",
+        "description": "Headless browser end-to-end integration tests for critical user journeys."
+      }
+    ],
+    "product-owner": [
+      {
+        "slug": "analytics-metrics",
+        "name": "Product Analytics & Funnel Tracking",
+        "description": "Event schema definition, conversion funnels, and retention KPI tracking."
+      },
+      {
+        "slug": "competitor-teardown",
+        "name": "Competitor Teardown Analysis",
+        "description": "Market feature gap analysis and differentiation matrix."
+      }
+    ],
+    "project-manager": [
+      {
+        "slug": "sprint-retrospective",
+        "name": "Sprint Retrospective & Velocity",
+        "description": "Task completion velocity analysis, bottlenecks review, and action plans."
+      },
+      {
+        "slug": "incident-postmortem",
+        "name": "Incident Postmortem & RCA",
+        "description": "Blameless Root Cause Analysis (RCA) and preventive action items."
+      }
+    ]
+  }
+}

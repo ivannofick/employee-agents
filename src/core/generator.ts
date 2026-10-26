@@ -29,19 +29,48 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
   const { templateBase, adapterBase } = getAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
 
-  // Copy template files non-destructively
-  await fs.copy(templateBase, destinationMyEmployee, {
-    overwrite: false,
-    errorOnExist: false,
-  });
+  await fs.ensureDir(destinationMyEmployee);
 
-  // Write custom config.json
+  // 1. Copy PRD.md, features/, and tasks/ templates non-destructively
+  const prdSource = path.join(templateBase, 'PRD.md');
+  const prdDest = path.join(destinationMyEmployee, 'PRD.md');
+  if (await fs.pathExists(prdSource) && !(await fs.pathExists(prdDest))) {
+    await fs.copy(prdSource, prdDest);
+  }
+
+  const featuresSource = path.join(templateBase, 'features');
+  const featuresDest = path.join(destinationMyEmployee, 'features');
+  if (await fs.pathExists(featuresSource)) {
+    await fs.copy(featuresSource, featuresDest, { overwrite: false, errorOnExist: false });
+  }
+
+  const tasksSource = path.join(templateBase, 'tasks');
+  const tasksDest = path.join(destinationMyEmployee, 'tasks');
+  if (await fs.pathExists(tasksSource)) {
+    await fs.copy(tasksSource, tasksDest, { overwrite: false, errorOnExist: false });
+  }
+
+  // 2. Copy ONLY selected squad roles (each role has only default-skill.md)
+  const rolesToInstall = answers.roles && answers.roles.length > 0
+    ? answers.roles
+    : ['product-owner', 'ui-ux', 'tech-lead', 'project-manager', 'developer', 'qa'];
+
+  for (const role of rolesToInstall) {
+    const roleSource = path.join(templateBase, 'roles', role);
+    const roleDest = path.join(destinationMyEmployee, 'roles', role);
+    if (await fs.pathExists(roleSource)) {
+      await fs.copy(roleSource, roleDest, { overwrite: false, errorOnExist: false });
+    }
+  }
+
+  // 3. Write custom config.json
   const configPath = path.join(destinationMyEmployee, 'config.json');
   const configContent = {
     name: answers.projectName,
     project_type: answers.projectType,
     target_ai: answers.targetAi,
     language: answers.language,
+    active_roles: rolesToInstall,
     version: '1.0.1',
     created_at: new Date().toISOString(),
   };
@@ -106,4 +135,130 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
   }
 
   return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true };
+}
+
+export interface CatalogSkill {
+  slug: string;
+  name: string;
+  description: string;
+}
+
+export async function getSkillCatalog(role?: string): Promise<CatalogSkill[]> {
+  const possibleCatalogPaths = [
+    path.resolve(process.cwd(), 'additional-skills', 'catalog.json'),
+    path.resolve(__dirname, '../../additional-skills/catalog.json'),
+  ];
+
+  for (const catPath of possibleCatalogPaths) {
+    if (await fs.pathExists(catPath)) {
+      try {
+        const data = await fs.readJson(catPath);
+        if (role && data.skills && data.skills[role]) {
+          return data.skills[role];
+        }
+        if (!role && data.skills) {
+          const all: CatalogSkill[] = [];
+          Object.values(data.skills).forEach((list: any) => all.push(...list));
+          return all;
+        }
+      } catch {}
+    }
+  }
+
+  // Fallback: Try fetching live registry from GitHub
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/catalog.json');
+    if (res.ok) {
+      const data = await res.json() as any;
+      if (role && data.skills && data.skills[role]) {
+        return data.skills[role];
+      }
+      if (!role && data.skills) {
+        const all: CatalogSkill[] = [];
+        Object.values(data.skills).forEach((list: any) => all.push(...list));
+        return all;
+      }
+    }
+  } catch {}
+
+  return [];
+}
+
+export async function addSkillToRole(
+  role: string,
+  skillSlug: string,
+  skillDescription: string = '',
+  targetDir: string = process.cwd()
+): Promise<string> {
+  const roleDir = path.join(targetDir, 'myemployee', 'roles', role);
+  if (!(await fs.pathExists(roleDir))) {
+    throw new Error(`Role "${role}" does not exist in ${path.join(targetDir, 'myemployee', 'roles')}`);
+  }
+
+  const skillDir = path.join(roleDir, 'skill');
+  await fs.ensureDir(skillDir);
+
+  const cleanSlug = skillSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  const skillFilePath = path.join(skillDir, `${cleanSlug}.md`);
+
+  let skillContent = '';
+
+  // 1. Check if local additional-skills exists (development / cloned repo)
+  const localAdditionalSkill = path.resolve(process.cwd(), 'additional-skills', role, `${cleanSlug}.md`);
+  if (await fs.pathExists(localAdditionalSkill)) {
+    skillContent = await fs.readFile(localAdditionalSkill, 'utf8');
+  }
+
+  // 2. Otherwise try downloading directly from GitHub registry on-demand
+  if (!skillContent) {
+    try {
+      const gitHubUrl = `https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/${role}/${cleanSlug}.md`;
+      const res = await fetch(gitHubUrl);
+      if (res.ok) {
+        skillContent = await res.text();
+      }
+    } catch {}
+  }
+
+  // 3. Fallback: Generate clean custom template
+  if (!skillContent) {
+    skillContent = `# Skill: ${cleanSlug}
+
+## Metadata
+- **Role**: ${role}
+- **Added**: ${new Date().toISOString().split('T')[0]}
+- **Description**: ${skillDescription || cleanSlug}
+
+## Guidelines & Operational Rules
+1. Define actionable guidelines and triggers for when to activate this skill.
+2. Follow strict Spec-Driven Development principles and zero AI-slop conventions.
+
+## Procedures
+- Step 1: Analyze context and verify preconditions.
+- Step 2: Execute surgical, clean edits without modifying unrelated code.
+- Step 3: Run validation checks and report outcome.
+`;
+  }
+
+  await fs.writeFile(skillFilePath, skillContent, 'utf8');
+
+  // Update role.md to register active skill
+  const roleMdPath = path.join(roleDir, 'role.md');
+  if (await fs.pathExists(roleMdPath)) {
+    let roleMd = await fs.readFile(roleMdPath, 'utf8');
+    const skillEntry = `- \`skill/${cleanSlug}.md\`: ${skillDescription || cleanSlug}`;
+    if (!roleMd.includes(`skill/${cleanSlug}.md`)) {
+      if (roleMd.includes('- **Active Skills**:')) {
+        roleMd = roleMd.replace(
+          '- **Active Skills**:',
+          `- **Active Skills**:\n  ${skillEntry}`
+        );
+      } else {
+        roleMd += `\n- **Active Skills**:\n  ${skillEntry}\n`;
+      }
+      await fs.writeFile(roleMdPath, roleMd, 'utf8');
+    }
+  }
+
+  return skillFilePath;
 }

@@ -21,6 +21,20 @@ export const id: LocaleDictionary = {
     },
     projectNamePrompt: 'Masukkan nama proyek Anda:',
     projectNameDefault: 'my-app',
+    selectSquadMode: 'Bagaimana Anda ingin menyusun squad?',
+    squadModeOptions: {
+      all: 'Semua Role (Aktifkan seluruh 6 role: PO, UI/UX, Tech Lead, PM, Dev, QA)',
+      custom: 'Kustom (Pilih role tertentu)',
+    },
+    selectRolesPrompt: 'Pilih squad roles yang ingin diaktifkan:',
+    roleOptions: {
+      'product-owner': 'product-owner (Patrick - Specs & User Stories)',
+      'ui-ux': 'ui-ux (Squidward - Anti-Slop UI & Wireframes)',
+      'tech-lead': 'tech-lead (Garry - Architecture & ADRs)',
+      'project-manager': 'project-manager (Sandy Cheeks - PM & Bug Tracking)',
+      'developer': 'developer (Tn. Crab - Clean Code Execution)',
+      'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
+    },
     successMessage: 'Berhasil menginisialisasi workspace /myemployee!',
     nextSteps: 'Squad siap tempur, Bos! Buka chat AI assistant Anda untuk memulai.',
   },
@@ -33,5 +47,12 @@ export const id: LocaleDictionary = {
     detectedPrompt: 'Workspace /myemployee yang sudah ada terdeteksi. Apa yang ingin Anda lakukan?',
     optionUpdate: '1) Update roles, skills & slash commands (Aman, menjaga PRD dan task kustom Anda)',
     optionReinit: '2) Jalankan ulang setup wizard dari awal',
+  },
+  skillAdder: {
+    title: 'TAMBAH SKILL SQUAD',
+    selectRole: 'Pilih role yang akan menerima skill baru:',
+    skillNamePrompt: 'Masukkan nama skill (format slug, contoh: docker-setup, mobile-layout):',
+    skillDescPrompt: 'Masukkan deskripsi singkat kapabilitas skill:',
+    success: 'Berhasil menambahkan skill baru ke',
   },
 };

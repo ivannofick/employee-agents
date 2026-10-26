@@ -2,18 +2,36 @@
 description: Guide Bos through adding a new modular skill to any employee role in the squad.
 ---
 
-Garry (Tech Lead) and Sandy Cheeks (PM) assist Bos in leveling up an employee with a new modular skill.
+Garry (Tech Lead) and Sandy Cheeks (PM) assist Bos in leveling up an employee with a new modular skill on-demand.
 
 ## Instructions
-1. Ask Bos which role is receiving the new skill:
-   - `product-owner` (Patrick)
+1. Ask Bos which role is receiving the new skill (or extract from Bos's prompt):
+   - `developer` (Tn. Crab)
    - `ui-ux` (Squidward)
    - `tech-lead` (Garry)
-   - `project-manager` (Sandy Cheeks)
-   - `developer` (Tn. Crab)
    - `qa` (Stanley)
-2. Ask Bos for the skill name and core purpose (e.g. `security-audit`, `wcag-contrast`, `docker-setup`).
-3. Generate the new skill file under `/myemployee/roles/<role>/skill/<skill-slug>.md` in 100% English:
-   - Include clear guidelines, triggers, step-by-step procedures, and anti-patterns to avoid.
-4. Update the corresponding `/myemployee/roles/<role>/role.md` to register the new skill under `- **Active Skills**:`.
-5. Confirm completion to Bos with a summary of the employee's new capability!
+   - `product-owner` (Patrick)
+   - `project-manager` (Sandy Cheeks)
+
+2. Offer available skills from the **On-Demand Catalog** or allow a custom skill:
+   - **`developer`**: `docker-containerization`, `micro-benchmark`, `sql-query-optimizer`
+   - **`ui-ux`**: `mobile-responsive`, `dark-mode-tokens`, `tailwind-system`
+   - **`tech-lead`**: `security-audit`, `database-migration`, `adr-architecture`
+   - **`qa`**: `load-stress-testing`, `e2e-playwright`
+   - **`product-owner`**: `analytics-metrics`, `competitor-teardown`
+   - **`project-manager`**: `sprint-retrospective`, `incident-postmortem`
+   - **Custom**: Bos can enter any custom capability.
+
+3. Install the skill:
+   - If selected from catalog:
+     - Check local `additional-skills/<role>/<skill-slug>.md` or fetch from:
+       `https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/<role>/<skill-slug>.md`
+     - Save directly to `/myemployee/roles/<role>/skill/<skill-slug>.md`.
+   - If custom:
+     - Generate a clean, 100% English markdown template under `/myemployee/roles/<role>/skill/<skill-slug>.md` with guidelines, triggers, and procedures.
+
+4. Register the skill:
+   - Update `/myemployee/roles/<role>/role.md` to append the new skill under `- **Active Skills**:`.
+
+5. Confirm completion:
+   - Announce the newly leveled-up employee capability to Bos!

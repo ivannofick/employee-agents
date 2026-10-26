@@ -6,8 +6,101 @@ import pc from 'picocolors';
 import fs from 'fs-extra';
 import path from 'node:path';
 import { runSetupWizard } from './cli/prompts.js';
-import { generateWorkspace, updateWorkspace } from './core/generator.js';
+import { generateWorkspace, updateWorkspace, addSkillToRole, getSkillCatalog } from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
+
+async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { lang?: string }) {
+  try {
+    const lang = options?.lang || 'en';
+    const dict = getDictionary(lang);
+
+    p.intro(pc.bgCyan(pc.black(` ⚡ ${dict.skillAdder.title} `)));
+
+    let role = roleArg;
+    if (!role) {
+      const selected = await p.select({
+        message: dict.skillAdder.selectRole,
+        options: [
+          { value: 'product-owner', label: 'product-owner (Patrick)' },
+          { value: 'ui-ux', label: 'ui-ux (Squidward)' },
+          { value: 'tech-lead', label: 'tech-lead (Garry)' },
+          { value: 'project-manager', label: 'project-manager (Sandy Cheeks)' },
+          { value: 'developer', label: 'developer (Tn. Crab)' },
+          { value: 'qa', label: 'qa (Stanley)' },
+        ],
+      });
+      if (p.isCancel(selected)) {
+        p.cancel('Cancelled.');
+        process.exit(0);
+      }
+      role = selected as string;
+    }
+
+    let skillSlug = skillArg;
+    let description = '';
+
+    if (!skillSlug) {
+      const catalog = await getSkillCatalog(role);
+      const catalogOptions = catalog.map((item) => ({
+        value: item.slug,
+        label: `${item.name} (${item.slug}) - ${item.description}`,
+      }));
+
+      catalogOptions.push({
+        value: '__custom__',
+        label: 'Custom (Define your own custom skill)',
+      });
+
+      const skillChoice = await p.select({
+        message: `Select a skill from catalog or create custom for ${role}:`,
+        options: catalogOptions,
+      });
+
+      if (p.isCancel(skillChoice)) {
+        p.cancel('Cancelled.');
+        process.exit(0);
+      }
+
+      if (skillChoice === '__custom__') {
+        const entered = await p.text({
+          message: dict.skillAdder.skillNamePrompt,
+          placeholder: 'docker-setup',
+          validate: (val) => (!val || !val.trim() ? 'Skill name is required' : undefined),
+        });
+        if (p.isCancel(entered)) {
+          p.cancel('Cancelled.');
+          process.exit(0);
+        }
+        skillSlug = entered as string;
+
+        const desc = await p.text({
+          message: dict.skillAdder.skillDescPrompt,
+          placeholder: 'Defines guidelines and execution procedures',
+        });
+        if (p.isCancel(desc)) {
+          p.cancel('Cancelled.');
+          process.exit(0);
+        }
+        description = (desc as string) || '';
+      } else {
+        skillSlug = skillChoice as string;
+        const found = catalog.find((c) => c.slug === skillSlug);
+        description = found ? found.description : '';
+      }
+    }
+
+    const s = p.spinner();
+    s.start(`Adding skill "${skillSlug}" to ${role}...`);
+
+    const filePath = await addSkillToRole(role, skillSlug, (description as string) || '');
+    s.stop(pc.green(`✔ ${dict.skillAdder.success} ${role}!`));
+    p.note(`Created: ${filePath}\nUpdated: /myemployee/roles/${role}/role.md`, 'Skill Registered');
+    p.outro(pc.cyan('💬 Ready for action, Bos!'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to add skill: ${err.message}`));
+    process.exit(1);
+  }
+}
 
 async function handleUpdate(options?: { lang?: string }) {
   try {
@@ -103,6 +196,14 @@ program
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);
+  });
+
+program
+  .command('add-skill [role] [skill-name]')
+  .description('Add a new modular skill to an employee role')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (role, skillName, options) => {
+    await handleAddSkill(role, skillName, options);
   });
 
 program.parse(process.argv);
