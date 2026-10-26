@@ -1,17 +1,29 @@
 {
   "name": "employee-agents",
   "version": "1.0.0",
-  "description": "Virtual multi-agent tech company squad framework adapting native spec-driven workflows",
+  "description": "Virtual multi-role engineering squad adapting native spec-driven workflows",
   "type": "module",
   "bin": {
     "employee-agents": "./dist/index.js"
   },
   "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "templates",
+    "adapters",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build && chmod +x dist/index.js",
+    "release": "npm version patch && npm publish --access public && git push && git push --tags",
+    "release:minor": "npm version minor && npm publish --access public && git push && git push --tags",
+    "release:major": "npm version major && npm publish --access public && git push && git push --tags",
+    "ship": "./publish.sh"
   },
   "repository": {
     "type": "git",
