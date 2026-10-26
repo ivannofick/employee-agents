@@ -6,8 +6,102 @@ import pc from 'picocolors';
 import fs from 'fs-extra';
 import path from 'node:path';
 import { runSetupWizard } from './cli/prompts.js';
-import { generateWorkspace, updateWorkspace, addSkillToRole, getSkillCatalog } from './core/generator.js';
+import {
+  generateWorkspace,
+  updateWorkspace,
+  addSkillToRole,
+  getSkillCatalog,
+  addRoleToWorkspace,
+  removeRoleFromWorkspace,
+} from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
+
+async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
+  try {
+    p.intro(pc.bgCyan(pc.black(' ➕ ADD SQUAD ROLE ')));
+    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const existing = (await fs.pathExists(rolesDir))
+      ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
+      : [];
+
+    const available = [
+      'product-owner',
+      'ui-ux',
+      'tech-lead',
+      'project-manager',
+      'developer',
+      'qa',
+    ].filter((r) => !existing.includes(r));
+
+    if (available.length === 0) {
+      p.note('All 6 roles are already active in your squad!', 'Squad Full');
+      p.outro(pc.cyan('No roles left to add, Bos!'));
+      return;
+    }
+
+    let role = roleArg;
+    if (!role) {
+      const selected = await p.select({
+        message: 'Select a role to add to your squad:',
+        options: available.map((r) => ({ value: r, label: r })),
+      });
+      if (p.isCancel(selected)) {
+        p.cancel('Cancelled.');
+        process.exit(0);
+      }
+      role = selected as string;
+    }
+
+    const s = p.spinner();
+    s.start(`Activating role "${role}" in squad...`);
+    const activeRoles = await addRoleToWorkspace(role, process.cwd());
+    s.stop(pc.green(`✔ Activated role "${role}" successfully!`));
+    p.note(`Active Squad: ${activeRoles.join(', ')}\nController .agent/skills/myemployee/SKILL.md is updated.`, 'Squad Updated');
+    p.outro(pc.cyan('Squad updated, Bos!'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to add role: ${err.message}`));
+    process.exit(1);
+  }
+}
+
+async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
+  try {
+    p.intro(pc.bgCyan(pc.black(' ➖ REMOVE SQUAD ROLE ')));
+    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const existing = (await fs.pathExists(rolesDir))
+      ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
+      : [];
+
+    if (existing.length === 0) {
+      p.note('No roles currently exist in your workspace.', 'Empty Squad');
+      p.outro(pc.cyan('Nothing to remove, Bos!'));
+      return;
+    }
+
+    let role = roleArg;
+    if (!role) {
+      const selected = await p.select({
+        message: 'Select a role to deactivate from your squad:',
+        options: existing.map((r) => ({ value: r, label: r })),
+      });
+      if (p.isCancel(selected)) {
+        p.cancel('Cancelled.');
+        process.exit(0);
+      }
+      role = selected as string;
+    }
+
+    const s = p.spinner();
+    s.start(`Deactivating role "${role}" from squad...`);
+    const remaining = await removeRoleFromWorkspace(role, process.cwd());
+    s.stop(pc.green(`✔ Role "${role}" removed successfully!`));
+    p.note(`Remaining Squad: ${remaining.join(', ')}\nController .agent/skills/myemployee/SKILL.md is updated and self-healed.`, 'Squad Updated');
+    p.outro(pc.cyan('Squad updated, Bos!'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to remove role: ${err.message}`));
+    process.exit(1);
+  }
+}
 
 async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { lang?: string }) {
   try {
@@ -204,6 +298,22 @@ program
   .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
   .action(async (role, skillName, options) => {
     await handleAddSkill(role, skillName, options);
+  });
+
+program
+  .command('add-role [role]')
+  .description('Add a new employee role to the squad')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (role, options) => {
+    await handleAddRole(role, options);
+  });
+
+program
+  .command('remove-role [role]')
+  .description('Remove an employee role from the squad')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (role, options) => {
+    await handleRemoveRole(role, options);
   });
 
 program.parse(process.argv);
