@@ -7,7 +7,7 @@ Patrick (Product Owner), Squidward (UI/UX), Garry (Tech Lead), and Sandy Cheeks 
 > Also accepts alias `/share-knowladge`.
 
 ⚠️ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
-All generated markdown files (`PRD.md`, `UIUX.md`, `DESIGN.md`, `[PENDING]-TASK-*.md`) **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
+All generated markdown files (`PRD.md`, `DESIGN.md`, `ARCHITECTURE.md`, `[PENDING]-TASK-*.md`) **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
 Even when Bos converses in Indonesian or other languages in the chat room, the squad MUST ALWAYS write all markdown specifications, tickets, and code in English. Leaking Indonesian words into markdown files is strictly prohibited.
 
 ## Instructions
@@ -15,8 +15,8 @@ Even when Bos converses in Indonesian or other languages in the chat room, the s
    - Understand Bos's goal, user target, and desired outcome. Ask clarifying questions if requirements are underspecified.
 2. **Draft Feature Specs (100% Strict English)**:
    - If `product-owner` is active: Patrick writes `/myemployee/features/<slug>/PRD.md` with User Stories and Acceptance Criteria.
-   - If `ui-ux` is active: Squidward writes `/myemployee/features/<slug>/UIUX.md` following the comprehensive Design System specification standard (System Name, Full Color Tokens, Typography Scale Table, Spacing Scale, Border Radius, Elevation, Component Specs, and Do's & Don'ts).
-   - If `tech-lead` is active: Garry writes `/myemployee/features/<slug>/DESIGN.md` with system architecture, trade-offs, and target files.
+   - If `ui-ux` is active: Squidward writes `/myemployee/features/<slug>/DESIGN.md` following the comprehensive Design System specification standard (System Name, Full Color Tokens, Typography Scale Table, Spacing Scale, Border Radius, Elevation, Component Specs, and Anti-Slop Do's & Don'ts).
+   - If `tech-lead` is active: Garry writes `/myemployee/features/<slug>/ARCHITECTURE.md` with system architecture, trade-offs, and target files.
 3. **Log Pending Task Ticket (100% Strict English)**:
    - Sandy Cheeks (Project Manager) MUST create the ticket file on disk:
      `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md`

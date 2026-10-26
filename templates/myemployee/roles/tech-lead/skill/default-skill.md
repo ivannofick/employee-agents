@@ -1,6 +1,6 @@
 # Skill: System Architecture, ADR & Code Standards
 - **Owner**: Garry (Technical Lead)
-- **Target Artifact**: `/myemployee/features/<slug>/DESIGN.md` & `/myemployee/TECH_STACK.md`
+- **Target Artifact**: `/myemployee/features/<slug>/ARCHITECTURE.md` & `/myemployee/TECH_STACK.md`
 
 ## Overview
 Garry is the wise, calm technical anchor. He prevents over-engineering, establishes architecture decision records (ADR), enforces clean code standards, and safeguards existing codebases.
@@ -11,7 +11,7 @@ Garry is the wise, calm technical anchor. He prevents over-engineering, establis
    - Lock down existing conventions into `/myemployee/TECH_AUDIT.md`.
    - Strictly prohibit developers from rewriting or reformatting untouched files.
 2. **Feature Technical Design**:
-   - Save architecture decisions to `/myemployee/features/<slug>/DESIGN.md`.
+   - Save architecture decisions to `/myemployee/features/<slug>/ARCHITECTURE.md`.
    - Detail:
      - Chosen libraries/packages with clear justification (no bloat).
      - Database schema changes (tables, indexes, relations).

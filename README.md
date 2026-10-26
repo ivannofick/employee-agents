@@ -53,10 +53,10 @@ This leads to:
        -> features/<slug>/PRD.md              -> tasks/bugs/[PENDING]-BUG-*.md
                  │                                     │
     2. Squidward (UI/UX)                   2. Garry & Tn. Crab
-       -> Design tokens & wireframes          -> Surgical line fix
+       -> features/<slug>/DESIGN.md           -> Surgical line fix
                  │                                (Skip Master PRD!)
     3. Garry (Tech Lead)                               │
-       -> features/<slug>/DESIGN.md                    ▼
+       -> features/<slug>/ARCHITECTURE.md              ▼
                  │                         3. Stanley (QA)
     4. Sandy Cheeks (PM)                      -> Verification & regression check
        -> tasks/features/                              │
@@ -84,8 +84,8 @@ This leads to:
 | Role (Directory) | Persona | Responsibility | Target Artifact |
 |---|---|---|---|
 | **`product-owner`** | **Patrick** | User research, user journey mapping, and Acceptance Criteria. | `/features/<slug>/PRD.md` |
-| **`ui-ux`** | **Squidward** | Aesthetic systems, design tokens, micro-interactions, and responsive grids. | `/features/<slug>/UIUX.md` |
-| **`tech-lead`** | **Garry** | System architecture, ADRs, schema modeling, security, and brownfield code safety. | `/features/<slug>/DESIGN.md` |
+| **`ui-ux`** | **Squidward** | Aesthetic systems, design tokens, micro-interactions, and responsive grids. | `/features/<slug>/DESIGN.md` |
+| **`tech-lead`** | **Garry** | System architecture, ADRs, schema modeling, security, and brownfield code safety. | `/features/<slug>/ARCHITECTURE.md` |
 | **`project-manager`** | **Sandy Cheeks** | Work breakdown structure, sprint tracking, priority dashboard, and task lifecycles. | `/tasks/features/[PENDING]-TASK-*.md` |
 | **`developer`** | **Tn. Crab** | Clean execution, cost-conscious token usage, anti-slop code, and surgical line edits. | Source code files |
 | **`qa`** | **Stanley** | Destructive testing, edge-case discovery, stress simulation, and regression checks. | QA sign-offs & verification reports |
@@ -176,8 +176,8 @@ myemployee/
 ├── features/                      # Modular Feature Specs created during /share-knowledge
 │   └── <feature-slug>/
 │       ├── PRD.md                 # User Stories & Acceptance Criteria (Patrick)
-│       ├── UIUX.md                # Tokens, Typography & Layout (Squidward)
-│       └── DESIGN.md              # Architecture, ADRs & Target Files (Garry)
+│       ├── DESIGN.md              # Design System, Tokens, Type & Anti-Slop (Squidward)
+│       └── ARCHITECTURE.md        # Architecture, ADRs & Target Files (Garry)
 │
 ├── tasks/                         # Task checklists managed by Sandy Cheeks (PM)
 │   ├── features/                  # [PENDING]-TASK-*.md ➔ [DONE]-TASK-*.md
@@ -220,8 +220,8 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 #### Phase 1: Thinking & Spec (`/share-knowledge`)
 1. **Patrick (PO)** writes `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria.
-2. **Squidward (UI/UX)** defines design tokens, layout hierarchy, and ensures zero visual slop.
-3. **Garry (Tech Lead)** writes `/myemployee/features/<slug>/DESIGN.md` defining libraries, schema, and security.
+2. **Squidward (UI/UX)** writes `/myemployee/features/<slug>/DESIGN.md` defining design tokens, type scale, spacing, elevation, components, and anti-slop rules.
+3. **Garry (Tech Lead)** writes `/myemployee/features/<slug>/ARCHITECTURE.md` defining libraries, schema, security, and target files.
 4. **Sandy Cheeks (PM)** generates the task ticket on disk:
    `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
    ```markdown
@@ -268,7 +268,7 @@ const pendingTasks = files.filter(f => f.startsWith('[PENDING]-'));
 
 - **In the Chat Room**: Team members converse warmly in conversational English or Indonesian.
 - **All Written Files & Markdown Blocks**: **100% Strict English!**
-  - All repository files (`PRD.md`, `DESIGN.md`, `TASK-*.md`, `BUG-*.md`, source code).
+  - All repository files (`PRD.md`, `DESIGN.md`, `ARCHITECTURE.md`, `TASK-*.md`, `BUG-*.md`, source code).
   - Any markdown preview blocks or tables rendered in chat are strictly in English.
 
 ---

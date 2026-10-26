@@ -15,4 +15,4 @@
 - Step 1: Draft migration script with matching up/down operations.
 - Step 2: Test migration against populated test database.
 - Step 3: Verify rollback execution without data loss.
-- Step 4: Record migration approval in `/features/<slug>/DESIGN.md`.
+- Step 4: Record migration approval in `/features/<slug>/ARCHITECTURE.md`.

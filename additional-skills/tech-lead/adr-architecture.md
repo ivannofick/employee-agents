@@ -12,6 +12,6 @@
 4. **Permanent Record**: ADRs are immutable once adopted; subsequent reversals must be recorded as a new superseding ADR.
 
 ## Procedures
-- Step 1: Create ADR under `/features/<slug>/DESIGN.md` or `/myemployee/adr/ADR-00X-<title>.md`.
+- Step 1: Create ADR under `/features/<slug>/ARCHITECTURE.md` or `/myemployee/adr/ADR-00X-<title>.md`.
 - Step 2: Fill out Status, Context, Decision, Alternatives Considered, and Consequences.
 - Step 3: Align with Bos and team before Tn. Crab starts writing code.
