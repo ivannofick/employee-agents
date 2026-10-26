@@ -1,0 +1,42 @@
+{
+  "name": "employee-agents",
+  "version": "1.0.0",
+  "description": "Virtual multi-agent tech company squad framework adapting native spec-driven workflows",
+  "type": "module",
+  "bin": {
+    "employee-agents": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "lint": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivannofick/employee-agents.git"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "antigravity",
+    "spec-driven",
+    "engineering-team",
+    "virtual-company"
+  ],
+  "author": "Ivan Nofick",
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "commander": "^13.0.0",
+    "fs-extra": "^11.3.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
