@@ -10,7 +10,7 @@
 
 **The Bikini Bottom Tech Squad**: A standalone virtual multi-role engineering squad adapting native spec-driven workflows for AI coding assistants.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Dual Pipelines](#-dual-operational-pipelines) • [Architecture](#-directory-structure) • [Roadmap](ROADMAP.md) • [Security](SECURITY.md)
+[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Dual Pipelines](#-dual-operational-pipelines) • [Architecture](#-directory-structure) • [About Us](#-about-us--the-inspiration) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -101,8 +101,6 @@ npx employee-agents
 # Or with Indonesian language setup wizard
 npx employee-agents --lang id
 ```
-
-*(You can also explicitly run `npx employee-agents init` or `npx employee-agents init --lang id`).*
 
 ### 3-Step Setup Wizard:
 1. **Target AI Environment**: Select your editor (Antigravity active, Cursor/Claude/Cline/Windsurf coming soon).
@@ -211,6 +209,28 @@ const activeTasks = files.filter(f => !f.startsWith('[DONE]-'));
 
 ---
 
+## 📖 About Us & The Inspiration
+
+`employee-agents` was conceived by [Ivan Nofick](https://github.com/ivannofick) out of a real-world developer need: *coding with AI agents shouldn't feel like a chaotic, one-man monologue.*
+
+By combining the discipline of real-world software engineering with a playful, creative homage purely inspired by the legendary world of **SpongeBob SquarePants**, building software with AI becomes structured, memorable, and fun. Every persona represents a vital facet of good software development—from Patrick's product curiosity to Garry's calm architectural wisdom, Sandy's tactical discipline, Tn. Crab's cost-efficiency, Squidward's aesthetic eye, and Stanley's destructive quality checks.
+
+---
+
+## 🙏 Acknowledgments & Inspiration
+
+- **[Nickelodeon](https://www.nick.com) & Stephen Hillenburg**: Sincere gratitude to Nickelodeon and the late Stephen Hillenburg for creating the timeless characters of SpongeBob SquarePants. The persona names used in this tool are a purely affectionate homage intended for non-commercial community developer education and enjoyment.
+- **[OpenSpec](https://github.com/Fission-AI/openspec)** by [Fission AI](https://github.com/Fission-AI): Tremendous gratitude to the OpenSpec project for pioneering the spec-driven change workflow that fundamentally inspired the architectural software development lifecycle inside `employee-agents`.
+- **[anti-slop](https://github.com/miqdadbadjuber/anti-slop)** by [Miqdad Badjuber](https://github.com/miqdadbadjuber): Special thanks for championing the anti-slop mindset across AI coding agents.
+
+---
+
+## ⚖️ Disclaimer
+
+> *`employee-agents` is an independent open-source project created for developer productivity and education. It is purely inspired by SpongeBob SquarePants and is NOT affiliated with, sponsored by, or officially endorsed by Nickelodeon, Viacom, or Paramount Global. All trademarks and character names belong entirely to their respective copyright owners.*
+
+---
+
 ## 🗺️ Roadmap & Community
 
 See our [ROADMAP.md](ROADMAP.md) for upcoming platform adapters (Cursor, Claude Code, Cline, Windsurf), role level-up skills, and autonomous squad debate features.
@@ -218,13 +238,6 @@ See our [ROADMAP.md](ROADMAP.md) for upcoming platform adapters (Cursor, Claude 
 - [Security Policy](SECURITY.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Contributing Guide](CONTRIBUTING.md)
-
----
-
-## 🙏 Acknowledgments & Special Thanks
-
-- **[OpenSpec](https://github.com/Fission-AI/openspec)** by [Fission AI](https://github.com/Fission-AI): Tremendous gratitude to the OpenSpec project for pioneering the spec-driven change workflow that fundamentally inspired the architectural software development lifecycle inside `employee-agents`.
-- **[anti-slop](https://github.com/miqdadbadjuber/anti-slop)** by [Miqdad Badjuber](https://github.com/miqdadbadjuber): Special thanks for championing the anti-slop mindset across AI coding agents.
 
 ---
 
