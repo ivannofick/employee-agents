@@ -1,6 +1,6 @@
 {
   "name": "employee-agents",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Virtual multi-role engineering squad adapting native spec-driven workflows",
   "type": "module",
   "bin": {
