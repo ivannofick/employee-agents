@@ -7,15 +7,15 @@ Sandy Cheeks (Project Manager) steps forward to finalize a task item.
 ## Invocation Modes
 This command supports two invocation patterns:
 
-### Mode 1: Targeted Task (`/done-task <slug>` or `/task-done <slug>`)
-*(Example: `/done-task google-oauth` or `/task-done BUG-26102026-register-500`)*
+### Mode 1: Targeted Task (`/done-task <slug>`)
+*(Example: `/done-task google-oauth` or `/done-task BUG-26102026-register-500`)*
 1. Search `/myemployee/tasks/` (`features/` and `bugs/`) for any file whose name contains `<slug>`.
 2. Check if the matching file already starts with `[DONE]-`:
    - If already completed: Inform Bos: *"Task ini sudah ditandai selesai sebelumnya, Bos!"*
-   - If active: Proceed to Step 3 below.
+   - If pending: Proceed to Step 3 below.
 
-### Mode 2: Auto-Detection (`/done-task` or `/task-done` without arguments)
-1. Scan `/myemployee/tasks/` (`features/` and `bugs/`) for files that do **NOT** start with `[DONE]-` (active tasks).
+### Mode 2: Auto-Detection (`/done-task` without arguments)
+1. Scan `/myemployee/tasks/` (`features/` and `bugs/`) for files starting with `[PENDING]-` (or lacking `[DONE]-`).
 2. Evaluate results:
    - **0 active tasks found**: Report to Bos: *"Semua task sudah beres, tidak ada task aktif yang pending saat ini, Bos!"*
    - **Exactly 1 active task found**: Automatically target that task, display its name to Bos, and proceed to Step 3.
@@ -30,7 +30,8 @@ Once the target task file is confirmed:
    - Confirm that Stanley (QA) verified the changes and found zero regressions or breaking edge-cases.
    - Confirm that Garry (Tech Lead) approved the architectural integrity.
 2. **Rename File**:
-   - Prepend `[DONE]-` to the filename (e.g., `TASK-26102026-auth.md` ➔ `[DONE]-TASK-26102026-auth.md`).
+   - If the file starts with `[PENDING]-`, replace `[PENDING]-` with `[DONE]-` (e.g., `[PENDING]-TASK-26102026-auth.md` ➔ `[DONE]-TASK-26102026-auth.md`).
+   - If the file does not have `[PENDING]-`, prepend `[DONE]-`.
 3. **Append Completion Log**:
    - Add a `[COMPLETION LOG]` section to the bottom of the task file with timestamp, sign-offs, and summary of changes.
 4. **Report Back**:

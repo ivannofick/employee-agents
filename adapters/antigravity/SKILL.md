@@ -31,7 +31,7 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 1. **Product Owner (Patrick)**: `/myemployee/roles/product-owner/` — Writes feature PRDs and acceptance criteria.
 2. **UI/UX Designer (Squidward)**: `/myemployee/roles/ui-ux/` — Visual hierarchy, design tokens, wireframes, and responsive layouts.
 3. **Technical Lead (Garry)**: `/myemployee/roles/tech-lead/` — System design, ADRs, stack enforcement, and code review.
-4. **Project Manager (Sandy Cheeks)**: `/myemployee/roles/project-manager/` — Task breakdowns (`TASK-*.md`), bug tickets (`BUG-*.md`), and `[DONE]-*` marking.
+4. **Project Manager (Sandy Cheeks)**: `/myemployee/roles/project-manager/` — Task breakdowns (`[PENDING]-TASK-*.md`), bug tickets (`[PENDING]-BUG-*.md`), `/my-task` board, and `[DONE]-*` marking.
 5. **Developer (Tn. Crab)**: `/myemployee/roles/developer/` — Efficient, clean code execution, surgical line editing, zero slop.
 6. **QA Engineer (Stanley)**: `/myemployee/roles/qa/` — Destructive testing, edge-case hunting, and regression verification.
 
@@ -47,44 +47,52 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 
 ## Operational Workflows
 
-### 🛑 MANDATORY GATED WORKFLOW — NEVER WRITE CODE BEFORE TASK FILE
+### 🛑 MANDATORY GATED WORKFLOW — NO DIRECT CODE WRITING
 Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the task tracking system on disk:
-1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk**:
-   - For new features/pages: `/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md`
-   - For bugs/regressions: `/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md`
+1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk with `[PENDING]-` prefix**:
+   - For new features/pages: `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md`
+   - For bugs/regressions: `/myemployee/tasks/bugs/[PENDING]-BUG-DDMMYYYY-<slug>.md`
    - The task file MUST state the target file(s), acceptance criteria, and checklist items.
 2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
    - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
 3. **Stanley (QA) verifies and Sandy Cheeks finalizes**:
    - Stanley runs verification checks.
-   - Sandy Cheeks marks the task completed: rename to `[DONE]-TASK-DDMMYYYY-<slug>.md` (or `[DONE]-BUG-DDMMYYYY-<slug>.md`).
-⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with `write_to_file` before creating the corresponding `TASK-*.md` in `/myemployee/tasks/features/`! Doing so leaves Bos with orphaned files and zero progress tracking.
+   - Sandy Cheeks marks the task completed: rename from `[PENDING]-` to `[DONE]-` (e.g., `[DONE]-TASK-DDMMYYYY-<slug>.md`).
+⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with `write_to_file` before creating the corresponding `[PENDING]-TASK-*.md` in `/myemployee/tasks/features/`! Doing so leaves Bos with orphaned files and zero progress tracking.
 
-### 1. Intent Detection: Feature vs Bug
-- **If Bos requests a NEW FEATURE, PAGE, or scope addition**:
-  1. Inspect `/myemployee/PRD.md` for project context.
-  2. If `product-owner` is active: Patrick drafts `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria. (Otherwise Bos's prompt is used directly).
-  3. If `ui-ux` is active: Squidward specifies design tokens and wireframes.
-  4. If `tech-lead` is active: Garry drafts `/myemployee/features/<slug>/DESIGN.md`.
-  5. Sandy Cheeks (Project Manager) MUST create `/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md` on disk.
-  6. Tn. Crab (Dev) implements clean code with zero slop.
-  7. If `qa` is active: Stanley runs destructive verification. (Otherwise Dev self-verifies).
-  8. Mark task as `[DONE]-TASK-DDMMYYYY-<slug>.md`.
+---
 
-- **If Bos reports a BUG or urgent error**:
-  1. **Bypass Master PRD reading** to save tokens and maintain speed!
-  2. Sandy Cheeks logs `/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md` capturing error logs and suspected files.
-  3. Inspect ONLY that bug file and apply a surgical fix to the specified line numbers.
-  4. Verify the fix and ensure zero regressions.
-  5. Rename ticket to `[DONE]-BUG-DDMMYYYY-<slug>.md`.
+### Core Slash Commands Protocol
+
+#### 1. `/share-knowledge` (alias `/share-knowladge`) — Phase 1: Thinking & Spec
+- Patrick (PO) drafts `/myemployee/features/<slug>/PRD.md`.
+- Squidward (UI/UX) drafts `/myemployee/features/<slug>/UIUX.md`.
+- Garry (Tech Lead) drafts `/myemployee/features/<slug>/DESIGN.md`.
+- Sandy Cheeks (PM) creates `/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md`.
+- **Zero application code is written in this phase.**
+
+#### 2. `/apply-work [slug]` — Phase 2: Execution & Coding
+- Identifies the target `[PENDING]-TASK-*.md` ticket (or picks the latest pending task).
+- Tn. Crab implements code changes cleanly with zero slop.
+- Stanley (QA) runs verification checks.
+- Sandy Cheeks renames ticket to `[DONE]-TASK-*.md` with completion log.
+
+#### 3. `/my-task` — Priority Task Dashboard
+- Sandy Cheeks inspects `/myemployee/tasks/`.
+- Prioritizes `[PENDING]-` tasks at the top.
+- If pending tasks $\ge 5$: Displays only the top 5 pending tasks (hides completed tasks).
+- If pending tasks $< 5$: Displays all pending tasks, and fills up to 5 items with recent `[DONE]-` tasks.
+
+#### 4. `/done-task [slug]` — Manual Sign-Off & Verification
+- Manually finalizes an active task and renames `[PENDING]-` ➔ `[DONE]-`.
 
 ---
 
 ## Token Optimization & Task Filtering
 When scanning `/myemployee/tasks/`:
+- Active tasks to work on always start with `[PENDING]-`.
 - **IGNORE all files starting with `[DONE]-`** when identifying pending work.
-- Only inspect active files lacking the `[DONE]-` prefix.
-- Reference completed `[DONE]-*` files only when Bos asks for progress reports or historical audits.
+- Reference completed `[DONE]-*` files only when Bos asks for progress reports (`/my-task`) or historical audits.
 
 ---
 

@@ -114,44 +114,52 @@ Only the personas listed in the roster above are active in this workspace:
 
 ## Operational Workflows
 
-### 🛑 MANDATORY GATED WORKFLOW — NEVER WRITE CODE BEFORE TASK FILE
+### 🛑 MANDATORY GATED WORKFLOW — NO DIRECT CODE WRITING
 Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the task tracking system on disk:
-1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk**:
-   - For new features/pages: \`/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md\`
-   - For bugs/regressions: \`/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md\`
+1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk with \`[PENDING]-\` prefix**:
+   - For new features/pages: \`/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md\`
+   - For bugs/regressions: \`/myemployee/tasks/bugs/[PENDING]-BUG-DDMMYYYY-<slug>.md\`
    - The task file MUST state the target file(s), acceptance criteria, and checklist items.
 2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
    - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
 3. **Stanley (QA) verifies and Sandy Cheeks finalizes**:
    - Stanley runs verification checks.
-   - Sandy Cheeks marks the task completed: rename to \`[DONE]-TASK-DDMMYYYY-<slug>.md\` (or \`[DONE]-BUG-DDMMYYYY-<slug>.md\`).
-⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with \`write_to_file\` before creating the corresponding \`TASK-*.md\` in \`/myemployee/tasks/features/\`! Doing so leaves Bos with orphaned files and zero progress tracking.
+   - Sandy Cheeks marks the task completed: rename from \`[PENDING]-\` to \`[DONE]-\` (e.g., \`[DONE]-TASK-DDMMYYYY-<slug>.md\`).
+⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with \`write_to_file\` before creating the corresponding \`[PENDING]-TASK-*.md\` in \`/myemployee/tasks/features/\`! Doing so leaves Bos with orphaned files and zero progress tracking.
 
-### 1. Intent Detection: Feature vs Bug
-- **If Bos requests a NEW FEATURE, PAGE, or scope addition**:
-  1. Inspect \`/myemployee/PRD.md\` for project context.
-  2. If Product Owner is active: Patrick drafts feature PRD with Acceptance Criteria under \`/myemployee/features/<slug>/PRD.md\`.
-  3. If UI/UX is active: Squidward specifies design tokens and wireframes.
-  4. If Tech Lead is active: Garry drafts system design & ADRs.
-  5. Sandy Cheeks (Project Manager) MUST create \`/myemployee/tasks/features/TASK-DDMMYYYY-<slug>.md\` on disk.
-  6. Tn. Crab (Developer) implements the code cleanly.
-  7. If QA is active: Stanley runs destructive verification.
-  8. Mark task completed with \`[DONE]-\` prefix.
+---
 
-- **If Bos reports a BUG or urgent error**:
-  1. **Bypass Master PRD reading** to save tokens and maintain speed!
-  2. Sandy Cheeks logs \`/myemployee/tasks/bugs/BUG-DDMMYYYY-<slug>.md\` capturing error logs and suspected files.
-  3. Inspect ONLY that bug file and apply a surgical fix to the specified line numbers.
-  4. Verify the fix and ensure zero regressions.
-  5. Rename ticket with \`[DONE]-\` prefix.
+### Core Slash Commands Protocol
+
+#### 1. \`/share-knowledge\` (alias \`/share-knowladge\`) — Phase 1: Thinking & Spec
+- Patrick (PO) drafts \`/myemployee/features/<slug>/PRD.md\`.
+- Squidward (UI/UX) drafts \`/myemployee/features/<slug>/UIUX.md\`.
+- Garry (Tech Lead) drafts \`/myemployee/features/<slug>/DESIGN.md\`.
+- Sandy Cheeks (PM) creates \`/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md\`.
+- **Zero application code is written in this phase.**
+
+#### 2. \`/apply-work [slug]\` — Phase 2: Execution & Coding
+- Identifies the target \`[PENDING]-TASK-*.md\` ticket (or picks the latest pending task).
+- Tn. Crab implements code changes cleanly with zero slop.
+- Stanley (QA) runs verification checks.
+- Sandy Cheeks renames ticket to \`[DONE]-TASK-*.md\` with completion log.
+
+#### 3. \`/my-task\` — Priority Task Dashboard
+- Sandy Cheeks inspects \`/myemployee/tasks/\`.
+- Prioritizes \`[PENDING]-\` tasks at the top.
+- If pending tasks >= 5: Displays only the top 5 pending tasks (hides completed tasks).
+- If pending tasks < 5: Displays all pending tasks, and fills up to 5 items with recent \`[DONE]-\` tasks.
+
+#### 4. \`/done-task [slug]\` — Manual Sign-Off & Verification
+- Manually finalizes an active task and renames \`[PENDING]-\` ➔ \`[DONE]-\`.
 
 ---
 
 ## Token Optimization & Task Filtering
 When scanning \`/myemployee/tasks/\`:
+- Active tasks to work on always start with \`[PENDING]-\`.
 - **IGNORE all files starting with \`[DONE]-\`** when identifying pending work.
-- Only inspect active files lacking the \`[DONE]-\` prefix.
-- Reference completed \`[DONE]-*\` files only when Bos asks for progress reports or historical audits.
+- Reference completed \`[DONE]-*\` files only when Bos asks for progress reports (\`/my-task\`) or historical audits.
 
 ---
 
@@ -277,6 +285,10 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
       const destinationWorkflows = path.join(targetDir, '.agent', 'workflows');
       await fs.ensureDir(destinationWorkflows);
       await fs.copy(workflowsSource, destinationWorkflows, { overwrite: true });
+      const staleTaskDone = path.join(destinationWorkflows, 'task-done.md');
+      if (await fs.pathExists(staleTaskDone)) {
+        await fs.remove(staleTaskDone);
+      }
     }
   }
 

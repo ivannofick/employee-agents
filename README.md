@@ -152,7 +152,10 @@ When using Antigravity, the framework equips you with interactive slash commands
 
 | Slash Command | Handler | Description |
 |---|---|---|
-| **`/done-task`** (or **`/task-done`**) | Sandy Cheeks (PM) | Marks a task completed and renames to `[DONE]-*`. Supports targeted slug (e.g. `/done-task oauth`) or auto-detection of pending tasks. |
+| **`/share-knowledge`** | Patrick, Squidward, Garry, Sandy | **Phase 1: Thinking & Spec**. Aligns on goals, drafts feature PRD, UI/UX tokens, and architecture, then logs `[PENDING]-TASK-*.md`. *(Also accepts alias `/share-knowladge`)*. |
+| **`/apply-work`** | Tn. Crab (Dev) & Stanley (QA) | **Phase 2: Execution**. Surgically implements active `[PENDING]-` tasks, runs QA validations, and transitions ticket to `[DONE]-`. |
+| **`/my-task`** | Sandy Cheeks (PM) | Displays priority task board. Shows top 5 pending tasks (hides completed if pending >= 5), or blends with recent completed tasks up to 5 items total. |
+| **`/done-task`** | Sandy Cheeks (PM) | Manually verifies sign-offs and marks a task as `[DONE]-*`. Supports targeted slug (e.g. `/done-task oauth`) or auto-detection. |
 | **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/myemployee/roles/<role>/skill/`. |
 | **`/status-token`** | Garry (Tech Lead) | Reports the active AI model, total context window capacity (1M tokens), estimated tokens consumed, remaining quota, and efficiency advice. |
 | **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
@@ -168,12 +171,15 @@ myemployee/
 ├── PRD.md                         # Master Product Requirements Document (North Star)
 ├── config.json                    # Project configuration & target AI setting
 │
-├── features/                      # Modular Feature PRDs created by Patrick (PO)
-│   └── <feature-slug>/PRD.md
+├── features/                      # Modular Feature Specs created during /share-knowledge
+│   └── <feature-slug>/
+│       ├── PRD.md                 # User Stories & Acceptance Criteria (Patrick)
+│       ├── UIUX.md                # Tokens, Typography & Layout (Squidward)
+│       └── DESIGN.md              # Architecture, ADRs & Target Files (Garry)
 │
-├── tasks/                         # Task checklists created by Sandy Cheeks (PM)
-│   ├── features/                  # TASK-DDMMYYYY-<slug>.md
-│   └── bugs/                      # BUG-DDMMYYYY-<slug>.md
+├── tasks/                         # Task checklists managed by Sandy Cheeks (PM)
+│   ├── features/                  # [PENDING]-TASK-*.md ➔ [DONE]-TASK-*.md
+│   └── bugs/                      # [PENDING]-BUG-*.md ➔ [DONE]-BUG-*.md
 │
 └── roles/                         # Modular Role Definitions & Capabilities
     ├── product-owner/
