@@ -1,6 +1,6 @@
 # Skill: Ruthless Anti-Slop UI & Aesthetic Design
 - **Owner**: Squidward (UI/UX Designer)
-- **Target Artifact**: UI wireframes, design tokens, HTML/CSS, and styling specifications
+- **Target Artifact**: `/myemployee/features/<slug>/UIUX.md`
 
 ## Overview
 Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises generic "AI slop" and holds interface designs to the highest standards of authentic, human-grade craftsmanship.
@@ -12,7 +12,7 @@ Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises 
 Every interface generated under Squidward's watch MUST pass these strict prohibitions:
 
 ### 1. BAN on Eyebrow Badges & Pulsing Dots
-- **FORBIDDEN**: Floating pill-shaped badges above headlines (e.g., "Available for hire", "Available for Architecture & Tech Advisory", "Beta", "AI-Powered") accompanied by pulsating green/blue dots.
+- **FORBIDDEN**: Floating pill-shaped badges above headlines (e.g., "Available for hire", "AI-Powered", "Beta") accompanied by pulsating green/blue dots.
 - **INSTEAD**: State identity and availability naturally within the headline, bio, or a clean footer note. No decorative status dots that pulse for no functional reason.
 
 ### 2. BAN on Generic Neon Gradients & Glassmorphism Card-Soup
@@ -30,14 +30,53 @@ Every interface generated under Squidward's watch MUST pass these strict prohibi
 
 ---
 
-## 🎨 PRODUCTION AESTHETIC STANDARDS
+## 📐 MANDATORY DESIGN SYSTEM SPECIFICATION STANDARD (UIUX.md)
 
-1. **Curated Color Palettes**:
-   - Limit to a dominant base (90%), a supporting structure (10%), and at most ONE deliberate, sharp accent color.
-   - Contrast must strictly pass WCAG AA standards (minimum 4.5:1 for body text, 3:1 for large headings).
-2. **Typography Hierarchy**:
-   - Distinct, purposeful font sizes (e.g., display 48-64px, H2 28-36px, body 15-17px).
-   - Generous line height (1.5 - 1.6 for body copy) and line length capped at 65-75 characters for optimal readability.
-3. **Responsive Breathing Room**:
-   - Minimum tap target of 44x44px for touch interfaces.
-   - Explicit layout adaptation: never jump from desktop 4-column directly to a squished mobile column without intentional tablet reflow.
+Whenever Squidward writes `/myemployee/features/<slug>/UIUX.md`, it MUST follow this structured, enterprise-grade specification format. Never write superficial notes:
+
+### 1. System Name & Overview
+- Provide a distinctive name for the design system (e.g. *ExecutiveObsidian*, *NovaCommerce*).
+- Define the visual philosophy, spatial breathing room, and core user emotional impact.
+
+### 2. Complete Color Palette (Hex Codes & Semantic Roles)
+- **Canvas & Surface**: Background, Surface, Surface Elevated, Surface Border, Surface Border Hover.
+- **Typography Colors**: Text Primary, Text Secondary, Text Muted.
+- **Brand & Telemetry Accents**: Primary Accent, Secondary Accent, Tertiary Accent.
+- **Semantic Feedback**: Success, Warning, Error, Info.
+
+### 3. Complete Typography Scale
+- Specify Headline Font, Body Font, and Mono Font.
+- Provide a full markdown table with:
+  - `Display` (56px+, 800 weight, tight line-height, negative tracking)
+  - `Headline` (36px–42px, 700 weight)
+  - `Subhead` (24px–28px, 600 weight)
+  - `Body Large` (18px, 400 weight, 1.6 line-height)
+  - `Body` (16px, 400 weight, 1.6 line-height)
+  - `Body Small` (14px, 400 weight, 1.5 line-height)
+  - `Caption` (12px, 500 weight)
+  - `Overline` (11px, 700 weight, uppercase, generous tracking)
+  - `Code` (13px–14px, Mono font)
+
+### 4. Spacing Scale
+- Base unit (e.g., 8px).
+- Concrete scale: `4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px, 96px, 128px`.
+- Component padding tokens (small, medium, large, container).
+- Section spacing tokens across mobile (<768px), tablet (768px–1024px), and desktop (>1024px).
+
+### 5. Border Radius Tokens
+- Concrete tokens: `None (0px)`, `Small (4px)`, `Medium (8px/12px)`, `Large (16px)`, `XL (24px)`, `Full (9999px)`.
+- Explicit UI element mappings for each token.
+
+### 6. Elevation & Layered Shadows
+- Multi-layered shadow specifications: `Subtle`, `Medium`, `Large`, `Overlay`, and Contextual Hover Lift.
+
+### 7. Concrete Component Specifications
+- Granular CSS specs (background, text, border, padding, radius, hover, active, focus-visible) for:
+  - Buttons (Primary Pill, Secondary Outline, Ghost, Destructive, sizes, disabled state)
+  - Cards (Default, Elevated, hover transforms)
+  - Inputs (Labels, placeholders, focus rings, error states)
+  - Chips / Badges / Segmented Controls
+  - Modals / Drawers / Tooltips
+
+### 8. Project-Tailored Do's and Don'ts
+- 8–10 actionable rules preventing visual slop and enforcing accessibility (WCAG AA contrast, CLS 0, touch targets 44x44px+).

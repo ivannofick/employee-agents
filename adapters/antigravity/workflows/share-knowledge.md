@@ -15,7 +15,7 @@ Even when Bos converses in Indonesian or other languages in the chat room, the s
    - Understand Bos's goal, user target, and desired outcome. Ask clarifying questions if requirements are underspecified.
 2. **Draft Feature Specs (100% Strict English)**:
    - If `product-owner` is active: Patrick writes `/myemployee/features/<slug>/PRD.md` with User Stories and Acceptance Criteria.
-   - If `ui-ux` is active: Squidward writes `/myemployee/features/<slug>/UIUX.md` with color tokens, typography, and layout vibe.
+   - If `ui-ux` is active: Squidward writes `/myemployee/features/<slug>/UIUX.md` following the comprehensive Design System specification standard (System Name, Full Color Tokens, Typography Scale Table, Spacing Scale, Border Radius, Elevation, Component Specs, and Do's & Don'ts).
    - If `tech-lead` is active: Garry writes `/myemployee/features/<slug>/DESIGN.md` with system architecture, trade-offs, and target files.
 3. **Log Pending Task Ticket (100% Strict English)**:
    - Sandy Cheeks (Project Manager) MUST create the ticket file on disk:
