@@ -152,6 +152,19 @@ npx employee-agents add-role tech-analyst
 npx employee-agents remove-role developer
 ```
 
+### 5. Hide or Show the Workspace Folder (Clean Sidebar Mode)
+Keep your project root clean in your IDE file explorer sidebar. Toggle workspace visibility non-destructively anytime without affecting git history or background AI operations:
+
+```bash
+# Hide /myemployee from the IDE file explorer sidebar:
+npx employee-agents hide
+
+# Restore /myemployee back to the IDE file explorer sidebar:
+npx employee-agents show
+```
+
+> **Note**: This configures `files.exclude` inside `.vscode/settings.json`. The AI squad continues to read, write, and track tasks in `/myemployee/` seamlessly in the background while hidden.
+
 ---
 
 ## Built-In Slash Commands (`/`)

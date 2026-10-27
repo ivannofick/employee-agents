@@ -13,6 +13,8 @@ import {
   getSkillCatalog,
   addRoleToWorkspace,
   removeRoleFromWorkspace,
+  hideWorkspaceFromIde,
+  showWorkspaceInIde,
 } from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
 
@@ -323,6 +325,58 @@ program
   .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
   .action(async (role, options) => {
     await handleRemoveRole(role, options);
+  });
+
+async function handleHide(options?: { lang?: string }) {
+  try {
+    p.intro(pc.cyan('employee-agents hide'));
+    const s = p.spinner();
+    s.start('Hiding /myemployee from IDE sidebar...');
+    await hideWorkspaceFromIde(process.cwd());
+    s.stop(pc.green('✔ Folder /myemployee hidden from IDE sidebar.'));
+    p.note(
+      'Configured in .vscode/settings.json (files.exclude).\nYour AI squad continues to run actively in the background.\nTo restore view in sidebar, run: npx employee-agents show',
+      'Workspace Hidden'
+    );
+    p.outro(pc.green('Done.'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to hide workspace: ${err.message}`));
+    process.exit(1);
+  }
+}
+
+async function handleShow(options?: { lang?: string }) {
+  try {
+    p.intro(pc.cyan('employee-agents show'));
+    const s = p.spinner();
+    s.start('Restoring /myemployee to IDE sidebar...');
+    await showWorkspaceInIde(process.cwd());
+    s.stop(pc.green('✔ Folder /myemployee restored to IDE sidebar.'));
+    p.note(
+      'Removed exclusion from .vscode/settings.json.\nFolder /myemployee is now visible in the file explorer.',
+      'Workspace Visible'
+    );
+    p.outro(pc.green('Done.'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to restore workspace: ${err.message}`));
+    process.exit(1);
+  }
+}
+
+program
+  .command('hide')
+  .description('Hide /myemployee workspace folder from IDE file explorer sidebar')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (options) => {
+    await handleHide(options);
+  });
+
+program
+  .command('show')
+  .description('Restore /myemployee workspace folder to IDE file explorer sidebar')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (options) => {
+    await handleShow(options);
   });
 
 program.parse(process.argv);

@@ -55,6 +55,7 @@
 - **Universal Ambient Governance**: Automatically provisions `.agent/rules/employee-agents.md` and smart-appends root `AGENTS.md` (via non-destructive delimiter tags `<!-- employee-agents:start -->...<!-- employee-agents:end -->`).
 - **Casual Prompt Triage**: Intercepts casual user chat without slash commands, summoning Larry (Tech Analyst) and Patrick (Product Owner) as front-desk to prepare pending Kanban task tickets rather than dumping unverified code.
 - **Multi-Skill Coexistence**: Seamlessly coexists with external agent skills and tools (OpenSpec, Antislop, linters) without interference.
+- **IDE Sidebar Toggle**: Provides non-destructive `employee-agents hide` and `employee-agents show` commands configuring `.vscode/settings.json` (`files.exclude`) for clean editor sidebar mode without impacting background squad operations.
 
 ---
 
@@ -62,7 +63,7 @@
 
 | Version | Release Date | Summary of Changes |
 |---------|--------------|--------------------|
-| **v1.0.4** | 2026-10-27 | Ambient Guardrail & Anti-Slop Interceptor: Added persistent ambient rules (`.agent/rules/employee-agents.md`), universal `AGENTS.md` smart-append, broad action semantic triggers in `SKILL.md`, Front-Desk casual prompt triage, and multi-skill coexistence. |
+| **v1.0.4** | 2026-10-27 | Ambient Guardrail & Clean Sidebar Mode: Added persistent ambient rules (`.agent/rules/employee-agents.md`), universal `AGENTS.md` smart-append, broad action semantic triggers in `SKILL.md`, Front-Desk casual prompt triage, multi-skill coexistence, and `hide`/`show` CLI commands. |
 | **v1.0.3** | 2026-10-27 | Squad Architecture Reform: Added Larry the Lobster (Tech Analyst), Kanban task subfolders, Living Master PRD sync, Mobile-First testable `DESIGN.md` with VAC checklists, Founder sovereignty on `[DONE]` and Git push, Garry's Context-Switch Guard, and streamlined roadmap. |
 | **v1.0.2** | 2026-10-26 | Refactored artifacts (`DESIGN.md`, `ARCHITECTURE.md`), enforced strict English specification standards, and extracted `ACKNOWLEDGMENTS.md`. |
 | **v1.0.1** | 2026-10-26 | Perdana rilis (Initial public release): 6-role Bikini Bottom squad, gated task lifecycle, TypeScript CLI wizard, i18n support, and Antigravity slash commands. |

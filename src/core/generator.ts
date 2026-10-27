@@ -478,3 +478,53 @@ export async function addSkillToRole(
 
   return skillFilePath;
 }
+
+export async function hideWorkspaceFromIde(targetDir: string = process.cwd()): Promise<boolean> {
+  const vscodeDir = path.join(targetDir, '.vscode');
+  const settingsPath = path.join(vscodeDir, 'settings.json');
+  await fs.ensureDir(vscodeDir);
+
+  let settings: Record<string, any> = {};
+  if (await fs.pathExists(settingsPath)) {
+    try {
+      settings = await fs.readJson(settingsPath);
+    } catch {
+      settings = {};
+    }
+  }
+
+  if (!settings['files.exclude'] || typeof settings['files.exclude'] !== 'object') {
+    settings['files.exclude'] = {};
+  }
+
+  settings['files.exclude']['**/myemployee'] = true;
+  settings['files.exclude']['**/.myemployee'] = true;
+
+  await fs.writeJson(settingsPath, settings, { spaces: 2 });
+  return true;
+}
+
+export async function showWorkspaceInIde(targetDir: string = process.cwd()): Promise<boolean> {
+  const settingsPath = path.join(targetDir, '.vscode', 'settings.json');
+
+  if (await fs.pathExists(settingsPath)) {
+    try {
+      const settings = await fs.readJson(settingsPath);
+      if (settings['files.exclude'] && typeof settings['files.exclude'] === 'object') {
+        delete settings['files.exclude']['**/myemployee'];
+        delete settings['files.exclude']['**/.myemployee'];
+        delete settings['files.exclude']['myemployee'];
+        delete settings['files.exclude']['.myemployee'];
+
+        if (Object.keys(settings['files.exclude']).length === 0) {
+          delete settings['files.exclude'];
+        }
+
+        await fs.writeJson(settingsPath, settings, { spaces: 2 });
+      }
+    } catch {}
+  }
+
+  return true;
+}
+
