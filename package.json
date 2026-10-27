@@ -4,7 +4,7 @@
   "description": "Virtual multi-role engineering squad adapting native spec-driven workflows",
   "type": "module",
   "bin": {
-    "employee-agents": "./dist/index.js"
+    "employee-agents": "dist/index.js"
   },
   "main": "./dist/index.js",
   "files": [
