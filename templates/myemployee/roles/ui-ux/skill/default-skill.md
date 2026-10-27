@@ -1,9 +1,9 @@
-# Skill: Ruthless Anti-Slop UI & Aesthetic Design
+# Skill: Ruthless Anti-Slop UI & Testable Design System Specification
 - **Owner**: Squidward (UI/UX Designer)
 - **Target Artifact**: `/myemployee/features/<slug>/DESIGN.md`
 
 ## Overview
-Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises generic "AI slop" and holds interface designs to the highest standards of authentic, human-grade craftsmanship.
+Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises generic "AI slop" and holds interface designs to the highest standards of authentic, human-grade craftsmanship. Every design must be concrete, testable, and strictly mobile-first.
 
 ---
 
@@ -13,15 +13,15 @@ Every interface generated under Squidward's watch MUST pass these strict prohibi
 
 ### 1. BAN on Eyebrow Badges & Pulsing Dots
 - **FORBIDDEN**: Floating pill-shaped badges above headlines (e.g., "Available for hire", "AI-Powered", "Beta") accompanied by pulsating green/blue dots.
-- **INSTEAD**: State identity and availability naturally within the headline, bio, or a clean footer note. No decorative status dots that pulse for no functional reason.
+- **INSTEAD**: State identity and availability naturally within the headline, bio, or a clean footer note.
 
 ### 2. BAN on Generic Neon Gradients & Glassmorphism Card-Soup
 - **FORBIDDEN**: Dark mode backgrounds drowned in generic purple-to-blue, violet-to-cyan, or magenta neon gradients.
 - **FORBIDDEN**: Wrapping every paragraph of text in semi-transparent frosted cards (`backdrop-filter: blur(10px)`) with glowing 1px borders.
-- **INSTEAD**: Confident, solid backgrounds (deep obsidian, warm charcoal, or crisp editorial white). Let typography and whitespace create structure, not borders and boxes.
+- **INSTEAD**: Confident, solid backgrounds (deep obsidian, warm charcoal, or crisp editorial white). Let typography and whitespace create structure.
 
 ### 3. BAN on Em Dashes (—) in UI Copy
-- **FORBIDDEN**: Using the em dash (`—`) in UI copy, headlines, or microcopy. It is a notorious dead giveaway of lazy AI generation.
+- **FORBIDDEN**: Using the em dash (`—`) in UI copy, headlines, buttons, or microcopy. It is a notorious dead giveaway of lazy AI generation.
 - **INSTEAD**: Use commas, colons, parentheses, or separate sentences cleanly.
 
 ### 4. BAN on Fake Bento Grids & Empty Icon Clutter
@@ -30,53 +30,50 @@ Every interface generated under Squidward's watch MUST pass these strict prohibi
 
 ---
 
-## 📐 MANDATORY DESIGN SYSTEM SPECIFICATION STANDARD (DESIGN.md)
+## 📱 MANDATORY MOBILE-FIRST DESIGN DIRECTIVE
 
-Whenever Squidward writes `/myemployee/features/<slug>/DESIGN.md`, it MUST follow this structured, enterprise-grade specification format. Never write superficial notes:
+Squidward designs from the **smallest viewport upward**:
+1. **Compact Baseline (360px–375px)**:
+   - All components, inputs, and cards MUST render perfectly on narrow mobile screens first.
+   - Zero horizontal overflow (`overflow-x: hidden`).
+   - Touch targets for all interactive elements MUST be at least 44x44px.
+2. **Fluid Expansion Rules (Responsive Matrix)**:
+   - Specify how single-column mobile layouts adapt when expanding to tablet (768px) and desktop (1280px+).
+   - Do NOT waste tokens generating repetitive ASCII art for multiple screen sizes; instead, define concrete CSS grid/flex layout behavior.
 
-### 1. System Name & Overview
-- Provide a distinctive name for the design system (e.g. *ExecutiveObsidian*, *NovaCommerce*).
-- Define the visual philosophy, spatial breathing room, and core user emotional impact.
+---
 
-### 2. Complete Color Palette (Hex Codes & Semantic Roles)
-- **Canvas & Surface**: Background, Surface, Surface Elevated, Surface Border, Surface Border Hover.
-- **Typography Colors**: Text Primary, Text Secondary, Text Muted.
-- **Brand & Telemetry Accents**: Primary Accent, Secondary Accent, Tertiary Accent.
-- **Semantic Feedback**: Success, Warning, Error, Info.
+## 📐 TESTABLE DESIGN SPECIFICATION STANDARD (DESIGN.md)
 
-### 3. Complete Typography Scale
-- Specify Headline Font, Body Font, and Mono Font.
-- Provide a full markdown table with:
-  - `Display` (56px+, 800 weight, tight line-height, negative tracking)
-  - `Headline` (36px–42px, 700 weight)
-  - `Subhead` (24px–28px, 600 weight)
-  - `Body Large` (18px, 400 weight, 1.6 line-height)
-  - `Body` (16px, 400 weight, 1.6 line-height)
-  - `Body Small` (14px, 400 weight, 1.5 line-height)
-  - `Caption` (12px, 500 weight)
-  - `Overline` (11px, 700 weight, uppercase, generous tracking)
-  - `Code` (13px–14px, Mono font)
+Whenever Squidward writes `/myemployee/features/<slug>/DESIGN.md`, it MUST follow this structured, contract-grade specification format:
 
-### 4. Spacing Scale
-- Base unit (e.g., 8px).
-- Concrete scale: `4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px, 96px, 128px`.
-- Component padding tokens (small, medium, large, container).
-- Section spacing tokens across mobile (<768px), tablet (768px–1024px), and desktop (>1024px).
+### 1. Design Tokens Table
+Every color, background, and accent MUST be defined as a testable token:
+| Token Name | Hex Value | CSS Variable / Utility Class | Semantic Role |
+|------------|-----------|------------------------------|---------------|
+| `--bg-canvas` | `#0F172A` | `var(--bg-canvas)` | Main canvas background |
+| `--text-primary` | `#F8FAFC` | `var(--text-primary)` | Primary headings and body |
+| `--accent-primary` | `#3B82F6` | `var(--accent-primary)` | Primary CTA buttons |
 
-### 5. Border Radius Tokens
-- Concrete tokens: `None (0px)`, `Small (4px)`, `Medium (8px/12px)`, `Large (16px)`, `XL (24px)`, `Full (9999px)`.
-- Explicit UI element mappings for each token.
+### 2. Component State Matrix
+Every component must specify exact CSS styling across all interactive states:
+| Component Variant | State | Background | Text Color | Border | Transform / Shadow |
+|-------------------|-------|------------|------------|--------|---------------------|
+| Primary Button | Default | `#3B82F6` | `#FFFFFF` | None | None |
+| Primary Button | Hover | `#2563EB` | `#FFFFFF` | None | `translateY(-1px)` |
+| Primary Button | Active | `#1D4ED8` | `#FFFFFF` | None | `scale(0.98)` |
+| Primary Button | Focus-Visible | `#3B82F6` | `#FFFFFF` | `2px solid #93C5FD` | Offset 2px |
+| Primary Button | Disabled | `#64748B` | `#94A3B8` | None | Cursor not-allowed |
 
-### 6. Elevation & Layered Shadows
-- Multi-layered shadow specifications: `Subtle`, `Medium`, `Large`, `Overlay`, and Contextual Hover Lift.
+### 3. Layout Bounds & Spacing Scale
+- Mobile Container Padding: `16px` (at 375px viewport)
+- Desktop Max Container Width: `1200px` (centered via `margin: 0 auto`, `32px` padding)
+- Spacing Scale: `4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px`
 
-### 7. Concrete Component Specifications
-- Granular CSS specs (background, text, border, padding, radius, hover, active, focus-visible) for:
-  - Buttons (Primary Pill, Secondary Outline, Ghost, Destructive, sizes, disabled state)
-  - Cards (Default, Elevated, hover transforms)
-  - Inputs (Labels, placeholders, focus rings, error states)
-  - Chips / Badges / Segmented Controls
-  - Modals / Drawers / Tooltips
-
-### 8. Project-Tailored Do's and Don'ts
-- 8–10 actionable rules preventing visual slop and enforcing accessibility (WCAG AA contrast, CLS 0, touch targets 44x44px+).
+### 4. Visual Acceptance Criteria (VAC) Checklist
+Squidward MUST provide a binary testable checklist for Stanley (QA):
+- [ ] **VAC-01 (Responsive 375px)**: Zero horizontal scrollbar on 375px viewport; all cards wrap into a single column.
+- [ ] **VAC-02 (Contrast WCAG AA)**: Text Primary on Canvas Background meets minimum 4.5:1 contrast ratio.
+- [ ] **VAC-03 (Touch Targets)**: All buttons and inputs meet the minimum 44x44px touch area on mobile.
+- [ ] **VAC-04 (Token Compliance)**: Zero hardcoded hex colors in application code outside the Design Tokens Table.
+- [ ] **VAC-05 (Anti-Slop Cleanliness)**: Zero em dashes (`—`), zero pulsing status dots, and zero unstyled card-soup.

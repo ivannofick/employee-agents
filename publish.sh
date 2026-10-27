@@ -20,7 +20,7 @@ echo -e "  ${GREEN}1) patch${NC}      (Bump patch & publish to npm + GitHub)"
 echo -e "  ${GREEN}2) minor${NC}      (Bump minor & publish to npm + GitHub)"
 echo -e "  ${GREEN}3) major${NC}      (Bump major & publish to npm + GitHub)"
 echo -e "  ${GREEN}4) current${NC}    (Publish current version to npm + GitHub)"
-echo -e "  ${YELLOW}5) test-local${NC} (Build, dry-run tarball & 'npm link' locally - NO PUBLISH)"
+echo -e "  ${YELLOW}5) test-local${NC} (Uninstall old version, clear cache, build & install globally - NO PUBLISH)"
 read -p "Select option [1-5] (default: 5): " choice
 choice=${choice:-5}
 
@@ -29,26 +29,62 @@ choice=${choice:-5}
 # ----------------------------------------------------
 if [[ "$choice" == "5" ]]; then
   echo ""
-  echo -e "${CYAN}--- RUNNING LOCAL TEST BUILD ---${NC}"
-  echo -e "${CYAN}1. Compiling TypeScript...${NC}"
+  echo -e "${CYAN}--- RUNNING CLEAN LOCAL TEST & DIRECT INSTALL ---${NC}"
+  echo -e "Choose local testing mode:"
+  echo -e "  ${GREEN}1) Local templates${NC} (Recommended: use templates from this local workspace - test unpushed changes)"
+  echo -e "  ${YELLOW}2) Remote GitHub${NC}   (Simulate real npm user: download latest templates from GitHub main)"
+  read -p "Select test mode [1-2] (default: 1): " test_mode
+  test_mode=${test_mode:-1}
+
+  echo -e "${CYAN}1. Removing previously installed local/global versions...${NC}"
+  npm uninstall -g employee-agents 2>/dev/null || true
+  npm unlink -g employee-agents 2>/dev/null || true
+
+  # Remove possible stale symlinks in global npm bin
+  GLOBAL_BIN="$(npm root -g)/../bin"
+  if [[ -f "$GLOBAL_BIN/employee-agents" || -L "$GLOBAL_BIN/employee-agents" ]]; then
+    rm -f "$GLOBAL_BIN/employee-agents"
+  fi
+
+  echo -e "${CYAN}2. Clearing npx and npm cache...${NC}"
+  rm -rf ~/.npm/_npx 2>/dev/null || true
+  npm cache clean --force 2>/dev/null || true
+
+  echo -e "${CYAN}3. Compiling TypeScript...${NC}"
   npm run build
   chmod +x dist/index.js
 
-  echo -e "${CYAN}2. Inspecting tarball contents (npm pack dry-run)...${NC}"
-  npm pack --dry-run
+  echo -e "${CYAN}4. Installing directly from local directory (npm install -g .)...${NC}"
+  npm install -g .
 
-  echo -e "${CYAN}3. Registering local binary via npm link...${NC}"
-  npm link
+  mkdir -p ~/.employee-agents
+
+  if [[ "$test_mode" == "1" ]]; then
+    echo -e "${CYAN}5. Configuring Local Workspace Template override...${NC}"
+    rm -f ~/.employee-agents/force-remote
+    echo "$PWD" > ~/.employee-agents/dev-root
+    echo -e "${GREEN}  ✔ Using local workspace templates from: $PWD${NC}"
+  else
+    echo -e "${CYAN}5. Configuring Remote GitHub download mode...${NC}"
+    rm -f ~/.employee-agents/dev-root
+    touch ~/.employee-agents/force-remote
+    echo -e "${YELLOW}  ✔ Set to remote mode! Will download live blueprints from GitHub.${NC}"
+  fi
 
   echo ""
   echo -e "${GREEN}=====================================================${NC}"
-  echo -e "${GREEN}  ✔ LOCAL TEST READY! (No changes published to npm)  ${NC}"
+  echo -e "${GREEN}  ✔ LOCAL INSTALL READY! Clean cache & freshly installed${NC}"
+  echo -e "${GREEN}  Installed binary: $(which employee-agents || echo "global binary")${NC}"
+  echo -e "${GREEN}  Mode: $([[ "$test_mode" == "1" ]] && echo "Local Workspace Templates" || echo "Remote GitHub Download")${NC}"
   echo -e "${GREEN}  You can test it right now in any directory:       ${NC}"
   echo -e "${CYAN}  $ employee-agents                                  ${NC}"
   echo -e "${CYAN}  $ employee-agents --lang id                        ${NC}"
   echo -e "${GREEN}=====================================================${NC}"
   exit 0
 fi
+
+# Clean up any local dev overrides before publish
+rm -f ~/.employee-agents/dev-root ~/.employee-agents/force-remote
 
 # ----------------------------------------------------
 # OPTIONS 1-4: FULL RELEASE PIPELINE

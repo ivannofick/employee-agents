@@ -12,6 +12,7 @@ export interface SetupAnswers {
 }
 
 export const ALL_ROLES = [
+  'tech-analyst',
   'product-owner',
   'ui-ux',
   'tech-lead',
@@ -87,6 +88,7 @@ export async function runSetupWizard(lang: string = 'en'): Promise<SetupAnswers>
     const customChoices = await p.multiselect({
       message: dict.wizard.selectRolesPrompt,
       options: [
+        { value: 'tech-analyst', label: dict.wizard.roleOptions['tech-analyst'] },
         { value: 'product-owner', label: dict.wizard.roleOptions['product-owner'] },
         { value: 'ui-ux', label: dict.wizard.roleOptions['ui-ux'] },
         { value: 'tech-lead', label: dict.wizard.roleOptions['tech-lead'] },
