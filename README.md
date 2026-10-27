@@ -10,7 +10,7 @@
 
 **A Virtual Software Engineering Team Framework**: Run an autonomous, 7-role engineering squad (Technical Analyst, Product Owner, UI/UX Designer, Tech Lead, Project Manager, Developer, QA Engineer) directly inside your AI coding assistant.
 
-[Quick Start](#quick-start) • [The Squad](#the-squad-roster) • [Slash Commands](#built-in-slash-commands) • [Operational Lifecycle](#operational-lifecycle) • [Directory Structure](#directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
+[Prerequisites](#prerequisites) • [Quick Start](#quick-start) • [Hands-On Tutorial](TUTORIAL.md) • [The Squad](#the-squad-roster) • [Slash Commands](#built-in-slash-commands) • [Operational Lifecycle](#operational-lifecycle) • [Directory Structure](#directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -95,6 +95,19 @@ This leads to:
 | **`project-manager`** | **Sandy Cheeks** | Kanban task management (`pending/`, `in-progress/`, `paused/`, `done/`), `File:Line` targeting. | `/tasks/pending/TASK-*.md` |
 | **`developer`** | **Tn. Crab** | Token-adherent clean code execution, surgical line editing, and 375px mobile self-testing. | Source code files |
 | **`qa`** | **Stanley** | Destructive functional testing, visual fidelity VAC audits, and anti-slop shield. | QA sign-offs & verification reports |
+
+---
+
+## Prerequisites
+
+Before using `employee-agents`, ensure your development environment has:
+
+1. **Node.js**: Version `>= 20.0.0` (with `npm` / `npx`).
+2. **AI Coding Assistant**: **Google Antigravity** (Antigravity IDE or Antigravity CLI `agy`) with an active AI model (e.g. Gemini 1.5 Pro / Flash). *(Cursor, Claude Code, Cline support on roadmap)*.
+3. **Version Control**: Git `>= 2.30.0` initialized in your target project.
+4. **Operating System**: macOS, Linux, or Windows (via WSL2 or PowerShell).
+
+> **Hands-On Tutorial**: For a complete step-by-step walkthrough covering your first feature from planning to ship, see **[TUTORIAL.md](TUTORIAL.md)**.
 
 ---
 
