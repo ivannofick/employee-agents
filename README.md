@@ -10,7 +10,7 @@
 
 **A Virtual Software Engineering Team Framework**: Run an autonomous, 7-role engineering squad (Technical Analyst, Product Owner, UI/UX Designer, Tech Lead, Project Manager, Developer, QA Engineer) directly inside your AI coding assistant.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Operational Lifecycle](#-operational-lifecycle) • [Directory Structure](#-directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
+[Quick Start](#quick-start) • [The Squad](#the-squad-roster) • [Slash Commands](#built-in-slash-commands) • [Operational Lifecycle](#operational-lifecycle) • [Directory Structure](#directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -34,50 +34,50 @@ This leads to:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ LEAD ARCHITECT / FOUNDER (User) │
-│ "Build feature X" • "Fix bug Y" • "Langsung sekarang!" │
+│                    LEAD ARCHITECT / FOUNDER (User)                     │
+│        "Build feature X" • "Fix bug Y" • "Langsung sekarang!"          │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
                                     ▼
        ┌────────────────────────────────────────────────────────┐
-       │ ADAPTER LAYER (.agent/skills/) │
-       │ - Reads Living Master PRD (/.myemployee/PRD.md) │
-       │ - Evaluates Intent: Feature, Bug, or Fast-Track │
+       │             ADAPTER LAYER (.agent/skills/)             │
+       │   - Reads Living Master PRD (/.myemployee/PRD.md)       │
+       │   - Evaluates Intent: Feature, Bug, or Fast-Track      │
        └────────────────────────────┬───────────────────────────┘
                                     │
                  ┌──────────────────┴──────────────────┐
-                 ▼ ▼
-      [ PHASE 1: /share-knowledge ] [ FAST-TRACK / BUG PIPELINE ]
-                 │ │
-    1. Larry (Technical Analyst) 1. Larry (Technical Analyst)
-       -> Feasibility & Data Boundaries -> 30-Sec Feasibility Check
-                 │ │
-    2. Patrick (Product Owner) 2. Patrick & Sandy
-       -> features/<slug>/PRD.md -> Micro-PRD (10-15 lines)
-       -> Syncs Master PRD -> tasks/pending/TASK-*.md
-                 │ │
-    3. Squidward (UI/UX) ▼
-       -> Mobile-First Tokens & VAC [ PHASE 2: /apply-work ]
-                 │ │
-    4. Garry (Tech Lead) 3. Sandy Cheeks (PM)
-       -> Architecture & Anti-Lasagna -> Moves to: tasks/in-progress/
-                 │ │
-    5. Sandy Cheeks (PM) 4. Tn. Crab (Developer)
-       -> tasks/pending/TASK-*.md -> Surgical token-adherent code
-                 │ │
-                 ▼ 5. Stanley (QA Engineer)
-      [ PHASE 2: /apply-work ] -> Destructive tests & VAC audit
-                 │ │
-    6. Sandy moves task to: ▼
-       tasks/in-progress/ [ PHASE 3: /done-task ]
-                 │ │
-    7. Tn. Crab implements code 6. Founder Sign-Off (HARD STOP)
-                 │ -> Sandy moves to: tasks/done/
-    8. Stanley audits VAC & QA -> Updates PRD to DONE
-                 │ │
-                 ▼ ▼
-      [ PHASE 3: /done-task ] [ Zero Auto-Push Guarantee ]
-    9. Founder signs off task (Push strictly gated on prompt)
+                 ▼                                     ▼
+      [ PHASE 1: /share-knowledge ]         [ FAST-TRACK / BUG PIPELINE ]
+                 │                                     │
+    1. Larry (Technical Analyst)          1. Larry (Technical Analyst)
+       -> Feasibility & Data Boundaries      -> 30-Sec Feasibility Check
+                 │                                     │
+    2. Patrick (Product Owner)            2. Patrick & Sandy
+       -> features/<slug>/PRD.md             -> Micro-PRD (10-15 lines)
+       -> Syncs Master PRD                   -> tasks/pending/TASK-*.md
+                 │                                     │
+    3. Squidward (UI/UX)                               ▼
+       -> Mobile-First Tokens & VAC         [ PHASE 2: /apply-work ]
+                 │                                     │
+    4. Garry (Tech Lead)                  3. Sandy Cheeks (PM)
+       -> Architecture & Anti-Lasagna        -> Moves to: tasks/in-progress/
+                 │                                     │
+    5. Sandy Cheeks (PM)                  4. Tn. Crab (Developer)
+       -> tasks/pending/TASK-*.md            -> Surgical token-adherent code
+                 │                                     │
+                 ▼                        5. Stanley (QA Engineer)
+      [ PHASE 2: /apply-work ]               -> Destructive tests & VAC audit
+                 │                                     │
+    6. Sandy moves task to:                            ▼
+       tasks/in-progress/                   [ PHASE 3: /done-task ]
+                 │                                     │
+    7. Tn. Crab implements code           6. Founder Sign-Off (HARD STOP)
+                 │                           -> Sandy moves to: tasks/done/
+    8. Stanley audits VAC & QA               -> Updates PRD to DONE
+                 │                                     │
+                 ▼                                     ▼
+      [ PHASE 3: /done-task ]               [ Zero Auto-Push Guarantee ]
+    9. Founder signs off task               (Push strictly gated on prompt)
        -> Sandy moves to: tasks/done/
        -> Updates Master PRD status
 ```
@@ -142,7 +142,7 @@ Or trigger it interactively inside your AI assistant chat room:
 ```
 
 ### 4. Scale Squad Roles (Add or Remove Roles Anytime)
-Scale your squad up or down dynamically. When a role is added or removed, your `.agent/skills/.myemployee/SKILL.md` controller automatically regenerates and self-heals:
+Scale your squad up or down dynamically. When a role is added or removed, your `.agent/skills/myemployee/SKILL.md` controller automatically regenerates and self-heals:
 
 ```bash
 # Add a role to your squad:
@@ -156,14 +156,14 @@ npx employee-agents remove-role developer
 Keep your project root clean in your IDE file explorer sidebar. Toggle workspace visibility non-destructively anytime without affecting git history or background AI operations:
 
 ```bash
-# Hide /myemployee from the IDE file explorer sidebar:
+# Hide /.myemployee and .vscode from the IDE file explorer sidebar:
 npx employee-agents hide
 
-# Restore /myemployee back to the IDE file explorer sidebar:
+# Restore /.myemployee back to the IDE file explorer sidebar:
 npx employee-agents show
 ```
 
-> **Note**: This configures `files.exclude` inside `.vscode/settings.json`. The AI squad continues to read, write, and track tasks in `/.myemployee/` seamlessly in the background while hidden.
+> **Note**: Running `npx employee-agents hide` configures `files.exclude` inside `.vscode/settings.json`, automatically hiding `/.myemployee` and `.vscode` itself so your IDE sidebar stays completely clutter-free. Running `npx employee-agents show` restores `/.myemployee` and automatically cleans up `.vscode/settings.json` and the `.vscode/` directory if no other custom IDE settings exist (zero residue). The AI squad continues to read, write, and track tasks in `/.myemployee/` seamlessly in the background while hidden.
 
 ---
 
@@ -188,7 +188,7 @@ When using Antigravity, the framework equips you with interactive slash commands
 Each role possesses a clean **`role.md`** defining its identity, and an extensible **`skill/`** folder containing its technical capabilities:
 
 ```text
-myemployee/
+.myemployee/
 ├── PRD.md # Living Master PRD (Founder Goal & Auto-Updating Feature Index)
 ├── config.json # Project configuration & active roles
 │

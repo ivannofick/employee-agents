@@ -36,7 +36,7 @@ export const en: LocaleDictionary = {
       'developer': 'developer (Tn. Crab - Clean Code Execution)',
       'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
     },
-    successMessage: 'Successfully initialized /myemployee workspace!',
+    successMessage: 'Successfully initialized /.myemployee workspace!',
     nextSteps: 'Workspace initialized. Open your AI assistant chat to begin.',
   },
   updater: {
@@ -45,7 +45,7 @@ export const en: LocaleDictionary = {
     successMessage: 'Successfully updated roles, skills, and slash commands!',
     safeNote: 'Your custom PRD.md, features/, tasks/, and config.json were safely preserved.',
     outro: 'Workspace is up to date.',
-    detectedPrompt: 'Existing /myemployee workspace detected. What would you like to do?',
+    detectedPrompt: 'Existing /.myemployee workspace detected. What would you like to do?',
     optionUpdate: '1) Update roles, skills & slash commands (Safely preserves your PRDs and tasks)',
     optionReinit: '2) Re-run full setup wizard from scratch',
   },

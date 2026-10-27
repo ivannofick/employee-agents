@@ -47,7 +47,7 @@ Personas are not all active simultaneously. The framework's turn-taking coordina
 
 ### 2. Kanban Subdirectory Isolation
 ```text
-myemployee/tasks/
+.myemployee/tasks/
 ├── pending/ <-- AI reads only this backlog (~150 - 300 tokens per ticket)
 ├── in-progress/ <-- AI reads ONLY the active ticket (~200 tokens)
 ├── paused/ <-- Ignored during regular work
@@ -56,4 +56,4 @@ myemployee/tasks/
 Whether your project has completed 5 tasks or 500 tasks, archived tickets in `tasks/done/` will **never pollute your active context window**.
 
 ### 3. Living Master PRD Summarization
-Instead of feeding 15 separate feature PRDs into the AI context (which can easily swallow 30,000+ tokens), `/myemployee/PRD.md` maintains a compact **Feature Index table** with 1–2 sentence summaries per feature. Full individual specs in `features/<slug>/` are only referenced when actively working on that specific feature.
+Instead of feeding 15 separate feature PRDs into the AI context (which can easily swallow 30,000+ tokens), `/.myemployee/PRD.md` maintains a compact **Feature Index table** with 1–2 sentence summaries per feature. Full individual specs in `features/<slug>/` are only referenced when actively working on that specific feature.

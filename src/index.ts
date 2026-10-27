@@ -293,7 +293,7 @@ program
 
 program
   .command('update-me')
-  .description('Update roles, skills, and slash commands in an existing /myemployee workspace')
+  .description('Update roles, skills, and slash commands in an existing /.myemployee workspace')
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);
@@ -301,7 +301,7 @@ program
 
 program
   .command('update')
-  .description('Update roles, skills, and slash commands in an existing /myemployee workspace (alias for update-me)')
+  .description('Update roles, skills, and slash commands in an existing /.myemployee workspace (alias for update-me)')
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);
@@ -337,7 +337,7 @@ async function handleHide(options?: { lang?: string }) {
     const s = p.spinner();
     s.start('Hiding /.myemployee from IDE sidebar...');
     await hideWorkspaceFromIde(process.cwd());
-    s.stop(pc.green('✔ Folder /.myemployee hidden from IDE sidebar.'));
+    s.stop(pc.green('✔ Folder /.myemployee and .vscode hidden from IDE sidebar.'));
     p.note(
       'Configured in .vscode/settings.json (files.exclude).\nYour AI squad continues to run actively in the background.\nTo restore view in sidebar, run: npx employee-agents show',
       'Workspace Hidden'
@@ -357,7 +357,7 @@ async function handleShow(options?: { lang?: string }) {
     await showWorkspaceInIde(process.cwd());
     s.stop(pc.green('✔ Folder /.myemployee restored to IDE sidebar.'));
     p.note(
-      'Removed exclusion from .vscode/settings.json.\nFolder /.myemployee is now visible in the file explorer.',
+      'Removed exclusion from .vscode/settings.json (auto-cleaned if empty).\nFolder /.myemployee is now visible in the file explorer.',
       'Workspace Visible'
     );
     p.outro(pc.green('Done.'));

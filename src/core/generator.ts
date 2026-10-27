@@ -518,13 +518,15 @@ export async function hideWorkspaceFromIde(targetDir: string = process.cwd()): P
 
   settings['files.exclude']['**/myemployee'] = true;
   settings['files.exclude']['**/.myemployee'] = true;
+  settings['files.exclude']['**/.vscode'] = true;
 
   await fs.writeJson(settingsPath, settings, { spaces: 2 });
   return true;
 }
 
 export async function showWorkspaceInIde(targetDir: string = process.cwd()): Promise<boolean> {
-  const settingsPath = path.join(targetDir, '.vscode', 'settings.json');
+  const vscodeDir = path.join(targetDir, '.vscode');
+  const settingsPath = path.join(vscodeDir, 'settings.json');
 
   if (await fs.pathExists(settingsPath)) {
     try {
@@ -534,12 +536,22 @@ export async function showWorkspaceInIde(targetDir: string = process.cwd()): Pro
         delete settings['files.exclude']['**/.myemployee'];
         delete settings['files.exclude']['myemployee'];
         delete settings['files.exclude']['.myemployee'];
+        delete settings['files.exclude']['**/.vscode'];
+        delete settings['files.exclude']['.vscode'];
 
         if (Object.keys(settings['files.exclude']).length === 0) {
           delete settings['files.exclude'];
         }
 
-        await fs.writeJson(settingsPath, settings, { spaces: 2 });
+        if (Object.keys(settings).length === 0) {
+          await fs.remove(settingsPath);
+          const remainingVscodeFiles = await fs.readdir(vscodeDir).catch(() => []);
+          if (remainingVscodeFiles.length === 0) {
+            await fs.remove(vscodeDir);
+          }
+        } else {
+          await fs.writeJson(settingsPath, settings, { spaces: 2 });
+        }
       }
     } catch {}
   }

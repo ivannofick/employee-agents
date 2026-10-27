@@ -8,14 +8,14 @@
 
 ### 1. Zero External Network Requests
 
-`employee-agents` does NOT make unauthorized outbound HTTP requests, phone home, or transmit your source code, environment variables, or API keys to external telemetry servers. The CLI only interacts with your local file system to scaffold `/myemployee/` and relevant adapter files.
+`employee-agents` does NOT make unauthorized outbound HTTP requests, phone home, or transmit your source code, environment variables, or API keys to external telemetry servers. The CLI only interacts with your local file system to scaffold `/.myemployee/` and relevant adapter files.
 
 ### 2. Brownfield Safety & Non-Destructive Inits
 
 When initialized in an existing codebase (`"project_type": "existing"`):
 
 - The CLI **never** overwrites, alters, or removes your existing application source code or dependency manifests (`package.json`, `composer.json`, `go.mod`, etc.).
-- The system only creates the isolated `/myemployee/` directory and platform adapters.
+- The system only creates the isolated `/.myemployee/` directory and platform adapters.
 - All agent roles follow strict **surgical line-editing constraints** (`file.ts:L20-L45`) to prevent accidental file wipes or unauthorized refactoring.
 
 ### 3. Transparent Driver Skills
@@ -27,9 +27,9 @@ The installed driver skill (e.g. `.agent/skills/myemployee/SKILL.md`) is a plain
 ## Supported Versions
 
 | Version | Supported |
-| ------- | ------------------ |
-| 1.0.x | :white_check_mark: |
-| < 1.0 | :x: |
+| ------- | --------- |
+| 1.0.x   | Yes       |
+| < 1.0   | No        |
 
 ---
 
