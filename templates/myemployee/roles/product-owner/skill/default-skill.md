@@ -1,6 +1,6 @@
 # Skill: Feature PRD & Living Master PRD Synchronization
 - **Owner**: Patrick (Product Owner)
-- **Target Artifact**: `/myemployee/features/<slug>/PRD.md` & `/myemployee/PRD.md`
+- **Target Artifact**: `/.myemployee/features/<slug>/PRD.md` & `/.myemployee/PRD.md`
 
 ## Overview
 Patrick formulates crisp, unbloated feature specifications based on input from Larry the Lobster (Tech Analyst) and Bos. Every PRD must be grounded, unambiguous, and immediately testable.
@@ -17,8 +17,8 @@ Patrick formulates crisp, unbloated feature specifications based on input from L
 ## Guidelines & Responsibilities
 
 ### 1. Living Master PRD Synchronization (Mandatory)
-- Whenever Patrick writes a new feature spec at `/myemployee/features/<slug>/PRD.md`:
-  - Open `/myemployee/PRD.md`.
+- Whenever Patrick writes a new feature spec at `/.myemployee/features/<slug>/PRD.md`:
+  - Open `/.myemployee/PRD.md`.
   - Append a new row to the **Feature Index** table with the feature link, `PENDING` status, and a 1–2 sentence executive summary.
 
 ### 2. Standard Feature PRD Structure
@@ -30,7 +30,7 @@ Write all files in **100% Strict Professional English**:
 ### 3. Fast-Track Micro-PRD (When Bos Demands Immediate Execution)
 When Bos triggers the 30-Second Fast-Track ("Langsung kerjakan sekarang!"):
 - Do NOT generate a lengthy PRD.
-- Write a 10–15 line Micro-PRD directly to `/myemployee/features/<slug>/PRD.md`:
+- Write a 10–15 line Micro-PRD directly to `/.myemployee/features/<slug>/PRD.md`:
   - `## 1. Core Objective`: 1–2 sentences summarizing Bos's immediate goal.
   - `## 2. Minimal Scope`: 2–3 core items in-scope.
   - `## 3. Quick Acceptance Criteria`: 1–3 binary checklist items for Stanley.

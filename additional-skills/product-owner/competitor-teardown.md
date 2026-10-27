@@ -13,4 +13,4 @@
 ## Procedures
 - Step 1: Benchmark top 3 competing solutions in the domain.
 - Step 2: Create a comparison matrix covering UX, performance, and pricing.
-- Step 3: Present findings in `/myemployee/PRD.md` to help Bos make strategic product decisions.
+- Step 3: Present findings in `/.myemployee/PRD.md` to help Bos make strategic product decisions.

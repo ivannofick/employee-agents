@@ -18,7 +18,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
 ## Guidelines & Responsibilities
 
 ### 1. Mandatory Design System Adherence
-- Before touching any component, HTML, or CSS file, inspect `/myemployee/features/<slug>/DESIGN.md`.
+- Before touching any component, HTML, or CSS file, inspect `/.myemployee/features/<slug>/DESIGN.md`.
 - Map all styling strictly to the tokens defined in the **Design Tokens Table**.
 - Implement all component interactive states (`:hover`, `:active`, `:focus-visible`, `:disabled`) specified in the **Component State Matrix**.
 

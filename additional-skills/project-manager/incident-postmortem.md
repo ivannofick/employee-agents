@@ -13,4 +13,4 @@
 ## Procedures
 - Step 1: Reconstruct incident timeline (detection, response, resolution).
 - Step 2: Document impact metrics (downtime duration, affected users, data loss).
-- Step 3: Publish postmortem to `/myemployee/POSTMORTEM-DDMMYYYY-<slug>.md` and present to Bos.
+- Step 3: Publish postmortem to `/.myemployee/POSTMORTEM-DDMMYYYY-<slug>.md` and present to Bos.

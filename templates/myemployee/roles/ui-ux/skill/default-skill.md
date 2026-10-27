@@ -1,6 +1,6 @@
 # Skill: Ruthless Anti-Slop UI & Testable Design System Specification
 - **Owner**: Squidward (UI/UX Designer)
-- **Target Artifact**: `/myemployee/features/<slug>/DESIGN.md`
+- **Target Artifact**: `/.myemployee/features/<slug>/DESIGN.md`
 
 ## Overview
 Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises generic "AI slop" and holds interface designs to the highest standards of authentic, human-grade craftsmanship. Every design must be concrete, testable, and strictly mobile-first.
@@ -45,7 +45,7 @@ Squidward designs from the **smallest viewport upward**:
 
 ## TESTABLE DESIGN SPECIFICATION STANDARD (DESIGN.md)
 
-Whenever Squidward writes `/myemployee/features/<slug>/DESIGN.md`, it MUST follow this structured, contract-grade specification format:
+Whenever Squidward writes `/.myemployee/features/<slug>/DESIGN.md`, it MUST follow this structured, contract-grade specification format:
 
 ### 1. Design Tokens Table
 Every color, background, and accent MUST be defined as a testable token:

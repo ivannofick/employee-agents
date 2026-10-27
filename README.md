@@ -41,7 +41,7 @@ This leads to:
                                     ▼
        ┌────────────────────────────────────────────────────────┐
        │ ADAPTER LAYER (.agent/skills/) │
-       │ - Reads Living Master PRD (/myemployee/PRD.md) │
+       │ - Reads Living Master PRD (/.myemployee/PRD.md) │
        │ - Evaluates Intent: Feature, Bug, or Fast-Track │
        └────────────────────────────┬───────────────────────────┘
                                     │
@@ -112,7 +112,7 @@ npx employee-agents --lang id
 ```
 
 ### 2. Update an Existing Workspace
-To safely upgrade an already initialized `/myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
+To safely upgrade an already initialized `/.myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
 
 ```bash
 # Via terminal:
@@ -142,7 +142,7 @@ Or trigger it interactively inside your AI assistant chat room:
 ```
 
 ### 4. Scale Squad Roles (Add or Remove Roles Anytime)
-Scale your squad up or down dynamically. When a role is added or removed, your `.agent/skills/myemployee/SKILL.md` controller automatically regenerates and self-heals:
+Scale your squad up or down dynamically. When a role is added or removed, your `.agent/skills/.myemployee/SKILL.md` controller automatically regenerates and self-heals:
 
 ```bash
 # Add a role to your squad:
@@ -163,7 +163,7 @@ npx employee-agents hide
 npx employee-agents show
 ```
 
-> **Note**: This configures `files.exclude` inside `.vscode/settings.json`. The AI squad continues to read, write, and track tasks in `/myemployee/` seamlessly in the background while hidden.
+> **Note**: This configures `files.exclude` inside `.vscode/settings.json`. The AI squad continues to read, write, and track tasks in `/.myemployee/` seamlessly in the background while hidden.
 
 ---
 
@@ -177,13 +177,13 @@ When using Antigravity, the framework equips you with interactive slash commands
 | **`/apply-work`** | Sandy (PM), Tn. Crab (Dev), Stanley (QA) | **Phase 2: Execution**. Moves target task to `tasks/in-progress/`, surgically implements code, and executes QA & VAC audits. Task stays in `in-progress/` (zero auto-done, zero nagging for git push). |
 | **`/done-task`** | Sandy Cheeks (PM) | **Phase 3: Founder Sign-Off**. Founder's dedicated command to mark a verified task complete. Moves task from `tasks/in-progress/` to `tasks/done/` and updates Master PRD feature status to `DONE`. |
 | **`/my-task`** | Sandy Cheeks (PM) | **Kanban Dashboard**. Inspects `tasks/` and displays active in-progress ticket, prioritized pending tasks, and paused tickets. Preserves tokens by ignoring `done/`. |
-| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/myemployee/roles/<role>/skill/`. |
+| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/.myemployee/roles/<role>/skill/`. |
 | **`/status-token`** | Garry (Tech Lead) | Reports the active AI model, total context window capacity (1M tokens), estimated tokens consumed, remaining quota, and efficiency advice. |
 | **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
 
 ---
 
-## Directory Structure (`/myemployee/`)
+## Directory Structure (`/.myemployee/`)
 
 Each role possesses a clean **`role.md`** defining its identity, and an extensible **`skill/`** folder containing its technical capabilities:
 
@@ -245,10 +245,10 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 #### Phase 1: Thinking & Spec (`/share-knowledge`)
 1. **Larry (Tech Analyst)** evaluates technical feasibility, data schemas, and API boundaries.
-2. **Patrick (PO)** writes `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria, and syncs an executive summary to the Living Master PRD (`/myemployee/PRD.md`).
-3. **Squidward (UI/UX)** writes `/myemployee/features/<slug>/DESIGN.md` defining Mobile-First design tokens (360px–375px), state matrices, and binary Visual Acceptance Criteria (`[ ] VAC-*`).
-4. **Garry (Tech Lead)** writes `/myemployee/features/<slug>/ARCHITECTURE.md` defining libraries, schema, security, and target files with zero boilerplate lasagna.
-5. **Sandy Cheeks (PM)** generates the task ticket on disk in `/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
+2. **Patrick (PO)** writes `/.myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria, and syncs an executive summary to the Living Master PRD (`/.myemployee/PRD.md`).
+3. **Squidward (UI/UX)** writes `/.myemployee/features/<slug>/DESIGN.md` defining Mobile-First design tokens (360px–375px), state matrices, and binary Visual Acceptance Criteria (`[ ] VAC-*`).
+4. **Garry (Tech Lead)** writes `/.myemployee/features/<slug>/ARCHITECTURE.md` defining libraries, schema, security, and target files with zero boilerplate lasagna.
+5. **Sandy Cheeks (PM)** generates the task ticket on disk in `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
    ```markdown
    - [ ] Implement Google OAuth Callback Handler
      - File: `src/api/auth/google/callback.ts`
@@ -268,7 +268,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 #### Phase 3: Founder Sign-Off (`/done-task`)
 1. Founder reviews the squad's work and triggers `/done-task <slug>`.
 2. **Sandy Cheeks (PM)** moves the task file from `tasks/in-progress/` to `tasks/done/`.
-3. Sandy updates the feature status in `/myemployee/PRD.md` to `DONE`.
+3. Sandy updates the feature status in `/.myemployee/PRD.md` to `DONE`.
 4. Git push is executed **only if the founder prompt explicitly commands** *"sekalian dipush ke git"* or *"push ke git"*.
 
 ---
@@ -277,7 +277,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 - **30-Second Fast-Track**: When the founder requests immediate coding (*"Langsung kerjakan sekarang!"*), Larry provides a 3-bullet technical feasibility triage, Patrick writes a lean 10–15 line Micro-PRD on disk, Sandy creates `tasks/pending/TASK-*.md`, and Tn. Crab begins implementation immediately without context drift.
 - **Urgent Bug Workflow**: Sandy logs the bug ticket directly in `tasks/pending/TASK-DDMMYYYY-<slug>.md` with `[BUG]` tag. Garry and Tn. Crab bypass reading the Master PRD, inspect *only* the targeted bug ticket, and apply surgical line edits. Stanley reproduces and verifies the fix with zero regressions.
-- **Context-Switch Guard**: When the founder shifts priorities mid-stream (e.g. pivoting from Bug A to Feature B), Garry reports repository status and presents 2 clean options: wrap up in 1 minute or park active work into `/myemployee/tasks/paused/`.
+- **Context-Switch Guard**: When the founder shifts priorities mid-stream (e.g. pivoting from Bug A to Feature B), Garry reports repository status and presents 2 clean options: wrap up in 1 minute or park active work into `/.myemployee/tasks/paused/`.
 
 ---
 

@@ -6,12 +6,12 @@ Sandy Cheeks (Project Manager) presents the current squad Kanban task board.
 
 ## Instructions
 1. **Scan Kanban Task Subdirectories**:
-   - Inspect `/myemployee/tasks/` across subfolders:
-     - **In-Progress (`/myemployee/tasks/in-progress/`)**: Tasks actively being implemented.
-     - **Pending (`/myemployee/tasks/pending/`)**: Tasks queued in backlog.
-     - **Paused (`/myemployee/tasks/paused/`)**: Tasks suspended during context-switches.
-     - **Done (`/myemployee/tasks/done/`)**: Archived tasks completed by Bos.
-   *(Fallback gracefully to scanning legacy flat `/myemployee/tasks/features/` and `bugs/` if subfolders do not exist).*
+   - Inspect `/.myemployee/tasks/` across subfolders:
+     - **In-Progress (`/.myemployee/tasks/in-progress/`)**: Tasks actively being implemented.
+     - **Pending (`/.myemployee/tasks/pending/`)**: Tasks queued in backlog.
+     - **Paused (`/.myemployee/tasks/paused/`)**: Tasks suspended during context-switches.
+     - **Done (`/.myemployee/tasks/done/`)**: Archived tasks completed by Bos.
+   *(Fallback gracefully to scanning legacy flat `/.myemployee/tasks/features/` and `bugs/` if subfolders do not exist).*
 
 2. **Apply Priority Display Rules (Token-Efficient)**:
    - **Step A**: Always display any task in `in-progress/` at the very top (` IN-PROGRESS`).

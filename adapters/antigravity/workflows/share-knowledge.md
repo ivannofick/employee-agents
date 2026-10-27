@@ -20,19 +20,19 @@ Even when Bos converses in Indonesian or other languages in the chat room, the s
      - `[SQUIDWARD - UI/UX]`: Mobile-first visual direction and responsive fluid expansion.
 
 2. **Draft Feature Specs (Physical File Writing Mandatory)**:
-   - **Patrick**: Writes `/myemployee/features/<slug>/PRD.md` with Given-When-Then AC and scope boundaries.
-   - **Living Master PRD Sync**: Patrick appends a new row to `/myemployee/PRD.md` with a 1–2 sentence executive summary.
-   - **Squidward**: Writes `/myemployee/features/<slug>/DESIGN.md` (Mobile-First, Design Tokens Table, Component State Matrix, `[ ] VAC-*` checklist).
-   - **Garry**: Writes `/myemployee/features/<slug>/ARCHITECTURE.md` (contracts, schema changes).
+   - **Patrick**: Writes `/.myemployee/features/<slug>/PRD.md` with Given-When-Then AC and scope boundaries.
+   - **Living Master PRD Sync**: Patrick appends a new row to `/.myemployee/PRD.md` with a 1–2 sentence executive summary.
+   - **Squidward**: Writes `/.myemployee/features/<slug>/DESIGN.md` (Mobile-First, Design Tokens Table, Component State Matrix, `[ ] VAC-*` checklist).
+   - **Garry**: Writes `/.myemployee/features/<slug>/ARCHITECTURE.md` (contracts, schema changes).
 
 3. **Log Pending Kanban Task Ticket**:
-   - **Sandy Cheeks**: Writes `/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.
+   - **Sandy Cheeks**: Writes `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.
    - Mandatory: Specify target file paths, line ranges (`File:Line`), and linked `VAC-*` criteria.
 
 4. **Fast-Track Protocol ("Langsung Kerjakan Sekarang!")**:
    - If Bos demands immediate execution:
      - Larry delivers a 3-bullet feasibility check in 30 seconds.
-     - Patrick writes a 10–15 line Micro-PRD to `/myemployee/features/<slug>/PRD.md`.
+     - Patrick writes a 10–15 line Micro-PRD to `/.myemployee/features/<slug>/PRD.md`.
      - Sandy logs the ticket directly into `tasks/pending/`.
 
 5. **DO NOT Write Application Code**:

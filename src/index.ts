@@ -15,13 +15,15 @@ import {
   removeRoleFromWorkspace,
   hideWorkspaceFromIde,
   showWorkspaceInIde,
+  resolveWorkspaceDir,
 } from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
 
 async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents: add-role'));
-    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const workspaceDir = await resolveWorkspaceDir(process.cwd());
+    const rolesDir = path.join(workspaceDir, 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
       : [];
@@ -69,7 +71,8 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
 async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents: remove-role'));
-    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const workspaceDir = await resolveWorkspaceDir(process.cwd());
+    const rolesDir = path.join(workspaceDir, 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
       : [];
@@ -190,7 +193,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
 
     const filePath = await addSkillToRole(role, skillSlug, (description as string) || '');
     s.stop(pc.green(`✔ ${dict.skillAdder.success} ${role}!`));
-    p.note(`Created: ${filePath}\nUpdated: /myemployee/roles/${role}/role.md`, 'Skill Registered');
+    p.note(`Created: ${filePath}\nUpdated: /.myemployee/roles/${role}/role.md`, 'Skill Registered');
     p.outro(pc.green('Skill registered successfully.'));
   } catch (err: any) {
     p.cancel(pc.red(`Failed to add skill: ${err.message}`));
@@ -225,8 +228,9 @@ async function handleInit(options: { lang?: string }) {
     const dict = getDictionary(lang);
 
     // If an existing workspace is detected, offer to update or re-init
-    const existingMyEmployee = path.join(process.cwd(), 'myemployee');
-    if (await fs.pathExists(existingMyEmployee)) {
+    const hasWorkspace = (await fs.pathExists(path.join(process.cwd(), '.myemployee'))) ||
+                         (await fs.pathExists(path.join(process.cwd(), 'myemployee')));
+    if (hasWorkspace) {
       p.intro(pc.cyan(dict.banner.title));
       const choice = await p.select({
         message: dict.updater.detectedPrompt,
@@ -255,7 +259,7 @@ async function handleInit(options: { lang?: string }) {
     const answers = await runSetupWizard(lang);
 
     const s = p.spinner();
-    s.start('Scaffolding /myemployee workspace and adapter...');
+    s.start('Scaffolding /.myemployee workspace and adapter...');
 
     await generateWorkspace(answers);
 
@@ -331,9 +335,9 @@ async function handleHide(options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents hide'));
     const s = p.spinner();
-    s.start('Hiding /myemployee from IDE sidebar...');
+    s.start('Hiding /.myemployee from IDE sidebar...');
     await hideWorkspaceFromIde(process.cwd());
-    s.stop(pc.green('✔ Folder /myemployee hidden from IDE sidebar.'));
+    s.stop(pc.green('✔ Folder /.myemployee hidden from IDE sidebar.'));
     p.note(
       'Configured in .vscode/settings.json (files.exclude).\nYour AI squad continues to run actively in the background.\nTo restore view in sidebar, run: npx employee-agents show',
       'Workspace Hidden'
@@ -349,11 +353,11 @@ async function handleShow(options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents show'));
     const s = p.spinner();
-    s.start('Restoring /myemployee to IDE sidebar...');
+    s.start('Restoring /.myemployee to IDE sidebar...');
     await showWorkspaceInIde(process.cwd());
-    s.stop(pc.green('✔ Folder /myemployee restored to IDE sidebar.'));
+    s.stop(pc.green('✔ Folder /.myemployee restored to IDE sidebar.'));
     p.note(
-      'Removed exclusion from .vscode/settings.json.\nFolder /myemployee is now visible in the file explorer.',
+      'Removed exclusion from .vscode/settings.json.\nFolder /.myemployee is now visible in the file explorer.',
       'Workspace Visible'
     );
     p.outro(pc.green('Done.'));
@@ -365,7 +369,7 @@ async function handleShow(options?: { lang?: string }) {
 
 program
   .command('hide')
-  .description('Hide /myemployee workspace folder from IDE file explorer sidebar')
+  .description('Hide /.myemployee workspace folder from IDE file explorer sidebar')
   .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
   .action(async (options) => {
     await handleHide(options);
@@ -373,7 +377,7 @@ program
 
 program
   .command('show')
-  .description('Restore /myemployee workspace folder to IDE file explorer sidebar')
+  .description('Restore /.myemployee workspace folder to IDE file explorer sidebar')
   .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
   .action(async (options) => {
     await handleShow(options);

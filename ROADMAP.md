@@ -21,16 +21,16 @@
 - `developer`: **Tn. Crab** (Design-Adherent Implementation, Surgical Line Editing & 375px Mobile Self-Testing)
 - `qa`: **Stanley** (Destructive Functional Testing, Visual Fidelity VAC Audits & Anti-Slop Gate)
 
-### 2. Living Master PRD Architecture (`/myemployee/PRD.md`)
+### 2. Living Master PRD Architecture (`/.myemployee/PRD.md`)
 - Living document containing the Founder Goal and an auto-updating Feature Index table with 1–2 sentence executive summaries per feature.
 - Dramatically cuts context window token consumption by preventing agents from reading all feature PRDs.
 
 ### 3. Kanban Task Management Subdirectories
 - Structure:
-  - `/myemployee/tasks/pending/` (Backlog of new tasks)
-  - `/myemployee/tasks/in-progress/` (Active task being coded)
-  - `/myemployee/tasks/paused/` (Tasks suspended during priority pivots)
-  - `/myemployee/tasks/done/` (Archived completed tasks)
+  - `/.myemployee/tasks/pending/` (Backlog of new tasks)
+  - `/.myemployee/tasks/in-progress/` (Active task being coded)
+  - `/.myemployee/tasks/paused/` (Tasks suspended during priority pivots)
+  - `/.myemployee/tasks/done/` (Archived completed tasks)
 - Eliminates context window pollution caused by scanning completed tasks in a single flat directory.
 
 ### 4. Testable Mobile-First Design Standard (`DESIGN.md`)

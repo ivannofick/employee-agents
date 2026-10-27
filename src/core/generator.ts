@@ -8,37 +8,37 @@ export function renderAgentSkill(activeRoles: string[], templateContent?: string
   const roleDefs: Record<string, { title: string; path: string; desc: string }> = {
     'tech-analyst': {
       title: 'Technical Analyst (Larry the Lobster)',
-      path: '/myemployee/roles/tech-analyst/',
+      path: '/.myemployee/roles/tech-analyst/',
       desc: 'Technical feasibility, data requirements, and fast-track triage.',
     },
     'product-owner': {
       title: 'Product Owner (Patrick)',
-      path: '/myemployee/roles/product-owner/',
+      path: '/.myemployee/roles/product-owner/',
       desc: 'Writes feature PRDs, acceptance criteria, and syncs Master PRD.',
     },
     'ui-ux': {
       title: 'UI/UX Designer (Squidward)',
-      path: '/myemployee/roles/ui-ux/',
+      path: '/.myemployee/roles/ui-ux/',
       desc: 'Mobile-first visual hierarchy, design tokens, and testable VAC checklists.',
     },
     'tech-lead': {
       title: 'Technical Lead (Garry)',
-      path: '/myemployee/roles/tech-lead/',
+      path: '/.myemployee/roles/tech-lead/',
       desc: 'System architecture, ADRs, anti-lasagna code review, and context-switch guard.',
     },
     'project-manager': {
       title: 'Project Manager (Sandy Cheeks)',
-      path: '/myemployee/roles/project-manager/',
+      path: '/.myemployee/roles/project-manager/',
       desc: 'Kanban task breakdowns (`tasks/pending/`, `in-progress/`, `paused/`, `done/`).',
     },
     'developer': {
       title: 'Developer (Tn. Crab)',
-      path: '/myemployee/roles/developer/',
+      path: '/.myemployee/roles/developer/',
       desc: 'Token-adherent implementation, surgical line editing, and 375px mobile self-testing.',
     },
     'qa': {
       title: 'QA Engineer (Stanley)',
-      path: '/myemployee/roles/qa/',
+      path: '/.myemployee/roles/qa/',
       desc: 'Destructive functional testing, visual fidelity VAC audits, and anti-slop shield.',
     },
   };
@@ -55,7 +55,7 @@ export function renderAgentSkill(activeRoles: string[], templateContent?: string
       if (def) {
         return `${idx + 1}. **${def.title}**: \`${def.path}\` — ${def.desc}`;
       }
-      return `${idx + 1}. **${role}**: \`/myemployee/roles/${role}/\``;
+      return `${idx + 1}. **${role}**: \`/.myemployee/roles/${role}/\``;
     })
     .join('\n');
 
@@ -68,12 +68,12 @@ export function renderAgentSkill(activeRoles: string[], templateContent?: string
 
   return `---
 name: myemployee
-description: Virtual multi-role engineering squad operating native spec-driven software workflows.
+description: Virtual multi-role engineering squad. Use for ANY request involving building features, fixing bugs, refactoring, UI design, code review, fullstack development, or managing Kanban tasks in this project.
 ---
 
 # Employee-Agents Squad Controller (The Bikini Bottom Tech Squad)
 
-You are operating as the multi-role engineering squad defined in the \`/myemployee/\` directory at the project root. The user is the founder, leader, and CEO, whom you always address respectfully as **"Bos"**.
+You are operating as the multi-role engineering squad defined in the \`/.myemployee/\` directory at the project root. The user is the founder, leader, and CEO, whom you always address respectfully as **"Bos"**.
 
 ---
 
@@ -89,14 +89,30 @@ export const END_AGENTS_DELIMITER = '<!-- employee-agents:end -->';
 
 export function renderUniversalAgentsBlock(): string {
   return `${START_AGENTS_DELIMITER}
-# Employee-Agents Squad Governance (Universal Ambient Rule)
-This workspace is actively governed by the multi-role engineering squad defined in \`/myemployee/\`.
-Whenever the user interacts with you (even without slash commands or explicit role mentions):
-1. **Identity & Tone**: The user is the founder and CEO. Always address the user as **"Bos"**.
-2. **Anti-Slop Hard Rule**: NEVER write or dump application code directly without an active task in \`/myemployee/tasks/in-progress/\` or \`/myemployee/tasks/pending/\`. All files, markdown specs, and code commits MUST be 100% Strict English.
-3. **Casual Prompt Triage**: If Bos asks to build, modify, or fix something in chat without typing \`/share-knowledge\` or \`/apply-work\`, Larry (Tech Analyst) and Patrick (PO) immediately greet Bos as front-desk, prepare a pending task ticket in \`/myemployee/tasks/pending/\`, and guide Bos to the next phase instead of dumping unverified code.
-4. **Coexistence**: Respect other external agent skills or commands (e.g., OpenSpec \`/opsx-*\`, linters) without interference.
+Before answering any prompt or executing any task in this workspace, always load and strictly follow the instructions in \`.agent/skills/myemployee/SKILL.md\`.
 ${END_AGENTS_DELIMITER}`;
+}
+
+export async function resolveWorkspaceDir(targetDir: string = process.cwd()): Promise<string> {
+  const dotPath = path.join(targetDir, '.myemployee');
+  const legacyPath = path.join(targetDir, 'myemployee');
+
+  // If legacy path exists and dotPath does not, migrate seamlessly
+  if ((await fs.pathExists(legacyPath)) && !(await fs.pathExists(dotPath))) {
+    await fs.move(legacyPath, dotPath);
+    return dotPath;
+  }
+
+  if (await fs.pathExists(dotPath)) {
+    return dotPath;
+  }
+
+  if (await fs.pathExists(legacyPath)) {
+    return legacyPath;
+  }
+
+  // Default for new workspace
+  return dotPath;
 }
 
 export async function ensureUniversalAgentsRule(targetDir: string = process.cwd()): Promise<void> {
@@ -120,7 +136,7 @@ export async function ensureUniversalAgentsRule(targetDir: string = process.cwd(
 
 export async function generateWorkspace(answers: SetupAnswers, targetDir: string = process.cwd()): Promise<void> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
-  const destinationMyEmployee = path.join(targetDir, 'myemployee');
+  const destinationMyEmployee = path.join(targetDir, '.myemployee');
 
   await fs.ensureDir(destinationMyEmployee);
 
@@ -199,12 +215,12 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
   await ensureUniversalAgentsRule(targetDir);
 }
 
-export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; updatedRules: boolean; activeRoles: string[] }> {
+export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; activeRoles: string[] }> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
-  const destinationMyEmployee = path.join(targetDir, 'myemployee');
+  const destinationMyEmployee = await resolveWorkspaceDir(targetDir);
 
   if (!(await fs.pathExists(destinationMyEmployee))) {
-    throw new Error('No existing /myemployee workspace found to update. Run init first.');
+    throw new Error('No existing /.myemployee workspace found to update. Run init first.');
   }
 
   // 1. Update ONLY existing active roles on disk (respects user-deleted roles!)
@@ -242,12 +258,14 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
     const templateContent = (await fs.pathExists(adapterSkillTemplate)) ? await fs.readFile(adapterSkillTemplate, 'utf8') : undefined;
     await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles, templateContent), 'utf8');
 
-    // Update ambient rules
-    const rulesSource = path.join(adapterBase, 'antigravity', 'rules');
-    if (await fs.pathExists(rulesSource)) {
-      const destinationRules = path.join(targetDir, '.agent', 'rules');
-      await fs.ensureDir(destinationRules);
-      await fs.copy(rulesSource, destinationRules, { overwrite: true });
+    // Clean up any stale legacy rules folder
+    const staleRuleFile = path.join(targetDir, '.agent', 'rules', 'employee-agents.md');
+    if (await fs.pathExists(staleRuleFile)) {
+      await fs.remove(staleRuleFile);
+    }
+    const staleRulesDir = path.join(targetDir, '.agent', 'rules');
+    if (await fs.pathExists(staleRulesDir) && (await fs.readdir(staleRulesDir)).length === 0) {
+      await fs.remove(staleRulesDir);
     }
 
     const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
@@ -265,11 +283,11 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
   // 4. Ensure universal AGENTS.md rule block is updated
   await ensureUniversalAgentsRule(targetDir);
 
-  return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, updatedRules: true, activeRoles };
+  return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, activeRoles };
 }
 
 export async function removeRoleFromWorkspace(role: string, targetDir: string = process.cwd()): Promise<string[]> {
-  const destinationMyEmployee = path.join(targetDir, 'myemployee');
+  const destinationMyEmployee = await resolveWorkspaceDir(targetDir);
   const roleDir = path.join(destinationMyEmployee, 'roles', role);
 
   if (await fs.pathExists(roleDir)) {
@@ -311,7 +329,7 @@ export async function removeRoleFromWorkspace(role: string, targetDir: string = 
 
 export async function addRoleToWorkspace(role: string, targetDir: string = process.cwd()): Promise<string[]> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
-  const destinationMyEmployee = path.join(targetDir, 'myemployee');
+  const destinationMyEmployee = await resolveWorkspaceDir(targetDir);
   const roleSource = path.join(templateBase, 'roles', role);
   const roleDest = path.join(destinationMyEmployee, 'roles', role);
 
@@ -406,9 +424,10 @@ export async function addSkillToRole(
   skillDescription: string = '',
   targetDir: string = process.cwd()
 ): Promise<string> {
-  const roleDir = path.join(targetDir, 'myemployee', 'roles', role);
+  const destinationMyEmployee = await resolveWorkspaceDir(targetDir);
+  const roleDir = path.join(destinationMyEmployee, 'roles', role);
   if (!(await fs.pathExists(roleDir))) {
-    throw new Error(`Role "${role}" does not exist in ${path.join(targetDir, 'myemployee', 'roles')}`);
+    throw new Error(`Role "${role}" does not exist in ${path.join(destinationMyEmployee, 'roles')}`);
   }
 
   const skillDir = path.join(roleDir, 'skill');

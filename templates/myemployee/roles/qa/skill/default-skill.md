@@ -34,4 +34,4 @@ Every task verification conducted by Stanley MUST execute two distinct pillars:
 
 ### 2. Sign-Off Handover
 - If any test fails: Reject immediately with concrete repro steps back to Tn. Crab and Garry.
-- If all tests pass: Append the verification sign-off into the active task file in `/myemployee/tasks/in-progress/` and report to Bos for final review.
+- If all tests pass: Append the verification sign-off into the active task file in `/.myemployee/tasks/in-progress/` and report to Bos for final review.

@@ -79,7 +79,7 @@ Type:
 ```text
 /add-skill
 ```
-Garry and Sandy Cheeks will display the available options and install the skill file directly into your `/myemployee/roles/<role>/skill/` directory!
+Garry and Sandy Cheeks will display the available options and install the skill file directly into your `/.myemployee/roles/<role>/skill/` directory!
 
 ---
 
