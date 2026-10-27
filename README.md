@@ -10,7 +10,7 @@
 
 **A Virtual Software Engineering Team Framework**: Run an autonomous, 7-role engineering squad (Technical Analyst, Product Owner, UI/UX Designer, Tech Lead, Project Manager, Developer, QA Engineer) directly inside your AI coding assistant.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Operational Lifecycle](#-operational-lifecycle) • [Directory Structure](#-directory-structure) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
+[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Operational Lifecycle](#-operational-lifecycle) • [Directory Structure](#-directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -268,16 +268,21 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 ---
 
-## Token Optimization & Kanban Isolation
+## Token Efficiency & Footprint
 
-During active sessions, the AI agent isolates task subdirectories without scanning completed archives:
-```typescript
-// AI scans only active or pending tasks; ignores tasks/done/
-const pendingTasks = await fs.readdir('myemployee/tasks/pending');
-const inProgress = await fs.readdir('myemployee/tasks/in-progress');
-```
-- Context window consumption remains constant regardless of whether you have completed 10 or 1,000 tasks.
-- Archived tickets in `tasks/done/` remain available for git history and auditing without polluting the active context window.
+`employee-agents` uses a **lean, modular architecture**: each persona's operational rules are isolated in a compact `role.md` and `skill/default-skill.md`. Monolithic framework bloat is avoided through lazy role loading, Kanban subfolder isolation, and Living Master PRD index tables.
+
+### 📊 Estimated Context Consumption Ranges
+
+| Operational Scenario | Active Personas / Artifacts | Estimated Context Range |
+|---|---|---|
+| **Quick Component or Bugfix** *(e.g. Button component)* | Tn. Crab (Developer) + 1 active task ticket | **~500 – 1,200 tokens** |
+| **Urgent Bug Pipeline** *(Targeted line hotfix)* | Tn. Crab (Developer) + 1 targeted bug ticket | **~400 – 900 tokens** |
+| **Phase 1: Feature Spec & Thinking** *(`/share-knowledge`)* | Larry, Patrick, Squidward, Garry | **~2,500 – 4,000 tokens** |
+| **Phase 2: Feature Execution** *(`/apply-work`)* | Tn. Crab (Dev) + Stanley (QA) | **~900 – 2,000 tokens** |
+| **All 7 Roles Combined (Base Footprint)** | All 7 personas (`role.md` + `default-skill.md`) | **~4,500 – 5,500 tokens** *(< 0.6% of 1M context)* |
+
+> 📖 **Deep Dive**: For complete breakdown methodology, architectural drivers, and comparisons with monolithic multi-agent frameworks, see **[TOKEN_FOOTPRINT.md](TOKEN_FOOTPRINT.md)**.
 
 ---
 
