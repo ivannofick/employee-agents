@@ -9,10 +9,7 @@
   "main": "./dist/index.js",
   "files": [
     "dist",
-    "templates",
-    "adapters",
     "README.md",
-    "ACKNOWLEDGMENTS.md",
     "LICENSE"
   ],
   "scripts": {

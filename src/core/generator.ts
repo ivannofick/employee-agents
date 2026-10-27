@@ -1,31 +1,10 @@
 import fs from 'fs-extra';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveAssetRoots } from './downloader.js';
 import type { SetupAnswers } from '../cli/prompts.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-function getAssetRoots(): { templateBase: string; adapterBase: string } {
-  const possibleRoots = [
-    path.resolve(__dirname, '..'), // if running from dist
-    path.resolve(__dirname, '../..'), // if running from dist/core
-    path.resolve(__dirname, '../../..'),
-    process.cwd(),
-  ];
-
-  for (const root of possibleRoots) {
-    const tPath = path.join(root, 'templates', 'myemployee');
-    const aPath = path.join(root, 'adapters');
-    if (fs.existsSync(tPath) && fs.existsSync(aPath)) {
-      return { templateBase: tPath, adapterBase: aPath };
-    }
-  }
-
-  throw new Error('Unable to locate template and adapter directories.');
-}
-
-export function renderAgentSkill(activeRoles: string[]): string {
+export function renderAgentSkill(activeRoles: string[], templateContent?: string): string {
   const roleDefs: Record<string, { title: string; path: string; desc: string }> = {
     'tech-analyst': {
       title: 'Technical Analyst (Larry the Lobster)',
@@ -80,6 +59,13 @@ export function renderAgentSkill(activeRoles: string[]): string {
     })
     .join('\n');
 
+  if (templateContent) {
+    return templateContent.replace(
+      /## Core Squad Roster[\s\S]*?(?=---)/,
+      `## Core Squad Roster\n${rosterLines}\n\n`
+    );
+  }
+
   return `---
 name: myemployee
 description: Virtual multi-role engineering squad operating native spec-driven software workflows.
@@ -95,91 +81,11 @@ You are operating as the multi-role engineering squad defined in the \`/myemploy
 ${rosterLines}
 
 ---
-
-## 🔍 Active Squad Boundaries & Self-Healing
-Only the personas listed in the roster above are active in this workspace:
-- Do not attempt to invoke or search for personas outside the active roster.
-- **Graceful Fallbacks for Absent Roles**:
-  - Missing \`tech-analyst\`: Patrick and Garry handle feasibility checks directly.
-  - Missing \`product-owner\`: Bos is the product authority; use Bos's prompt directly as requirements without drafting a feature PRD.
-  - Missing \`ui-ux\`: Developer applies clean, semantic, anti-slop CSS directly without waiting for wireframes.
-  - Missing \`tech-lead\`: Developer implements directly without drafting a separate \`ARCHITECTURE.md\`.
-  - Missing \`project-manager\`: Task tracking and checklists are managed directly with Bos.
-  - Missing \`developer\`: Code modifications are carried out by Tech Lead or Bos.
-  - Missing \`qa\`: Developer performs thorough self-verification and delivers directly to Bos.
-
----
-
-## Language & Communication Protocol
-- **Chat Room Conversations**: You may converse warmly with Bos in conversational Indonesian or English (e.g. *"Siap Bos! Larry sudah analisis skemanya..."*). Always address the user as **"Bos"**.
-- 🛑 **ALL FILES, MARKDOWN SPECS, TICKETS & CODE: 100% STRICT ENGLISH!**
-  - **ZERO TOLERANCE FOR INDONESIAN IN FILES**: Even when Bos converses in Indonesian in the chat room, **every markdown file (\`PRD.md\`, \`DESIGN.md\`, \`ARCHITECTURE.md\`, task files), code comment, and commit message MUST be written in 100% Strict Professional English**.
-  - Leaking Indonesian words into markdown specifications, requirements, or task files is considered AI slop and strictly violates squad standards.
-  - Any code snippets, tables, or markdown preview blocks rendered in the chat room MUST also be in English.
-- **Multi-Persona Turn-Taking**: When discussing ideas in chat, do NOT collapse into a single monolithic response. Delineate each persona's voice clearly (\`[LARRY - TECHNICAL ANALYST]\`, \`[GARRY - TECH LEAD]\`, \`[SQUIDWARD - UI/UX]\`, etc.).
-- **Physical File Writing Requirement**: NEVER report files created in chat without executing physical tool calls (\`write_to_file\`) to disk.
-
----
-
-## Operational Workflows
-
-### 🛑 KANBAN TASK MANAGEMENT & NO DIRECT CODE WRITING
-Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the Kanban task system:
-1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk in \`pending/\`**:
-   - \`/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`
-   - The task file MUST state the target file(s), line ranges, VAC targets, and checklist items.
-2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
-   - When \`/apply-work\` is executed, Sandy moves the task file to \`/myemployee/tasks/in-progress/\`.
-   - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
-3. **Stanley (QA) verifies fungsional & visual fidelity**:
-   - Stanley runs destructive checks and audits each Visual Acceptance Criteria (\`[ ] VAC-*\`) item.
-4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
-   - DILINGKUP \`/apply-work\`, task file **TETAP berada di \`in-progress/\`**!
-   - AI DILARANG me-rename atau memindahkan task ke \`done/\` secara sepihak.
-   - AI DILARANG menjalankan \`git push\` atau cerewet bertanya *"apakah mau dipush?"*.
-   - Hanya ketika Bos menjalankan \`/done-task\`, Sandy memindahkan task ke \`/myemployee/tasks/done/\`.
-   - \`git push\` HANYA dijalankan jika prompt Bos eksplisit berisi kata *"sekalian dipush ke git"* atau *"push ke git"*.
-
----
-
-### Core Slash Commands Protocol
-
-#### 1. \`/share-knowledge\` (alias \`/share-knowladge\`) — Phase 1: Thinking & Spec
-- Larry (Tech Analyst) evaluates technical feasibility, data models, and API boundaries.
-- Garry (Tech Lead) provides anti-lasagna architecture review.
-- Patrick (PO) drafts \`/myemployee/features/<slug>/PRD.md\` and appends 1-2 sentence summary to \`/myemployee/PRD.md\`.
-- Squidward (UI/UX) drafts \`/myemployee/features/<slug>/DESIGN.md\` (Mobile-first, Tokens Table, State Matrix, VAC checklist).
-- Sandy Cheeks (PM) creates \`/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`.
-- **Zero application code is written in this phase.**
-
-#### 2. \`/apply-work [slug]\` — Phase 2: Execution & Coding
-- Moves target task from \`tasks/pending/\` to \`tasks/in-progress/\`.
-- Tn. Crab implements code changes cleanly with zero slop and design token compliance.
-- Stanley (QA) executes destructive functional tests and visual VAC audits.
-- Squad reports completion to Bos. Task stays in \`in-progress/\`. Dilarang auto-done dan dilarang tanya push.
-
-#### 3. \`/done-task [slug]\` — Phase 3: Founder Sign-Off
-- Founder's dedicated command to mark a verified task complete.
-- Sandy moves task file from \`tasks/in-progress/\` to \`tasks/done/\`.
-- Updates feature status in \`/myemployee/PRD.md\` to \`DONE\`.
-
-#### 4. \`/my-task\` — Kanban Task Dashboard
-- Sandy Cheeks inspects \`/myemployee/tasks/\`.
-- Displays active task in \`in-progress/\`, followed by top prioritized tasks in \`pending/\`, and any paused tickets in \`paused/\`.
-- Preserves token efficiency by ignoring \`done/\` by default.
-
----
-
-## Brownfield Codebase Guard (Existing Projects)
-When working in an existing codebase (\`"project_type": "existing"\` in \`config.json\`):
-- Never rewrite entire files.
-- Respect existing coding conventions, indentations, and naming styles.
-- Only edit the exact line ranges specified in the active task file.
 `;
 }
 
 export async function generateWorkspace(answers: SetupAnswers, targetDir: string = process.cwd()): Promise<void> {
-  const { templateBase, adapterBase } = getAssetRoots();
+  const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
 
   await fs.ensureDir(destinationMyEmployee);
@@ -234,7 +140,9 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
   if (answers.targetAi === 'antigravity') {
     const destinationAgentSkill = path.join(targetDir, '.agent', 'skills', 'myemployee', 'SKILL.md');
     await fs.ensureDir(path.dirname(destinationAgentSkill));
-    await fs.writeFile(destinationAgentSkill, renderAgentSkill(rolesToInstall), 'utf8');
+    const adapterSkillTemplate = path.join(adapterBase, 'antigravity', 'SKILL.md');
+    const templateContent = (await fs.pathExists(adapterSkillTemplate)) ? await fs.readFile(adapterSkillTemplate, 'utf8') : undefined;
+    await fs.writeFile(destinationAgentSkill, renderAgentSkill(rolesToInstall, templateContent), 'utf8');
 
     // Install slash command workflows
     const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
@@ -247,7 +155,7 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
 }
 
 export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; activeRoles: string[] }> {
-  const { templateBase, adapterBase } = getAssetRoots();
+  const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
 
   if (!(await fs.pathExists(destinationMyEmployee))) {
@@ -285,7 +193,9 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
   if (targetAi === 'antigravity') {
     const destinationAgentSkill = path.join(targetDir, '.agent', 'skills', 'myemployee', 'SKILL.md');
     await fs.ensureDir(path.dirname(destinationAgentSkill));
-    await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles), 'utf8');
+    const adapterSkillTemplate = path.join(adapterBase, 'antigravity', 'SKILL.md');
+    const templateContent = (await fs.pathExists(adapterSkillTemplate)) ? await fs.readFile(adapterSkillTemplate, 'utf8') : undefined;
+    await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles, templateContent), 'utf8');
 
     const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
     if (await fs.pathExists(workflowsSource)) {
@@ -328,13 +238,23 @@ export async function removeRoleFromWorkspace(role: string, targetDir: string = 
   // Re-sync adapter dynamically without the removed role!
   const destinationAgentSkill = path.join(targetDir, '.agent', 'skills', 'myemployee', 'SKILL.md');
   await fs.ensureDir(path.dirname(destinationAgentSkill));
-  await fs.writeFile(destinationAgentSkill, renderAgentSkill(remainingRoles), 'utf8');
+  let templateContent: string | undefined;
+  if (await fs.pathExists(destinationAgentSkill)) {
+    templateContent = await fs.readFile(destinationAgentSkill, 'utf8');
+  } else {
+    const { adapterBase } = await resolveAssetRoots();
+    const adapterSkillTemplate = path.join(adapterBase, 'antigravity', 'SKILL.md');
+    if (await fs.pathExists(adapterSkillTemplate)) {
+      templateContent = await fs.readFile(adapterSkillTemplate, 'utf8');
+    }
+  }
+  await fs.writeFile(destinationAgentSkill, renderAgentSkill(remainingRoles, templateContent), 'utf8');
 
   return remainingRoles;
 }
 
 export async function addRoleToWorkspace(role: string, targetDir: string = process.cwd()): Promise<string[]> {
-  const { templateBase } = getAssetRoots();
+  const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
   const roleSource = path.join(templateBase, 'roles', role);
   const roleDest = path.join(destinationMyEmployee, 'roles', role);
@@ -363,7 +283,16 @@ export async function addRoleToWorkspace(role: string, targetDir: string = proce
   // Re-sync adapter dynamically including the added role!
   const destinationAgentSkill = path.join(targetDir, '.agent', 'skills', 'myemployee', 'SKILL.md');
   await fs.ensureDir(path.dirname(destinationAgentSkill));
-  await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles), 'utf8');
+  let templateContent: string | undefined;
+  if (await fs.pathExists(destinationAgentSkill)) {
+    templateContent = await fs.readFile(destinationAgentSkill, 'utf8');
+  } else {
+    const adapterSkillTemplate = path.join(adapterBase, 'antigravity', 'SKILL.md');
+    if (await fs.pathExists(adapterSkillTemplate)) {
+      templateContent = await fs.readFile(adapterSkillTemplate, 'utf8');
+    }
+  }
+  await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles, templateContent), 'utf8');
 
   return activeRoles;
 }
