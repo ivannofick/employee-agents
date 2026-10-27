@@ -57,23 +57,17 @@ if [[ "$choice" == "5" ]]; then
   echo -e "${CYAN}4. Installing directly from local directory (npm install -g .)...${NC}"
   npm install -g .
 
-  GLOBAL_PKG_DIR="$(npm root -g)/employee-agents"
   mkdir -p ~/.employee-agents
 
   if [[ "$test_mode" == "1" ]]; then
     echo -e "${CYAN}5. Configuring Local Workspace Template override...${NC}"
+    rm -f ~/.employee-agents/force-remote
     echo "$PWD" > ~/.employee-agents/dev-root
-    if [[ -d "$GLOBAL_PKG_DIR" ]]; then
-      cp -r templates "$GLOBAL_PKG_DIR/"
-      cp -r adapters "$GLOBAL_PKG_DIR/"
-    fi
     echo -e "${GREEN}  ✔ Using local workspace templates from: $PWD${NC}"
   else
     echo -e "${CYAN}5. Configuring Remote GitHub download mode...${NC}"
     rm -f ~/.employee-agents/dev-root
-    if [[ -d "$GLOBAL_PKG_DIR" ]]; then
-      rm -rf "$GLOBAL_PKG_DIR/templates" "$GLOBAL_PKG_DIR/adapters"
-    fi
+    touch ~/.employee-agents/force-remote
     echo -e "${YELLOW}  ✔ Set to remote mode! Will download live blueprints from GitHub.${NC}"
   fi
 
@@ -90,7 +84,7 @@ if [[ "$choice" == "5" ]]; then
 fi
 
 # Clean up any local dev overrides before publish
-rm -f ~/.employee-agents/dev-root
+rm -f ~/.employee-agents/dev-root ~/.employee-agents/force-remote
 
 # ----------------------------------------------------
 # OPTIONS 1-4: FULL RELEASE PIPELINE

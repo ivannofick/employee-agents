@@ -21,8 +21,9 @@ export interface AssetRoots {
 }
 
 function findLocalAssetRoots(): AssetRoots | null {
-  // If forced remote testing, skip local check
-  if (process.env.EMPLOYEE_AGENTS_FORCE_REMOTE === 'true') {
+  // If forced remote testing via env or marker file, skip all local checks
+  const forceRemoteFile = path.join(os.homedir(), '.employee-agents', 'force-remote');
+  if (process.env.EMPLOYEE_AGENTS_FORCE_REMOTE === 'true' || fs.existsSync(forceRemoteFile)) {
     return null;
   }
 
