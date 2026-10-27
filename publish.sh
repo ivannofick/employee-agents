@@ -9,18 +9,24 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+CURRENT_VERSION=$(node -p "require('./package.json').version")
+PATCH_VERSION=$(node -p "const v=require('./package.json').version.split('.').map(Number); \`\${v[0]}.\${v[1]}.\${v[2]+1}\`")
+MINOR_VERSION=$(node -p "const v=require('./package.json').version.split('.').map(Number); \`\${v[0]}.\${v[1]+1}.0\`")
+MAJOR_VERSION=$(node -p "const v=require('./package.json').version.split('.').map(Number); \`\${v[0]+1}.0.0\`")
+
 echo -e "${CYAN}=====================================================${NC}"
-echo -e "${CYAN}      🚀 EMPLOYEE-AGENTS RELEASE & TEST SCRIPT       ${NC}"
+echo -e "${CYAN}      EMPLOYEE-AGENTS RELEASE & TEST SCRIPT          ${NC}"
+echo -e "${CYAN}      Current Version: v${CURRENT_VERSION}                     ${NC}"
 echo -e "${CYAN}=====================================================${NC}"
 
 # Choose action / version bump type
 echo ""
 echo -e "Choose release or testing option:"
-echo -e "  ${GREEN}1) patch${NC}      (Bump patch & publish to npm + GitHub)"
-echo -e "  ${GREEN}2) minor${NC}      (Bump minor & publish to npm + GitHub)"
-echo -e "  ${GREEN}3) major${NC}      (Bump major & publish to npm + GitHub)"
-echo -e "  ${GREEN}4) current${NC}    (Publish current version to npm + GitHub)"
-echo -e "  ${YELLOW}5) test-local${NC} (Uninstall old version, clear cache, build & install globally - NO PUBLISH)"
+echo -e "  ${GREEN}1) patch${NC}      (v${PATCH_VERSION} - Bump patch & publish to npm + GitHub)"
+echo -e "  ${GREEN}2) minor${NC}      (v${MINOR_VERSION} - Bump minor & publish to npm + GitHub)"
+echo -e "  ${GREEN}3) major${NC}      (v${MAJOR_VERSION} - Bump major & publish to npm + GitHub)"
+echo -e "  ${GREEN}4) current${NC}    (v${CURRENT_VERSION} - Publish current version as-is to npm + GitHub)"
+echo -e "  ${YELLOW}5) test-local${NC} (v${CURRENT_VERSION} - Clean uninstall, build & install globally - NO PUBLISH)"
 read -p "Select option [1-5] (default: 5): " choice
 choice=${choice:-5}
 
