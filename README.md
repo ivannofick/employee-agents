@@ -102,9 +102,9 @@ This leads to:
 
 Before using `employee-agents`, ensure your development environment has:
 
-1. **Node.js**: Version `>= 20.0.0` (with `npm` / `npx`).
+1. **Node.js**: Version `>= 20.0.0` ([Download Node.js LTS](https://nodejs.org/en/download)) with `npm` / `npx`.
 2. **AI Coding Assistant**: **Google Antigravity** (Antigravity IDE or Antigravity CLI `agy`) with an active AI model (e.g. Gemini 1.5 Pro / Flash). *(Cursor, Claude Code, Cline support on roadmap)*.
-3. **Version Control**: Git `>= 2.30.0` initialized in your target project.
+3. **Version Control**: Git `>= 2.30.0` ([Download Git](https://git-scm.com/downloads)) initialized in your target project.
 4. **Operating System**: macOS, Linux, or Windows (via WSL2 or PowerShell).
 
 > **Hands-On Tutorial**: For a complete step-by-step walkthrough covering your first feature from planning to ship, see **[TUTORIAL.md](TUTORIAL.md)**.

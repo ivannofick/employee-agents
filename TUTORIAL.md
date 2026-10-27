@@ -23,29 +23,61 @@ A comprehensive, step-by-step tutorial on how to install, configure, and ship so
 
 ## Prerequisites & System Requirements
 
-Before running `employee-agents`, ensure your environment meets the following requirements:
+Before running `employee-agents`, ensure your environment meets the following requirements. Direct download links and installation options are provided below:
 
-1. **Node.js Runtime**:
-   - Node.js `>= 20.0.0`
-   - npm `>= 9.0.0` (bundled with Node.js)
-   - Verify by running:
-     ```bash
-     node -v
-     npm -v
-     ```
+### 1. Node.js Runtime (v20.0.0 or higher required)
+`employee-agents` is an ES Module CLI that requires Node.js version 20 or later.
 
-2. **AI Coding Assistant Environment**:
-   - **Google Antigravity** (Antigravity IDE or Antigravity CLI `agy`) with an active AI model (e.g., Gemini 1.5 Pro or Flash).
-   - *(Note: Support for Cursor, Claude Code, Cline, and Windsurf is scheduled on the Roadmap)*.
+- **Direct Download**: [Download Node.js LTS (Official Website)](https://nodejs.org/en/download) (Select the LTS installer for macOS, Windows, or Linux).
+- **Via Package Managers**:
+  - macOS (Homebrew):
+    ```bash
+    brew install node
+    ```
+  - macOS / Linux (via nvm):
+    ```bash
+    nvm install 20 && nvm use 20
+    ```
+  - Windows (via winget):
+    ```powershell
+    winget install OpenJS.NodeJS.LTS
+    ```
+- **Verify Installation**:
+  ```bash
+  node -v   # Output must be v20.0.0 or higher (e.g. v20.18.0, v22.x)
+  npm -v    # Output must be v9.0.0 or higher (bundled with Node.js)
+  ```
 
-3. **Version Control**:
-   - Git `>= 2.30.0` installed and initialized in your project repository:
-     ```bash
-     git --version
-     ```
+---
 
-4. **Operating System**:
-   - macOS, Linux, or Windows (via WSL2 or PowerShell).
+### 2. Version Control (Git)
+Git is required to manage source code history and track task tickets.
+
+- **Direct Download**: [Download Git (Official Website)](https://git-scm.com/downloads)
+- **Via Package Managers**:
+  - macOS: `brew install git` or via Xcode Command Line Tools (`xcode-select --install`)
+  - Ubuntu / Debian Linux: `sudo apt update && sudo apt install git`
+  - Fedora Linux: `sudo dnf install git`
+  - Windows: `winget install Git.Git`
+- **Verify Installation**:
+  ```bash
+  git --version
+  ```
+
+---
+
+### 3. AI Coding Assistant Environment
+`employee-agents` integrates directly with AI agent environments:
+
+- **Google Antigravity**: Use the Antigravity IDE or the Antigravity CLI (`agy`) with an active Google Gemini AI model (e.g., Gemini 1.5 Pro or Flash).
+- *(Support for Cursor, Claude Code, Cline, and Windsurf is scheduled in our Roadmap)*.
+
+---
+
+### 4. Operating System & Terminal
+- **macOS**: Terminal or iTerm2 running `zsh` or `bash`.
+- **Linux**: Any standard shell (`bash`, `zsh`).
+- **Windows**: Windows 10/11 running WSL2 (Ubuntu recommended) or PowerShell / Windows Terminal.
 
 ---
 
