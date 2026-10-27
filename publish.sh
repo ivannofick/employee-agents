@@ -114,6 +114,11 @@ case $choice in
     ;;
   4)
     echo -e "${YELLOW}Publishing current version...${NC}"
+    CURRENT_VERSION=$(node -p "require('./package.json').version")
+    if ! git rev-parse "v$CURRENT_VERSION" >/dev/null 2>&1; then
+      echo -e "${YELLOW}Creating Git tag v$CURRENT_VERSION...${NC}"
+      git tag -a "v$CURRENT_VERSION" -m "chore(release): v$CURRENT_VERSION"
+    fi
     ;;
   *)
     echo -e "${RED}Invalid selection. Aborted.${NC}"
