@@ -6,7 +6,7 @@
 
 ---
 
-## 🎯 1. Founder Goal & North Star
+## 1. Founder Goal & North Star
 > State the core purpose, target audience, and primary problem this application solves. Keep this concise and clear.
 
 - **Primary Problem**: [What is the core user pain point being eliminated?]
@@ -15,7 +15,7 @@
 
 ---
 
-## 📑 2. Active Feature Index & Executive Summaries
+## 2. Active Feature Index & Executive Summaries
 *(This directory is updated continuously by Patrick whenever a new feature PRD is drafted. AI agents and Bos refer to these summaries instead of reading all full feature specs).*
 
 | # | Feature Name & Spec Link | Status | Executive Summary (1–2 Sentences) |
@@ -24,7 +24,7 @@
 
 ---
 
-## 🛠️ 3. Global Technical Constraints
+## 3. Global Technical Constraints
 - **Stack & Architecture Guard**: Garry (Tech Lead)
 - **Clean Code & Design Mandate**: Tn. Crab (Developer) & Squidward (UI/UX)
 - **Fidelity & Regression Gate**: Stanley (QA)

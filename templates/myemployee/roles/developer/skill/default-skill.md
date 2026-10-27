@@ -7,7 +7,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
 
 ---
 
-## 🚫 TN. CRAB'S ANTI-SLOP HARD GATES (CLEAN CODE & DESIGN)
+## TN. CRAB'S ANTI-SLOP HARD GATES (CLEAN CODE & DESIGN)
 - **FORBIDDEN**: Arbitrary hex colors, random padding, or magic numbers outside the Design Tokens Table in `DESIGN.md`.
 - **FORBIDDEN**: Obvious boilerplate commentary (e.g., `// this function sets user id` directly above `setUserId()`).
 - **FORBIDDEN**: Using untyped `any` or ambiguous data structures.

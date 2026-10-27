@@ -84,6 +84,40 @@ ${rosterLines}
 `;
 }
 
+export const START_AGENTS_DELIMITER = '<!-- employee-agents:start -->';
+export const END_AGENTS_DELIMITER = '<!-- employee-agents:end -->';
+
+export function renderUniversalAgentsBlock(): string {
+  return `${START_AGENTS_DELIMITER}
+# Employee-Agents Squad Governance (Universal Ambient Rule)
+This workspace is actively governed by the multi-role engineering squad defined in \`/myemployee/\`.
+Whenever the user interacts with you (even without slash commands or explicit role mentions):
+1. **Identity & Tone**: The user is the founder and CEO. Always address the user as **"Bos"**.
+2. **Anti-Slop Hard Rule**: NEVER write or dump application code directly without an active task in \`/myemployee/tasks/in-progress/\` or \`/myemployee/tasks/pending/\`. All files, markdown specs, and code commits MUST be 100% Strict English.
+3. **Casual Prompt Triage**: If Bos asks to build, modify, or fix something in chat without typing \`/share-knowledge\` or \`/apply-work\`, Larry (Tech Analyst) and Patrick (PO) immediately greet Bos as front-desk, prepare a pending task ticket in \`/myemployee/tasks/pending/\`, and guide Bos to the next phase instead of dumping unverified code.
+4. **Coexistence**: Respect other external agent skills or commands (e.g., OpenSpec \`/opsx-*\`, linters) without interference.
+${END_AGENTS_DELIMITER}`;
+}
+
+export async function ensureUniversalAgentsRule(targetDir: string = process.cwd()): Promise<void> {
+  const agentsPath = path.join(targetDir, 'AGENTS.md');
+  const block = renderUniversalAgentsBlock();
+
+  if (await fs.pathExists(agentsPath)) {
+    const existingContent = await fs.readFile(agentsPath, 'utf8');
+    if (existingContent.includes(START_AGENTS_DELIMITER) && existingContent.includes(END_AGENTS_DELIMITER)) {
+      const regex = new RegExp(`${START_AGENTS_DELIMITER}[\\s\\S]*?${END_AGENTS_DELIMITER}`, 'g');
+      const updated = existingContent.replace(regex, block);
+      await fs.writeFile(agentsPath, updated, 'utf8');
+    } else {
+      const separator = existingContent.endsWith('\n') ? '\n' : '\n\n';
+      await fs.writeFile(agentsPath, existingContent + separator + block + '\n', 'utf8');
+    }
+  } else {
+    await fs.writeFile(agentsPath, block + '\n', 'utf8');
+  }
+}
+
 export async function generateWorkspace(answers: SetupAnswers, targetDir: string = process.cwd()): Promise<void> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
@@ -130,7 +164,7 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
     target_ai: answers.targetAi,
     language: answers.language,
     active_roles: rolesToInstall,
-    version: '1.0.1',
+    version: '1.0.4',
     created_at: new Date().toISOString(),
   };
 
@@ -144,6 +178,14 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
     const templateContent = (await fs.pathExists(adapterSkillTemplate)) ? await fs.readFile(adapterSkillTemplate, 'utf8') : undefined;
     await fs.writeFile(destinationAgentSkill, renderAgentSkill(rolesToInstall, templateContent), 'utf8');
 
+    // Install ambient rules
+    const rulesSource = path.join(adapterBase, 'antigravity', 'rules');
+    if (await fs.pathExists(rulesSource)) {
+      const destinationRules = path.join(targetDir, '.agent', 'rules');
+      await fs.ensureDir(destinationRules);
+      await fs.copy(rulesSource, destinationRules, { overwrite: true });
+    }
+
     // Install slash command workflows
     const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
     if (await fs.pathExists(workflowsSource)) {
@@ -152,9 +194,12 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
       await fs.copy(workflowsSource, destinationWorkflows, { overwrite: true });
     }
   }
+
+  // 5. Ensure universal AGENTS.md rule block at target root
+  await ensureUniversalAgentsRule(targetDir);
 }
 
-export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; activeRoles: string[] }> {
+export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; updatedRules: boolean; activeRoles: string[] }> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, 'myemployee');
 
@@ -197,6 +242,14 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
     const templateContent = (await fs.pathExists(adapterSkillTemplate)) ? await fs.readFile(adapterSkillTemplate, 'utf8') : undefined;
     await fs.writeFile(destinationAgentSkill, renderAgentSkill(activeRoles, templateContent), 'utf8');
 
+    // Update ambient rules
+    const rulesSource = path.join(adapterBase, 'antigravity', 'rules');
+    if (await fs.pathExists(rulesSource)) {
+      const destinationRules = path.join(targetDir, '.agent', 'rules');
+      await fs.ensureDir(destinationRules);
+      await fs.copy(rulesSource, destinationRules, { overwrite: true });
+    }
+
     const workflowsSource = path.join(adapterBase, 'antigravity', 'workflows');
     if (await fs.pathExists(workflowsSource)) {
       const destinationWorkflows = path.join(targetDir, '.agent', 'workflows');
@@ -209,7 +262,10 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
     }
   }
 
-  return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, activeRoles };
+  // 4. Ensure universal AGENTS.md rule block is updated
+  await ensureUniversalAgentsRule(targetDir);
+
+  return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, updatedRules: true, activeRoles };
 }
 
 export async function removeRoleFromWorkspace(role: string, targetDir: string = process.cwd()): Promise<string[]> {

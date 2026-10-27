@@ -6,7 +6,7 @@ Larry the Lobster (Tech Analyst), Patrick (Product Owner), Squidward (UI/UX), Ga
 
 > Also accepts alias `/share-knowladge`.
 
-⚠️ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
+ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
 All generated markdown files (`PRD.md`, `DESIGN.md`, `ARCHITECTURE.md`, `TASK-*.md`) **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
 Even when Bos converses in Indonesian or other languages in the chat room, the squad MUST ALWAYS write all markdown specifications, tickets, and code in English. Leaking Indonesian words into markdown files is strictly prohibited.
 

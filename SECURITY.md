@@ -4,7 +4,7 @@
 
 ---
 
-## 🔒 Security Principles
+## Security Principles
 
 ### 1. Zero External Network Requests
 
@@ -24,16 +24,16 @@ The installed driver skill (e.g. `.agent/skills/myemployee/SKILL.md`) is a plain
 
 ---
 
-## 🛡️ Supported Versions
+## Supported Versions
 
-| Version | Supported          |
+| Version | Supported |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 1.0.x | :white_check_mark: |
+| < 1.0 | :x: |
 
 ---
 
-## 🚨 Reporting a Vulnerability
+## Reporting a Vulnerability
 
 If you discover a security vulnerability or unexpected behavior within `employee-agents`, please report it directly and privately to the maintainers rather than opening a public issue.
 

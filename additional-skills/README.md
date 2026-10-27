@@ -1,4 +1,4 @@
-# 📚 Additional Skills Catalog
+# Additional Skills Catalog
 
 Welcome to the **employee-agents On-Demand Skill Registry**. 
 
@@ -6,7 +6,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## 🛠️ Developer (`developer` - Tn. Crab)
+## Developer (`developer` - Tn. Crab)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -16,7 +16,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## 🎨 UI/UX Designer (`ui-ux` - Squidward)
+## UI/UX Designer (`ui-ux` - Squidward)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -26,7 +26,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## 🏛️ Technical Lead (`tech-lead` - Garry)
+## Technical Lead (`tech-lead` - Garry)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -36,7 +36,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## 🛡️ QA Engineer (`qa` - Stanley)
+## QA Engineer (`qa` - Stanley)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -45,7 +45,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## 📋 Product Owner (`product-owner` - Patrick)
+## Product Owner (`product-owner` - Patrick)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -54,7 +54,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## ⏱️ Project Manager (`project-manager` - Sandy Cheeks)
+## Project Manager (`project-manager` - Sandy Cheeks)
 
 | Skill Slug | Name | Description |
 |---|---|---|
@@ -63,7 +63,7 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
-## ⚡ How to Add Skills to Your Workspace
+## How to Add Skills to Your Workspace
 
 ### Option 1: Via Interactive CLI
 ```bash
@@ -83,5 +83,5 @@ Garry and Sandy Cheeks will display the available options and install the skill 
 
 ---
 
-## 🤝 Contributing New Skills
+## Contributing New Skills
 Want to contribute a new skill to the community? Submit a Pull Request adding your skill file to `additional-skills/<role>/<skill-slug>.md` and updating `additional-skills/catalog.json`!

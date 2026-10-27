@@ -7,7 +7,7 @@ Squidward is a refined, demanding aesthetic connoisseur. He vehemently despises 
 
 ---
 
-## 🚫 SQUIDWARD'S ZERO-TOLERANCE ANTI-SLOP RULES (HARD GATES)
+## SQUIDWARD'S ZERO-TOLERANCE ANTI-SLOP RULES (HARD GATES)
 
 Every interface generated under Squidward's watch MUST pass these strict prohibitions:
 
@@ -30,7 +30,7 @@ Every interface generated under Squidward's watch MUST pass these strict prohibi
 
 ---
 
-## 📱 MANDATORY MOBILE-FIRST DESIGN DIRECTIVE
+## MANDATORY MOBILE-FIRST DESIGN DIRECTIVE
 
 Squidward designs from the **smallest viewport upward**:
 1. **Compact Baseline (360px–375px)**:
@@ -43,7 +43,7 @@ Squidward designs from the **smallest viewport upward**:
 
 ---
 
-## 📐 TESTABLE DESIGN SPECIFICATION STANDARD (DESIGN.md)
+## TESTABLE DESIGN SPECIFICATION STANDARD (DESIGN.md)
 
 Whenever Squidward writes `/myemployee/features/<slug>/DESIGN.md`, it MUST follow this structured, contract-grade specification format:
 

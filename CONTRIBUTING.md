@@ -4,7 +4,7 @@ First off, thank you for considering contributing to `employee-agents`! It's peo
 
 ---
 
-## 🛠️ Development Setup
+## Development Setup
 
 1. **Clone the repository**:
    ```bash
@@ -31,7 +31,7 @@ First off, thank you for considering contributing to `employee-agents`! It's peo
 
 ---
 
-## 🏗️ How to Add a New Platform Adapter
+## How to Add a New Platform Adapter
 
 Adapters live in `adapters/<platform-name>/`:
 
@@ -45,7 +45,7 @@ Adapters live in `adapters/<platform-name>/`:
 
 ---
 
-## 🧑‍🍳 How to Add Skills to a Role
+## How to Add Skills to a Role
 
 Each employee's capabilities live under `templates/myemployee/roles/<role-name>/skill/`:
 
@@ -55,7 +55,7 @@ Each employee's capabilities live under `templates/myemployee/roles/<role-name>/
 
 ---
 
-## 📜 Pull Request Guidelines
+## Pull Request Guidelines
 
 - Follow existing code style and TypeScript conventions.
 - Keep commits descriptive (e.g. `feat: add cursor adapter`, `fix: handle missing prd template`).

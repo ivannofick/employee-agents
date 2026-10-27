@@ -270,7 +270,7 @@ const program = new Command();
 program
   .name('employee-agents')
   .description('Virtual multi-role engineering squad adapting native spec-driven workflows')
-  .version('1.0.1')
+  .version('1.0.4')
   .addHelpCommand('help [command]', 'Display help for employee-agents commands')
   .option('-l, --lang <language>', 'Language for CLI wizard (en | id)', 'en')
   .action(async (options) => {

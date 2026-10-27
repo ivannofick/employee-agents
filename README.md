@@ -34,50 +34,50 @@ This leads to:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                      LEAD ARCHITECT / FOUNDER (User)                   │
-│         "Build feature X"  •  "Fix bug Y"  •  "Langsung sekarang!"     │
+│ LEAD ARCHITECT / FOUNDER (User) │
+│ "Build feature X" • "Fix bug Y" • "Langsung sekarang!" │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
                                     ▼
        ┌────────────────────────────────────────────────────────┐
-       │             ADAPTER LAYER (.agent/skills/)             │
-       │  - Reads Living Master PRD (/myemployee/PRD.md)        │
-       │  - Evaluates Intent: Feature, Bug, or Fast-Track       │
+       │ ADAPTER LAYER (.agent/skills/) │
+       │ - Reads Living Master PRD (/myemployee/PRD.md) │
+       │ - Evaluates Intent: Feature, Bug, or Fast-Track │
        └────────────────────────────┬───────────────────────────┘
                                     │
                  ┌──────────────────┴──────────────────┐
-                 ▼                                     ▼
-      [ PHASE 1: /share-knowledge ]          [ FAST-TRACK / BUG PIPELINE ]
-                 │                                     │
-    1. Larry (Technical Analyst)             1. Larry (Technical Analyst)
-       -> Feasibility & Data Boundaries         -> 30-Sec Feasibility Check
-                 │                                     │
-    2. Patrick (Product Owner)               2. Patrick & Sandy
-       -> features/<slug>/PRD.md                -> Micro-PRD (10-15 lines)
-       -> Syncs Master PRD                      -> tasks/pending/TASK-*.md
-                 │                                     │
-    3. Squidward (UI/UX)                               ▼
-       -> Mobile-First Tokens & VAC          [ PHASE 2: /apply-work ]
-                 │                                     │
-    4. Garry (Tech Lead)                     3. Sandy Cheeks (PM)
-       -> Architecture & Anti-Lasagna           -> Moves to: tasks/in-progress/
-                 │                                     │
-    5. Sandy Cheeks (PM)                     4. Tn. Crab (Developer)
-       -> tasks/pending/TASK-*.md               -> Surgical token-adherent code
-                 │                                     │
-                 ▼                           5. Stanley (QA Engineer)
-      [ PHASE 2: /apply-work ]                  -> Destructive tests & VAC audit
-                 │                                     │
-    6. Sandy moves task to:                            ▼
-       tasks/in-progress/                    [ PHASE 3: /done-task ]
-                 │                                     │
-    7. Tn. Crab implements code              6. Founder Sign-Off (HARD STOP)
-                 │                              -> Sandy moves to: tasks/done/
-    8. Stanley audits VAC & QA                  -> Updates PRD to DONE
-                 │                                     │
-                 ▼                                     ▼
-      [ PHASE 3: /done-task ]               [ Zero Auto-Push Guarantee ]
-    9. Founder signs off task               (Push strictly gated on prompt)
+                 ▼ ▼
+      [ PHASE 1: /share-knowledge ] [ FAST-TRACK / BUG PIPELINE ]
+                 │ │
+    1. Larry (Technical Analyst) 1. Larry (Technical Analyst)
+       -> Feasibility & Data Boundaries -> 30-Sec Feasibility Check
+                 │ │
+    2. Patrick (Product Owner) 2. Patrick & Sandy
+       -> features/<slug>/PRD.md -> Micro-PRD (10-15 lines)
+       -> Syncs Master PRD -> tasks/pending/TASK-*.md
+                 │ │
+    3. Squidward (UI/UX) ▼
+       -> Mobile-First Tokens & VAC [ PHASE 2: /apply-work ]
+                 │ │
+    4. Garry (Tech Lead) 3. Sandy Cheeks (PM)
+       -> Architecture & Anti-Lasagna -> Moves to: tasks/in-progress/
+                 │ │
+    5. Sandy Cheeks (PM) 4. Tn. Crab (Developer)
+       -> tasks/pending/TASK-*.md -> Surgical token-adherent code
+                 │ │
+                 ▼ 5. Stanley (QA Engineer)
+      [ PHASE 2: /apply-work ] -> Destructive tests & VAC audit
+                 │ │
+    6. Sandy moves task to: ▼
+       tasks/in-progress/ [ PHASE 3: /done-task ]
+                 │ │
+    7. Tn. Crab implements code 6. Founder Sign-Off (HARD STOP)
+                 │ -> Sandy moves to: tasks/done/
+    8. Stanley audits VAC & QA -> Updates PRD to DONE
+                 │ │
+                 ▼ ▼
+      [ PHASE 3: /done-task ] [ Zero Auto-Push Guarantee ]
+    9. Founder signs off task (Push strictly gated on prompt)
        -> Sandy moves to: tasks/done/
        -> Updates Master PRD status
 ```
@@ -176,57 +176,57 @@ Each role possesses a clean **`role.md`** defining its identity, and an extensib
 
 ```text
 myemployee/
-├── PRD.md                         # Living Master PRD (Founder Goal & Auto-Updating Feature Index)
-├── config.json                    # Project configuration & active roles
+├── PRD.md # Living Master PRD (Founder Goal & Auto-Updating Feature Index)
+├── config.json # Project configuration & active roles
 │
-├── features/                      # Modular Feature Specs created during /share-knowledge
-│   └── <feature-slug>/
-│       ├── PRD.md                 # User Stories & Acceptance Criteria (Patrick)
-│       ├── DESIGN.md              # Mobile-First Tokens, State Matrix & VAC Checklists (Squidward)
-│       └── ARCHITECTURE.md        # Architecture, ADRs & Anti-Lasagna Boundaries (Garry)
+├── features/ # Modular Feature Specs created during /share-knowledge
+│ └── <feature-slug>/
+│ ├── PRD.md # User Stories & Acceptance Criteria (Patrick)
+│ ├── DESIGN.md # Mobile-First Tokens, State Matrix & VAC Checklists (Squidward)
+│ └── ARCHITECTURE.md # Architecture, ADRs & Anti-Lasagna Boundaries (Garry)
 │
-├── tasks/                         # Kanban task subdirectories managed by Sandy Cheeks (PM)
-│   ├── pending/                   # Backlog tickets awaiting execution
-│   ├── in-progress/               # Active task currently being coded by Tn. Crab
-│   ├── paused/                    # Suspended tasks during priority shifts
-│   └── done/                      # Verified tasks archived by founder via /done-task
+├── tasks/ # Kanban task subdirectories managed by Sandy Cheeks (PM)
+│ ├── pending/ # Backlog tickets awaiting execution
+│ ├── in-progress/ # Active task currently being coded by Tn. Crab
+│ ├── paused/ # Suspended tasks during priority shifts
+│ └── done/ # Verified tasks archived by founder via /done-task
 │
-└── roles/                         # Modular Role Definitions & Capabilities
+└── roles/ # Modular Role Definitions & Capabilities
     ├── tech-analyst/
-    │   ├── role.md                # Persona: Larry | Focus: Technical Feasibility & Fast-Track
-    │   └── skill/
-    │       └── default-skill.md   # API boundaries, schema triage & fast-track checks
+    │ ├── role.md # Persona: Larry | Focus: Technical Feasibility & Fast-Track
+    │ └── skill/
+    │ └── default-skill.md # API boundaries, schema triage & fast-track checks
     ├── product-owner/
-    │   ├── role.md                # Persona: Patrick | Focus: Product Vision & User Stories
-    │   └── skill/
-    │       └── default-skill.md   # PRD & User Story drafting, Master PRD sync
+    │ ├── role.md # Persona: Patrick | Focus: Product Vision & User Stories
+    │ └── skill/
+    │ └── default-skill.md # PRD & User Story drafting, Master PRD sync
     ├── ui-ux/
-    │   ├── role.md                # Persona: Squidward | Focus: Mobile-First Systems & VAC
-    │   └── skill/
-    │       └── default-skill.md   # 375px compact layout, design tokens, VAC checklists
+    │ ├── role.md # Persona: Squidward | Focus: Mobile-First Systems & VAC
+    │ └── skill/
+    │ └── default-skill.md # 375px compact layout, design tokens, VAC checklists
     ├── tech-lead/
-    │   ├── role.md                # Persona: Garry | Focus: System Architecture & ADRs
-    │   └── skill/
-    │       └── default-skill.md   # Anti-lasagna architecture, context-switch guard
+    │ ├── role.md # Persona: Garry | Focus: System Architecture & ADRs
+    │ └── skill/
+    │ └── default-skill.md # Anti-lasagna architecture, context-switch guard
     ├── project-manager/
-    │   ├── role.md                # Persona: Sandy Cheeks | Focus: Kanban Task Management
-    │   └── skill/
-    │       └── default-skill.md   # Kanban tracking, file:line targeting, dashboard
+    │ ├── role.md # Persona: Sandy Cheeks | Focus: Kanban Task Management
+    │ └── skill/
+    │ └── default-skill.md # Kanban tracking, file:line targeting, dashboard
     ├── developer/
-    │   ├── role.md                # Persona: Tn. Crab | Focus: Clean Code & Surgical Editing
-    │   └── skill/
-    │       └── default-skill.md   # Token-adherent coding & 375px visual self-testing
+    │ ├── role.md # Persona: Tn. Crab | Focus: Clean Code & Surgical Editing
+    │ └── skill/
+    │ └── default-skill.md # Token-adherent coding & 375px visual self-testing
     └── qa/
-        ├── role.md                # Persona: Stanley | Focus: QA & VAC Auditing
+        ├── role.md # Persona: Stanley | Focus: QA & VAC Auditing
         └── skill/
-            └── default-skill.md   # Destructive testing & Visual Acceptance Criteria audit
+            └── default-skill.md # Destructive testing & Visual Acceptance Criteria audit
 ```
 
 ---
 
 ## Operational Lifecycle
 
-### 1. Three-Phase Feature Workflow (`/share-knowledge` ➔ `/apply-work` ➔ `/done-task`)
+### 1. Three-Phase Feature Workflow (`/share-knowledge` `/apply-work` `/done-task`)
 
 To prevent AI from prematurely generating unreviewed code, features strictly follow a three-phase gated process:
 
@@ -272,7 +272,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 `employee-agents` uses a **lean, modular architecture**: each persona's operational rules are isolated in a compact `role.md` and `skill/default-skill.md`. Monolithic framework bloat is avoided through lazy role loading, Kanban subfolder isolation, and Living Master PRD index tables.
 
-### 📊 Estimated Context Consumption Ranges
+### Estimated Context Consumption Ranges
 
 | Operational Scenario | Active Personas / Artifacts | Estimated Context Range |
 |---|---|---|
@@ -282,7 +282,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 | **Phase 2: Feature Execution** *(`/apply-work`)* | Tn. Crab (Dev) + Stanley (QA) | **~900 – 2,000 tokens** |
 | **All 7 Roles Combined (Base Footprint)** | All 7 personas (`role.md` + `default-skill.md`) | **~4,500 – 5,500 tokens** *(< 0.6% of 1M context)* |
 
-> 📖 **Deep Dive**: For complete breakdown methodology, architectural drivers, and comparisons with monolithic multi-agent frameworks, see **[TOKEN_FOOTPRINT.md](TOKEN_FOOTPRINT.md)**.
+> **Deep Dive**: For complete breakdown methodology, architectural drivers, and comparisons with monolithic multi-agent frameworks, see **[TOKEN_FOOTPRINT.md](TOKEN_FOOTPRINT.md)**.
 
 ---
 
