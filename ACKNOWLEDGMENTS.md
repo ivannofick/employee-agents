@@ -4,6 +4,7 @@
 
 By combining the rigor of enterprise software engineering workflows with an affectionate homage inspired by the iconic world of **SpongeBob SquarePants**, building software with AI becomes structured, memorable, and disciplined. Every persona maps directly to an essential pillar of high-performing engineering teams:
 
+- **Larry the Lobster (Technical Analyst)**: Technical feasibility evaluation, API and schema boundary checks, and 30-second fast-track triage.
 - **Patrick (Product Owner)**: Customer empathy, user journey mapping, and acceptance criteria specification.
 - **Squidward (UI/UX Designer)**: Visual hierarchy, responsive design systems, and anti-slop design tokens.
 - **Garry (Technical Lead)**: Architectural integrity, system design, and Architectural Decision Records (ADRs).

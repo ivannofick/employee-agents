@@ -4,7 +4,7 @@
 
 ---
 
-## 📍 Current Release Status: v1.0.2 (Published)
+## 📍 Current Release Status: v1.0.3 (In Preparation / Ready to Ship)
 
 `employee-agents` provides solo founders and engineering leaders with a self-sufficient, disciplined engineering squad operating on native spec-driven workflows and strict token hygiene.
 
@@ -57,6 +57,6 @@
 
 | Version | Release Date | Summary of Changes |
 |---------|--------------|--------------------|
-| **v1.0.2** | 2026-10-27 | Squad Architecture Reform: Added Larry the Lobster (Tech Analyst), Kanban task subfolders, Living Master PRD sync, Mobile-First testable `DESIGN.md` with VAC checklists, Founder sovereignty on `[DONE]` and Git push, Garry's Context-Switch Guard, and streamlined roadmap. |
-| **v1.0.1** | 2026-10-26 | Workflow refinement, `/done-task` slash command addition, and token dashboard optimization. |
-| **v1.0.0** | 2026-10-26 | Initial public release. 6 squad roles, dual feature/bug pipelines, TypeScript CLI wizard, i18n support, and Antigravity adapter. |
+| **v1.0.3** | 2026-10-27 | Squad Architecture Reform: Added Larry the Lobster (Tech Analyst), Kanban task subfolders, Living Master PRD sync, Mobile-First testable `DESIGN.md` with VAC checklists, Founder sovereignty on `[DONE]` and Git push, Garry's Context-Switch Guard, and streamlined roadmap. |
+| **v1.0.2** | 2026-10-26 | Refactored artifacts (`DESIGN.md`, `ARCHITECTURE.md`), enforced strict English specification standards, and extracted `ACKNOWLEDGMENTS.md`. |
+| **v1.0.1** | 2026-10-26 | Perdana rilis (Initial public release): 6-role Bikini Bottom squad, gated task lifecycle, TypeScript CLI wizard, i18n support, and Antigravity slash commands. |
