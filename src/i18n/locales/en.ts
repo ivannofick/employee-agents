@@ -23,11 +23,12 @@ export const en: LocaleDictionary = {
     projectNameDefault: 'my-app',
     selectSquadMode: 'How would you like to assemble your squad?',
     squadModeOptions: {
-      all: 'All Roles (Activate all 6 roles: PO, UI/UX, Tech Lead, PM, Dev, QA)',
+      all: 'All Roles (Activate all 7 roles: Analyst, PO, UI/UX, Tech Lead, PM, Dev, QA)',
       custom: 'Custom (Select specific roles)',
     },
     selectRolesPrompt: 'Select squad roles to activate:',
     roleOptions: {
+      'tech-analyst': 'tech-analyst (Larry the Lobster - Feasibility & Data Analysis)',
       'product-owner': 'product-owner (Patrick - Specs & User Stories)',
       'ui-ux': 'ui-ux (Squidward - Anti-Slop UI & Wireframes)',
       'tech-lead': 'tech-lead (Garry - Architecture & ADRs)',

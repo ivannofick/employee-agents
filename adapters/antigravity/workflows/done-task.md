@@ -1,38 +1,39 @@
 ---
-description: Mark an active task as completed, verify sign-offs, and rename with [DONE]- prefix.
+description: Founder command to finalize a verified task, move to tasks/done/, and sync Master PRD.
 ---
 
-Sandy Cheeks (Project Manager) steps forward to finalize a task item.
+Sandy Cheeks (Project Manager) steps forward to finalize a task item upon Bos's explicit command.
 
 ## Invocation Modes
-This command supports two invocation patterns:
+This command is triggered exclusively by Bos (Founder):
 
 ### Mode 1: Targeted Task (`/done-task <slug>`)
-*(Example: `/done-task google-oauth` or `/done-task BUG-26102026-register-500`)*
-1. Search `/myemployee/tasks/` (`features/` and `bugs/`) for any file whose name contains `<slug>`.
-2. Check if the matching file already starts with `[DONE]-`:
-   - If already completed: Inform Bos: *"Task ini sudah ditandai selesai sebelumnya, Bos!"*
-   - If pending: Proceed to Step 3 below.
+1. Search `/myemployee/tasks/in-progress/` and `/myemployee/tasks/pending/` for any file matching `<slug>`.
+2. If already in `/myemployee/tasks/done/`: Inform Bos: *"Task ini sudah berada di folder done sebelumnya, Bos!"*
+3. If found in `in-progress/` or `pending/`: Proceed to Step 3 below.
 
 ### Mode 2: Auto-Detection (`/done-task` without arguments)
-1. Scan `/myemployee/tasks/` (`features/` and `bugs/`) for files starting with `[PENDING]-` (or lacking `[DONE]-`).
+1. Inspect `/myemployee/tasks/in-progress/`.
 2. Evaluate results:
-   - **0 active tasks found**: Report to Bos: *"Semua task sudah beres, tidak ada task aktif yang pending saat ini, Bos!"*
-   - **Exactly 1 active task found**: Automatically target that task, display its name to Bos, and proceed to Step 3.
-   - **Multiple active tasks found**: Display a numbered list of all active pending tasks and ask Bos: *"Ada beberapa task aktif yang pending. Mau saya tandai selesai yang nomor berapa atau sebutkan namanya, Bos?"* Block until Bos selects.
+   - **Exactly 1 active task in `in-progress/`**: Automatically target that task and proceed to Step 3.
+   - **0 active tasks in `in-progress/`**: Check `/myemployee/tasks/pending/`. If 1 pending task exists, target it; if multiple, list them and ask Bos to select; if none, inform Bos: *"Tidak ada task aktif yang siap di-done-in saat ini, Bos!"*
+   - **Multiple active tasks in `in-progress/`**: List them and ask Bos to select.
 
 ---
 
 ## Finalization & Sign-Offs (Step 3)
 Once the target task file is confirmed:
-1. **Verify Implementation**:
-   - Confirm that Tn. Crab (Dev) implemented the targeted files and line ranges specified in the task checklist.
-   - Confirm that Stanley (QA) verified the changes and found zero regressions or breaking edge-cases.
-   - Confirm that Garry (Tech Lead) approved the architectural integrity.
-2. **Rename File**:
-   - If the file starts with `[PENDING]-`, replace `[PENDING]-` with `[DONE]-` (e.g., `[PENDING]-TASK-26102026-auth.md` ➔ `[DONE]-TASK-26102026-auth.md`).
-   - If the file does not have `[PENDING]-`, prepend `[DONE]-`.
-3. **Append Completion Log**:
-   - Add a `[COMPLETION LOG]` section to the bottom of the task file with timestamp, sign-offs, and summary of changes.
-4. **Report Back**:
-   - Announce the completion cheerfully to Bos in conversational Indonesian or English!
+1. **Verify QA Sign-Off**:
+   - Confirm Stanley's QA verification log and VAC audit exist in the task file.
+2. **Move File to Kanban Done Folder**:
+   - Move the file to `/myemployee/tasks/done/<filename>`.
+3. **Synchronize Living Master PRD**:
+   - If the task maps to a feature in `/myemployee/PRD.md`, update its status column to `DONE`.
+4. **Append Completion Log**:
+   - Append completion timestamp, reviewer approvals, and final status to the task file.
+5. **Git Push Execution (Zero-Assumption Rule)**:
+   - Check if Bos's invocation explicitly contained: *"sekalian dipush ke git"* or *"push ke git"*.
+   - If present: Commit and push the changes.
+   - If NOT present: **Do NOT run git push and do NOT ask Bos whether to push.**
+6. **Report Back**:
+   - Announce completion cheerfully to Bos in conversational Indonesian or English!

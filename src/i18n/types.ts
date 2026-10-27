@@ -26,6 +26,7 @@ export interface LocaleDictionary {
     };
     selectRolesPrompt: string;
     roleOptions: {
+      'tech-analyst': string;
       'product-owner': string;
       'ui-ux': string;
       'tech-lead': string;

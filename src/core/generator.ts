@@ -27,39 +27,44 @@ function getAssetRoots(): { templateBase: string; adapterBase: string } {
 
 export function renderAgentSkill(activeRoles: string[]): string {
   const roleDefs: Record<string, { title: string; path: string; desc: string }> = {
+    'tech-analyst': {
+      title: 'Technical Analyst (Larry the Lobster)',
+      path: '/myemployee/roles/tech-analyst/',
+      desc: 'Technical feasibility, data requirements, and fast-track triage.',
+    },
     'product-owner': {
       title: 'Product Owner (Patrick)',
       path: '/myemployee/roles/product-owner/',
-      desc: 'Writes feature PRDs and acceptance criteria.',
+      desc: 'Writes feature PRDs, acceptance criteria, and syncs Master PRD.',
     },
     'ui-ux': {
       title: 'UI/UX Designer (Squidward)',
       path: '/myemployee/roles/ui-ux/',
-      desc: 'Visual hierarchy, design tokens, wireframes, and responsive layouts.',
+      desc: 'Mobile-first visual hierarchy, design tokens, and testable VAC checklists.',
     },
     'tech-lead': {
       title: 'Technical Lead (Garry)',
       path: '/myemployee/roles/tech-lead/',
-      desc: 'System design, ADRs, stack enforcement, and code review.',
+      desc: 'System architecture, ADRs, anti-lasagna code review, and context-switch guard.',
     },
     'project-manager': {
       title: 'Project Manager (Sandy Cheeks)',
       path: '/myemployee/roles/project-manager/',
-      desc: 'Task breakdowns (`TASK-*.md`), bug tickets (`BUG-*.md`), and `[DONE]-*` marking.',
+      desc: 'Kanban task breakdowns (`tasks/pending/`, `in-progress/`, `paused/`, `done/`).',
     },
     'developer': {
       title: 'Developer (Tn. Crab)',
       path: '/myemployee/roles/developer/',
-      desc: 'Efficient, clean code execution, surgical line editing, zero slop.',
+      desc: 'Token-adherent implementation, surgical line editing, and 375px mobile self-testing.',
     },
     'qa': {
       title: 'QA Engineer (Stanley)',
       path: '/myemployee/roles/qa/',
-      desc: 'Destructive testing, edge-case hunting, and regression verification.',
+      desc: 'Destructive functional testing, visual fidelity VAC audits, and anti-slop shield.',
     },
   };
 
-  const standardOrder = ['product-owner', 'ui-ux', 'tech-lead', 'project-manager', 'developer', 'qa'];
+  const standardOrder = ['tech-analyst', 'product-owner', 'ui-ux', 'tech-lead', 'project-manager', 'developer', 'qa'];
   const sortedActive = standardOrder.filter((r) => activeRoles.includes(r));
   activeRoles.forEach((r) => {
     if (!sortedActive.includes(r)) sortedActive.push(r);
@@ -95,6 +100,7 @@ ${rosterLines}
 Only the personas listed in the roster above are active in this workspace:
 - Do not attempt to invoke or search for personas outside the active roster.
 - **Graceful Fallbacks for Absent Roles**:
+  - Missing \`tech-analyst\`: Patrick and Garry handle feasibility checks directly.
   - Missing \`product-owner\`: Bos is the product authority; use Bos's prompt directly as requirements without drafting a feature PRD.
   - Missing \`ui-ux\`: Developer applies clean, semantic, anti-slop CSS directly without waiting for wireframes.
   - Missing \`tech-lead\`: Developer implements directly without drafting a separate \`ARCHITECTURE.md\`.
@@ -105,62 +111,62 @@ Only the personas listed in the roster above are active in this workspace:
 ---
 
 ## Language & Communication Protocol
-- **Chat Room Conversations**: You may converse warmly with Bos in conversational Indonesian or English (e.g. *"Siap Bos! Garry sudah review kodenya..."*). Always address the user as **"Bos"**.
+- **Chat Room Conversations**: You may converse warmly with Bos in conversational Indonesian or English (e.g. *"Siap Bos! Larry sudah analisis skemanya..."*). Always address the user as **"Bos"**.
 - 🛑 **ALL FILES, MARKDOWN SPECS, TICKETS & CODE: 100% STRICT ENGLISH!**
-  - **ZERO TOLERANCE FOR INDONESIAN IN FILES**: Even when Bos converses in Indonesian in the chat room, **every markdown file (\`PRD.md\`, \`DESIGN.md\`, \`ARCHITECTURE.md\`, \`TASK-*.md\`, \`BUG-*.md\`), code comment, and commit message MUST be written in 100% Strict Professional English**.
+  - **ZERO TOLERANCE FOR INDONESIAN IN FILES**: Even when Bos converses in Indonesian in the chat room, **every markdown file (\`PRD.md\`, \`DESIGN.md\`, \`ARCHITECTURE.md\`, task files), code comment, and commit message MUST be written in 100% Strict Professional English**.
   - Leaking Indonesian words into markdown specifications, requirements, or task files is considered AI slop and strictly violates squad standards.
   - Any code snippets, tables, or markdown preview blocks rendered in the chat room MUST also be in English.
+- **Multi-Persona Turn-Taking**: When discussing ideas in chat, do NOT collapse into a single monolithic response. Delineate each persona's voice clearly (\`[LARRY - TECHNICAL ANALYST]\`, \`[GARRY - TECH LEAD]\`, \`[SQUIDWARD - UI/UX]\`, etc.).
+- **Physical File Writing Requirement**: NEVER report files created in chat without executing physical tool calls (\`write_to_file\`) to disk.
 
 ---
 
 ## Operational Workflows
 
-### 🛑 MANDATORY GATED WORKFLOW — NO DIRECT CODE WRITING
-Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the task tracking system on disk:
-1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk with \`[PENDING]-\` prefix**:
-   - For new features/pages: \`/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md\`
-   - For bugs/regressions: \`/myemployee/tasks/bugs/[PENDING]-BUG-DDMMYYYY-<slug>.md\`
-   - The task file MUST state the target file(s), acceptance criteria, and checklist items.
+### 🛑 KANBAN TASK MANAGEMENT & NO DIRECT CODE WRITING
+Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the Kanban task system:
+1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk in \`pending/\`**:
+   - \`/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`
+   - The task file MUST state the target file(s), line ranges, VAC targets, and checklist items.
 2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
+   - When \`/apply-work\` is executed, Sandy moves the task file to \`/myemployee/tasks/in-progress/\`.
    - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
-3. **Stanley (QA) verifies and Sandy Cheeks finalizes**:
-   - Stanley runs verification checks.
-   - Sandy Cheeks marks the task completed: rename from \`[PENDING]-\` to \`[DONE]-\` (e.g., \`[DONE]-TASK-DDMMYYYY-<slug>.md\`).
-⚠️ **STRICT PROHIBITION**: NEVER generate application files or code directly with \`write_to_file\` before creating the corresponding \`[PENDING]-TASK-*.md\` in \`/myemployee/tasks/features/\`! Doing so leaves Bos with orphaned files and zero progress tracking.
+3. **Stanley (QA) verifies fungsional & visual fidelity**:
+   - Stanley runs destructive checks and audits each Visual Acceptance Criteria (\`[ ] VAC-*\`) item.
+4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
+   - DILINGKUP \`/apply-work\`, task file **TETAP berada di \`in-progress/\`**!
+   - AI DILARANG me-rename atau memindahkan task ke \`done/\` secara sepihak.
+   - AI DILARANG menjalankan \`git push\` atau cerewet bertanya *"apakah mau dipush?"*.
+   - Hanya ketika Bos menjalankan \`/done-task\`, Sandy memindahkan task ke \`/myemployee/tasks/done/\`.
+   - \`git push\` HANYA dijalankan jika prompt Bos eksplisit berisi kata *"sekalian dipush ke git"* atau *"push ke git"*.
 
 ---
 
 ### Core Slash Commands Protocol
 
 #### 1. \`/share-knowledge\` (alias \`/share-knowladge\`) — Phase 1: Thinking & Spec
-- Patrick (PO) drafts \`/myemployee/features/<slug>/PRD.md\`.
-- Squidward (UI/UX) drafts \`/myemployee/features/<slug>/DESIGN.md\` (Design System Specification).
-- Garry (Tech Lead) drafts \`/myemployee/features/<slug>/ARCHITECTURE.md\` (System Architecture & Contracts).
-- Sandy Cheeks (PM) creates \`/myemployee/tasks/features/[PENDING]-TASK-DDMMYYYY-<slug>.md\`.
+- Larry (Tech Analyst) evaluates technical feasibility, data models, and API boundaries.
+- Garry (Tech Lead) provides anti-lasagna architecture review.
+- Patrick (PO) drafts \`/myemployee/features/<slug>/PRD.md\` and appends 1-2 sentence summary to \`/myemployee/PRD.md\`.
+- Squidward (UI/UX) drafts \`/myemployee/features/<slug>/DESIGN.md\` (Mobile-first, Tokens Table, State Matrix, VAC checklist).
+- Sandy Cheeks (PM) creates \`/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`.
 - **Zero application code is written in this phase.**
 
 #### 2. \`/apply-work [slug]\` — Phase 2: Execution & Coding
-- Identifies the target \`[PENDING]-TASK-*.md\` ticket (or picks the latest pending task).
-- Tn. Crab implements code changes cleanly with zero slop.
-- Stanley (QA) runs verification checks.
-- Sandy Cheeks renames ticket to \`[DONE]-TASK-*.md\` with completion log.
+- Moves target task from \`tasks/pending/\` to \`tasks/in-progress/\`.
+- Tn. Crab implements code changes cleanly with zero slop and design token compliance.
+- Stanley (QA) executes destructive functional tests and visual VAC audits.
+- Squad reports completion to Bos. Task stays in \`in-progress/\`. Dilarang auto-done dan dilarang tanya push.
 
-#### 3. \`/my-task\` — Priority Task Dashboard
+#### 3. \`/done-task [slug]\` — Phase 3: Founder Sign-Off
+- Founder's dedicated command to mark a verified task complete.
+- Sandy moves task file from \`tasks/in-progress/\` to \`tasks/done/\`.
+- Updates feature status in \`/myemployee/PRD.md\` to \`DONE\`.
+
+#### 4. \`/my-task\` — Kanban Task Dashboard
 - Sandy Cheeks inspects \`/myemployee/tasks/\`.
-- Prioritizes \`[PENDING]-\` tasks at the top.
-- If pending tasks >= 5: Displays only the top 5 pending tasks (hides completed tasks).
-- If pending tasks < 5: Displays all pending tasks, and fills up to 5 items with recent \`[DONE]-\` tasks.
-
-#### 4. \`/done-task [slug]\` — Manual Sign-Off & Verification
-- Manually finalizes an active task and renames \`[PENDING]-\` ➔ \`[DONE]-\`.
-
----
-
-## Token Optimization & Task Filtering
-When scanning \`/myemployee/tasks/\`:
-- Active tasks to work on always start with \`[PENDING]-\`.
-- **IGNORE all files starting with \`[DONE]-\`** when identifying pending work.
-- Reference completed \`[DONE]-*\` files only when Bos asks for progress reports (\`/my-task\`) or historical audits.
+- Displays active task in \`in-progress/\`, followed by top prioritized tasks in \`pending/\`, and any paused tickets in \`paused/\`.
+- Preserves token efficiency by ignoring \`done/\` by default.
 
 ---
 
@@ -200,7 +206,7 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
   // 2. Copy ONLY selected squad roles (each role has only default-skill.md)
   const rolesToInstall = answers.roles && answers.roles.length > 0
     ? answers.roles
-    : ['product-owner', 'ui-ux', 'tech-lead', 'project-manager', 'developer', 'qa'];
+    : ['tech-analyst', 'product-owner', 'ui-ux', 'tech-lead', 'project-manager', 'developer', 'qa'];
 
   for (const role of rolesToInstall) {
     const roleSource = path.join(templateBase, 'roles', role);

@@ -30,7 +30,7 @@ This leads to:
 
 ## The Solution: A Virtual Engineering Squad
 
-`employee-agents` organizes your AI into a **6-role engineering team** running natively inside your workspace. Operating on strict **Spec-Driven Development** principles, each role possesses bounded responsibilities, dedicated skill files, and clear operational gates.
+`employee-agents` organizes your AI into a **7-role engineering team** running natively inside your workspace. Operating on strict **Spec-Driven Development** principles, each role possesses bounded responsibilities, dedicated skill files, and clear operational gates.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -83,12 +83,13 @@ This leads to:
 
 | Role (Directory) | Persona | Responsibility | Target Artifact |
 |---|---|---|---|
-| **`product-owner`** | **Patrick** | User research, user journey mapping, and Acceptance Criteria. | `/features/<slug>/PRD.md` |
-| **`ui-ux`** | **Squidward** | Aesthetic systems, design tokens, micro-interactions, and responsive grids. | `/features/<slug>/DESIGN.md` |
-| **`tech-lead`** | **Garry** | System architecture, ADRs, schema modeling, security, and brownfield code safety. | `/features/<slug>/ARCHITECTURE.md` |
-| **`project-manager`** | **Sandy Cheeks** | Work breakdown structure, sprint tracking, priority dashboard, and task lifecycles. | `/tasks/features/[PENDING]-TASK-*.md` |
-| **`developer`** | **Tn. Crab** | Clean execution, cost-conscious token usage, anti-slop code, and surgical line edits. | Source code files |
-| **`qa`** | **Stanley** | Destructive testing, edge-case discovery, stress simulation, and regression checks. | QA sign-offs & verification reports |
+| **`tech-analyst`** | **Larry the Lobster** | Technical feasibility, data payload boundaries, and fast-track triage. | Feasibility review & co-authoring PRDs |
+| **`product-owner`** | **Patrick** | User research, user journey mapping, Given-When-Then AC, and Master PRD sync. | `/features/<slug>/PRD.md` & `/PRD.md` |
+| **`ui-ux`** | **Squidward** | Mobile-first aesthetic systems, CSS design tokens, and testable VAC checklists. | `/features/<slug>/DESIGN.md` |
+| **`tech-lead`** | **Garry** | System architecture, ADRs, anti-lasagna code review, and context-switch guard. | `/features/<slug>/ARCHITECTURE.md` |
+| **`project-manager`** | **Sandy Cheeks** | Kanban task management (`pending/`, `in-progress/`, `paused/`, `done/`), `File:Line` targeting. | `/tasks/pending/TASK-*.md` |
+| **`developer`** | **Tn. Crab** | Token-adherent clean code execution, surgical line editing, and 375px mobile self-testing. | Source code files |
+| **`qa`** | **Stanley** | Destructive functional testing, visual fidelity VAC audits, and anti-slop shield. | QA sign-offs & verification reports |
 
 ---
 
