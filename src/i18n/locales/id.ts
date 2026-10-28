@@ -37,6 +37,7 @@ export const id: LocaleDictionary = {
       'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
     },
     successMessage: 'Berhasil menginisialisasi workspace /.myemployee!',
+    gitProtection: 'Menambahkan /.myemployee/ ke .gitignore (aman dari git push).\nMengonfigurasi ambient guardrail di AGENTS.md.',
     nextSteps: 'Workspace berhasil diinisialisasi. Buka sesi AI assistant Anda untuk memulai.',
   },
   updater: {

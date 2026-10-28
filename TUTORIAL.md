@@ -129,6 +129,9 @@ Once initialization completes, inspect your project directory. You will see two 
    - `.agent/skills/myemployee/SKILL.md`: The master squad controller that orchestrates turn-taking, role boundaries, and anti-slop rules.
    - `.agent/workflows/`: Slash command workflows (`/share-knowledge`, `/apply-work`, `/done-task`, `/my-task`, `/add-skill`, `/update-me`, `/status-token`).
 
+3. **Automatic Git Protection (`.gitignore`)**:
+   - `employee-agents` automatically appends `/.myemployee/` (and `myemployee/`) to `.gitignore`. Even if you run `git add .` or commit your codebase, your internal squad tickets, PRDs, and employee configurations remain strictly local and are never pushed to remote git repositories.
+
 ---
 
 ## Step 3: Shipping Your First Feature (End-to-End Walkthrough)

@@ -134,6 +134,44 @@ export async function ensureUniversalAgentsRule(targetDir: string = process.cwd(
   }
 }
 
+export async function ensureGitignore(targetDir: string = process.cwd()): Promise<boolean> {
+  const gitignorePath = path.join(targetDir, '.gitignore');
+
+  if (await fs.pathExists(gitignorePath)) {
+    const existingContent = await fs.readFile(gitignorePath, 'utf8');
+    const lines = existingContent.split(/\r?\n/).map((l) => l.trim());
+    const hasDotMyEmployee = lines.some((l) => l === '.myemployee' || l === '.myemployee/' || l === '/.myemployee' || l === '/.myemployee/');
+    const hasLegacyMyEmployee = lines.some((l) => l === 'myemployee' || l === 'myemployee/' || l === '/myemployee' || l === '/myemployee/');
+
+    const missingEntries: string[] = [];
+    if (!hasDotMyEmployee) missingEntries.push('.myemployee/');
+    if (!hasLegacyMyEmployee) missingEntries.push('myemployee/');
+
+    if (missingEntries.length > 0) {
+      const separator = existingContent.endsWith('\n') ? '' : '\n';
+      const block = `${separator}\n# employee-agents squad workspace\n${missingEntries.join('\n')}\n`;
+      await fs.writeFile(gitignorePath, existingContent + block, 'utf8');
+    }
+  } else {
+    const initialContent = `# employee-agents squad workspace\n.myemployee/\nmyemployee/\n`;
+    await fs.writeFile(gitignorePath, initialContent, 'utf8');
+  }
+
+  // If a git repo exists and .myemployee was already staged in the git index, untrack it non-destructively
+  const gitDir = path.join(targetDir, '.git');
+  if (await fs.pathExists(gitDir)) {
+    try {
+      const { execSync } = await import('node:child_process');
+      execSync('git rm -r --cached --ignore-unmatch .myemployee myemployee', {
+        cwd: targetDir,
+        stdio: 'ignore',
+      });
+    } catch {}
+  }
+
+  return true;
+}
+
 export async function generateWorkspace(answers: SetupAnswers, targetDir: string = process.cwd()): Promise<void> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, '.myemployee');
@@ -213,6 +251,9 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
 
   // 5. Ensure universal AGENTS.md rule block at target root
   await ensureUniversalAgentsRule(targetDir);
+
+  // 6. Ensure .gitignore excludes /.myemployee/
+  await ensureGitignore(targetDir);
 }
 
 export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; activeRoles: string[] }> {
@@ -282,6 +323,9 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
 
   // 4. Ensure universal AGENTS.md rule block is updated
   await ensureUniversalAgentsRule(targetDir);
+
+  // 5. Ensure .gitignore excludes /.myemployee/
+  await ensureGitignore(targetDir);
 
   return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, activeRoles };
 }

@@ -22,6 +22,10 @@ When initialized in an existing codebase (`"project_type": "existing"`):
 
 The installed driver skill (e.g. `.agent/skills/myemployee/SKILL.md`) is a plain, human-readable Markdown file. It contains zero obfuscated binaries, shell scripts, or hidden commands. You can inspect every line of instruction before or after installation.
 
+### 4. Git Leak Prevention
+
+`employee-agents` automatically appends `/.myemployee/` and `myemployee/` to `.gitignore` upon initialization and untracks any cached git index references. Your internal Kanban task tickets, feature PRDs, and squad configurations remain local and are never pushed to remote repositories.
+
 ---
 
 ## Supported Versions

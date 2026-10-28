@@ -264,6 +264,7 @@ async function handleInit(options: { lang?: string }) {
     await generateWorkspace(answers);
 
     s.stop(pc.green(`✔ ${dict.wizard.successMessage}`));
+    p.note(dict.wizard.gitProtection, 'Git Protection');
     p.outro(pc.green(dict.wizard.nextSteps));
   } catch (err: any) {
     p.cancel(pc.red(`Initialization failed: ${err.message}`));

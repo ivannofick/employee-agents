@@ -124,6 +124,8 @@ npx employee-agents
 npx employee-agents --lang id
 ```
 
+> **Automatic Git Protection**: `employee-agents` automatically appends `/.myemployee/` to your `.gitignore` upon initialization (and untracks it from git cache if previously staged), guaranteeing that local task tickets, PRD drafts, and squad states are never accidentally pushed to remote repositories.
+
 ### 2. Update an Existing Workspace
 To safely upgrade an already initialized `/.myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
 

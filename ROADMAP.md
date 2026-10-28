@@ -56,6 +56,7 @@
 - **Casual Prompt Triage**: Intercepts casual user chat without slash commands, summoning Larry (Tech Analyst) and Patrick (Product Owner) as front-desk to prepare pending Kanban task tickets rather than dumping unverified code.
 - **Multi-Skill Coexistence**: Seamlessly coexists with external agent skills and tools (OpenSpec, Antislop, linters) without interference.
 - **Dotfolder Standard (`/.myemployee/`)**: Standardized workspace folder to `/.myemployee/` with seamless backward-compatibility auto-migration from legacy `myemployee/` directories.
+- **Automatic .gitignore Guard**: Automatically excludes `/.myemployee/` and `myemployee/` in `.gitignore` and untracks cached index files, ensuring internal squad tickets and PRDs are never pushed to remote repositories.
 - **IDE Sidebar Toggle**: Provides non-destructive `employee-agents hide` and `employee-agents show` commands. `hide` conceals `/.myemployee` and `.vscode` itself via `.vscode/settings.json` (`files.exclude`). `show` restores visibility and automatically cleans up `.vscode/settings.json` and the `.vscode/` directory when empty (zero residue).
 
 ---
@@ -64,7 +65,7 @@
 
 | Version | Release Date | Summary of Changes |
 |---------|--------------|--------------------|
-| **v1.0.4** | 2026-10-27 | Ambient Guardrail, Dotfolder Standard & Clean Sidebar Mode: Added universal SSOT `AGENTS.md` pointer, broad action semantic triggers in `SKILL.md`, Front-Desk casual prompt triage, multi-skill coexistence, `/.myemployee/` dotfolder standard with auto-migration, and `hide`/`show` CLI commands with auto-hiding `.vscode` and zero-residue cleanup. |
+| **v1.0.4** | 2026-10-27 | Ambient Guardrail, Dotfolder Standard & Clean Sidebar Mode: Added universal SSOT `AGENTS.md` pointer, broad action semantic triggers in `SKILL.md`, Front-Desk casual prompt triage, multi-skill coexistence, `/.myemployee/` dotfolder standard with auto-migration, automatic `.gitignore` leak prevention, and `hide`/`show` CLI commands with auto-hiding `.vscode` and zero-residue cleanup. |
 | **v1.0.3** | 2026-10-27 | Squad Architecture Reform: Added Larry the Lobster (Tech Analyst), Kanban task subfolders, Living Master PRD sync, Mobile-First testable `DESIGN.md` with VAC checklists, Founder sovereignty on `[DONE]` and Git push, Garry's Context-Switch Guard, and streamlined roadmap. |
 | **v1.0.2** | 2026-10-26 | Refactored artifacts (`DESIGN.md`, `ARCHITECTURE.md`), enforced strict English specification standards, and extracted `ACKNOWLEDGMENTS.md`. |
 | **v1.0.1** | 2026-10-26 | Perdana rilis (Initial public release): 6-role Bikini Bottom squad, gated task lifecycle, TypeScript CLI wizard, i18n support, and Antigravity slash commands. |

@@ -37,6 +37,7 @@ export const en: LocaleDictionary = {
       'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
     },
     successMessage: 'Successfully initialized /.myemployee workspace!',
+    gitProtection: 'Added /.myemployee/ to .gitignore (safe from remote git push).\nConfigured universal ambient guardrail in AGENTS.md.',
     nextSteps: 'Workspace initialized. Open your AI assistant chat to begin.',
   },
   updater: {

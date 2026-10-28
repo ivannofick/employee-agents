@@ -6,3 +6,7 @@ dist/
 # Do not track local agent & openspec development files
 .agent/
 openspec/
+
+# employee-agents squad workspace
+.myemployee/
+myemployee/
