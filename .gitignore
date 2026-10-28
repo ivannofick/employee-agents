@@ -10,3 +10,6 @@ openspec/
 # employee-agents squad workspace
 .myemployee/
 myemployee/
+.agent*
+AGENTS.md
+settings.json
