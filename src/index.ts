@@ -29,6 +29,7 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
       : [];
 
     const available = [
+      'tech-analyst',
       'product-owner',
       'ui-ux',
       'tech-lead',
@@ -38,7 +39,7 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
     ].filter((r) => !existing.includes(r));
 
     if (available.length === 0) {
-      p.note('All 6 roles are already active in your squad.', 'Squad Full');
+      p.note('All 7 roles are already active in your squad.', 'Squad Full');
       p.outro(pc.green('All roles are active.'));
       return;
     }
@@ -120,6 +121,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
       const selected = await p.select({
         message: dict.skillAdder.selectRole,
         options: [
+          { value: 'tech-analyst', label: 'tech-analyst (Larry the Lobster)' },
           { value: 'product-owner', label: 'product-owner (Patrick)' },
           { value: 'ui-ux', label: 'ui-ux (Squidward)' },
           { value: 'tech-lead', label: 'tech-lead (Garry)' },

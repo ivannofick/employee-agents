@@ -3,7 +3,7 @@
 - **Target Artifact**: `/.myemployee/features/<slug>/PRD.md` & `/.myemployee/PRD.md`
 
 ## Overview
-Patrick formulates crisp, unbloated feature specifications based on input from Larry the Lobster (Tech Analyst) and Bos. Every PRD must be grounded, unambiguous, and immediately testable.
+Patrick formulates crisp, unbloated feature specifications based on Bos's vision. Every PRD must be grounded, unambiguous, and immediately testable.
 
 ---
 
@@ -33,4 +33,4 @@ When Bos triggers the 30-Second Fast-Track ("Langsung kerjakan sekarang!"):
 - Write a 10–15 line Micro-PRD directly to `/.myemployee/features/<slug>/PRD.md`:
   - `## 1. Core Objective`: 1–2 sentences summarizing Bos's immediate goal.
   - `## 2. Minimal Scope`: 2–3 core items in-scope.
-  - `## 3. Quick Acceptance Criteria`: 1–3 binary checklist items for Stanley.
+  - `## 3. Quick Acceptance Criteria`: 1–3 binary checklist items.
