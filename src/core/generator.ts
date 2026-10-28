@@ -684,24 +684,36 @@ export async function ensureUniversalAgentsRule(targetDir: string = process.cwd(
 
 export async function ensureGitignore(targetDir: string = process.cwd()): Promise<boolean> {
   const gitignorePath = path.join(targetDir, '.gitignore');
+  const requiredEntries = [
+    { entry: '.myemployee/', matches: ['.myemployee', '.myemployee/', '/.myemployee', '/.myemployee/'] },
+    { entry: 'myemployee/', matches: ['myemployee', 'myemployee/', '/myemployee', '/myemployee/'] },
+    { entry: '.agent*', matches: ['.agent*', '/.agent*'] },
+    { entry: 'AGENTS.md', matches: ['AGENTS.md', '/AGENTS.md'] },
+    { entry: 'settings.json', matches: ['settings.json', '/settings.json', '**/settings.json'] },
+  ];
 
   if (await fs.pathExists(gitignorePath)) {
     const existingContent = await fs.readFile(gitignorePath, 'utf8');
     const lines = existingContent.split(/\r?\n/).map((l) => l.trim());
-    const hasDotMyEmployee = lines.some((l) => l === '.myemployee' || l === '.myemployee/' || l === '/.myemployee' || l === '/.myemployee/');
-    const hasLegacyMyEmployee = lines.some((l) => l === 'myemployee' || l === 'myemployee/' || l === '/myemployee' || l === '/myemployee/');
 
     const missingEntries: string[] = [];
-    if (!hasDotMyEmployee) missingEntries.push('.myemployee/');
-    if (!hasLegacyMyEmployee) missingEntries.push('myemployee/');
+    for (const item of requiredEntries) {
+      const exists = lines.some((l) => item.matches.includes(l));
+      if (!exists) {
+        missingEntries.push(item.entry);
+      }
+    }
 
     if (missingEntries.length > 0) {
       const separator = existingContent.endsWith('\n') ? '' : '\n';
-      const block = `${separator}\n# employee-agents squad workspace\n${missingEntries.join('\n')}\n`;
+      const hasHeader = lines.some((l) => l === '# employee-agents squad workspace');
+      const block = hasHeader
+        ? `${separator}${missingEntries.join('\n')}\n`
+        : `${separator}\n# employee-agents squad workspace\n${missingEntries.join('\n')}\n`;
       await fs.writeFile(gitignorePath, existingContent + block, 'utf8');
     }
   } else {
-    const initialContent = `# employee-agents squad workspace\n.myemployee/\nmyemployee/\n`;
+    const initialContent = `# employee-agents squad workspace\n${requiredEntries.map((r) => r.entry).join('\n')}\n`;
     await fs.writeFile(gitignorePath, initialContent, 'utf8');
   }
 
@@ -709,10 +721,13 @@ export async function ensureGitignore(targetDir: string = process.cwd()): Promis
   if (await fs.pathExists(gitDir)) {
     try {
       const { execSync } = await import('node:child_process');
-      execSync('git rm -r --cached --ignore-unmatch .myemployee myemployee', {
-        cwd: targetDir,
-        stdio: 'ignore',
-      });
+      execSync(
+        'git rm -r --cached --ignore-unmatch .myemployee myemployee .agent .agents AGENTS.md settings.json .vscode/settings.json',
+        {
+          cwd: targetDir,
+          stdio: 'ignore',
+        }
+      );
     } catch {}
   }
 
