@@ -12,6 +12,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
 - **FORBIDDEN**: Using untyped `any`, swallowed exceptions, or ambiguous data structures.
 - **FORBIDDEN**: Rewriting an entire file (e.g., replacing 400 lines) just to change 5 lines. You MUST execute surgical line edits.
 - **FORBIDDEN**: Generating unrequested specification markdown documents. Focus strictly on the task ticket and application source code.
+- **MANDATORY TEST-FIRST GATE**: For `logic` and `ui-interactive` tasks, NEVER edit application source files in `## 3. Implementation Checklist` before the unit tests in `## 2. Unit Test Plan` (derived from `## 1. Objective & Context`) have been created.
 
 ---
 

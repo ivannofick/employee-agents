@@ -42,45 +42,73 @@ const DEFAULT_FALLBACK_ORDER = [
   'qa',
 ];
 
-export async function loadSquadBlueprint(templateBase?: string): Promise<SquadBlueprint> {
+export async function loadRoleBlueprint(role: string, templateBase?: string): Promise<RoleBlueprint> {
   const candidates: string[] = [];
   if (templateBase) {
-    candidates.push(path.join(templateBase, 'squad-blueprint.json'));
+    candidates.push(path.join(templateBase, 'roles', role, 'blueprint.json'));
   }
   candidates.push(
-    path.resolve(process.cwd(), 'templates', 'myemployee', 'squad-blueprint.json'),
-    path.resolve(__dirname, '../../templates/myemployee/squad-blueprint.json'),
-    path.resolve(__dirname, '../templates/myemployee/squad-blueprint.json')
+    path.resolve(process.cwd(), 'templates', 'myemployee', 'roles', role, 'blueprint.json'),
+    path.resolve(__dirname, `../../templates/myemployee/roles/${role}/blueprint.json`),
+    path.resolve(__dirname, `../templates/myemployee/roles/${role}/blueprint.json`)
   );
 
   for (const candidate of candidates) {
     if (await fs.pathExists(candidate)) {
       try {
-        return (await fs.readJson(candidate)) as SquadBlueprint;
+        return (await fs.readJson(candidate)) as RoleBlueprint;
       } catch {}
     }
   }
 
-  // Try fetching from GitHub raw
+  // Try fetching only this single role's blueprint from GitHub raw (~3-5 KB)
   try {
     const res = await fetch(
-      'https://raw.githubusercontent.com/ivannofick/employee-agents/main/templates/myemployee/squad-blueprint.json'
+      `https://raw.githubusercontent.com/ivannofick/employee-agents/main/templates/myemployee/roles/${role}/blueprint.json`
     );
     if (res.ok) {
-      return (await res.json()) as SquadBlueprint;
+      return (await res.json()) as RoleBlueprint;
     }
   } catch {}
 
   // Try resolving asset roots from GitHub tarball
   try {
     const roots = await resolveAssetRoots();
-    const remoteFile = path.join(roots.templateBase, 'squad-blueprint.json');
+    const remoteFile = path.join(roots.templateBase, 'roles', role, 'blueprint.json');
     if (await fs.pathExists(remoteFile)) {
-      return (await fs.readJson(remoteFile)) as SquadBlueprint;
+      return (await fs.readJson(remoteFile)) as RoleBlueprint;
     }
   } catch {}
 
-  throw new Error('Could not load squad-blueprint.json from local templates or GitHub.');
+  throw new Error(`Could not load blueprint.json for role "${role}" from local templates or GitHub.`);
+}
+
+export async function loadSquadBlueprint(
+  templateBase?: string,
+  activeRoles?: string[]
+): Promise<SquadBlueprint> {
+  const rolesToLoad =
+    activeRoles && activeRoles.length > 0
+      ? DEFAULT_FALLBACK_ORDER.filter((r) => activeRoles.includes(r))
+      : DEFAULT_FALLBACK_ORDER;
+
+  const loadedEntries = await Promise.all(
+    rolesToLoad.map(async (role) => {
+      const bp = await loadRoleBlueprint(role, templateBase);
+      return [role, bp] as const;
+    })
+  );
+
+  const roles: Record<string, RoleBlueprint> = {};
+  for (const [role, bp] of loadedEntries) {
+    roles[role] = bp;
+  }
+
+  return {
+    version: '1.0.5',
+    standardOrder: DEFAULT_FALLBACK_ORDER,
+    roles,
+  };
 }
 
 function sortActiveRoles(activeRoles: string[], standardOrder: string[] = DEFAULT_FALLBACK_ORDER): string[] {
@@ -239,23 +267,30 @@ export function renderAgentSkill(activeRoles: string[], blueprint?: SquadBluepri
       `- **${coordinator.persona} (${coordinator.shortTitle})** analyzes Bos's technical request, identifies target files and line ranges, and outlines the implementation plan.`
     );
   }
+  const unitTestOwnerLabel = hasQA
+    ? 'Stanley / QA'
+    : `${implementer.persona} / Self-TDD`;
+
   shareKnowledgeBullets.push(
-    `- **${coordinator.persona} (${coordinator.shortTitle})** creates \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` with target files and line ranges.`
+    `- **${coordinator.persona} (${coordinator.shortTitle})** creates \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` using the 4-section structure (\`## 1. Objective & Context\` with \`Task Type\`, \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerLabel})\`, \`## 3. Implementation Checklist\`, and \`## 4. Verification & Audit Log\`).`
   );
   shareKnowledgeBullets.push(`- **Zero application code is written in this phase.**`);
 
   // Build /apply-work bullets dynamically
   const applyWorkBullets: string[] = [
     `- Moves target task from \`tasks/pending/\` to \`tasks/in-progress/\`.`,
-    `- **${implementer.persona} (${implementer.shortTitle})** implements surgical changes cleanly with zero slop.`,
   ];
   if (hasQA) {
     applyWorkBullets.push(
-      `- **Stanley (QA Engineer)** executes destructive functional tests (and visual audits if the task touches Frontend/UI).`
+      `- **Pre-Implementation Unit Test Gate (Stanley — QA Engineer)**: For \`logic\` and \`ui-interactive\` tasks, **Stanley** writes the unit test file(s) in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` BEFORE implementation code is edited (\`style-only\` and \`docs-config\` tasks bypass unit test creation as \`N/A\`).`,
+      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass.`,
+      `- **Verification (Stanley — QA Engineer)**: Executes destructive functional tests (and visual audits if the task touches Frontend/UI) and records results in \`## 4. Verification & Audit Log\`.`
     );
   } else {
     applyWorkBullets.push(
-      `- **${implementer.persona} (${implementer.shortTitle})** performs functional and build self-verification before reporting to Bos.`
+      `- **Pre-Implementation Self-TDD Gate (${implementer.persona} — ${implementer.shortTitle})**: For \`logic\` and \`ui-interactive\` tasks, **${implementer.persona}** writes the unit test file(s) in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` BEFORE editing application source files (\`style-only\` and \`docs-config\` tasks bypass unit test creation as \`N/A\`).`,
+      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass.`,
+      `- **Self-Verification (${implementer.persona} — ${implementer.shortTitle})**: Performs functional and build self-verification and records results in \`## 4. Verification & Audit Log\`.`
     );
   }
   applyWorkBullets.push(
@@ -314,16 +349,21 @@ ${turnTakingInstruction}
 
 ## Operational Workflows
 
-### KANBAN TASK MANAGEMENT & NO DIRECT CODE WRITING
+### KANBAN TASK MANAGEMENT, PRE-IMPLEMENTATION TDD & NO DIRECT CODE WRITING
 Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the Kanban task system:
-1. **${coordinator.persona} (${coordinator.shortTitle}) MUST first generate the task file on disk in \`pending/\`**:
+1. **${coordinator.persona} (${coordinator.shortTitle}) MUST first generate the 4-section task file on disk in \`pending/\`**:
    - \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`
-   - The task file MUST state the target file(s), line ranges, and checklist items.
-2. **${implementer.persona} (${implementer.shortTitle}) ONLY writes code AFTER the task file exists**:
+   - Must contain:
+     1. \`## 1. Objective & Context\` (Goal, Context, and \`Task Type\`: \`logic\` | \`ui-interactive\` | \`style-only\` | \`docs-config\`)
+     2. \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerLabel})\` (Mandatory test file & assertions for \`logic\` / \`ui-interactive\`; marked \`N/A (Bypassed)\` for \`style-only\` / \`docs-config\`)
+     3. \`## 3. Implementation Checklist (${implementer.persona} / ${implementer.shortTitle})\` (Exact target files and line ranges)
+     4. \`## 4. Verification & Audit Log\`
+2. **Pre-Implementation Unit Test Gate (Before Application Code Changes)**:
    - When \`/apply-work\` is executed, move the task file to \`/.myemployee/tasks/in-progress/\`.
-   - **${implementer.persona}** reads the active task checklist, executes clean surgical implementation with zero slop, and checks off items.
-3. **Verification & Quality Gate**:
-   - ${hasQA ? '**Stanley (QA Engineer)** runs destructive functional checks (and visual checks for UI tasks) and appends verification logs to the active task file.' : `**${implementer.persona} (${implementer.shortTitle})** runs self-verification checks and logs verification results in the active task file.`}
+   - ${hasQA ? `For \`logic\` and \`ui-interactive\` tasks, **Stanley (QA Engineer)** FIRST writes the unit test file(s) defined in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` before application source code is modified.` : `For \`logic\` and \`ui-interactive\` tasks, **${implementer.persona} (${implementer.shortTitle})** operates in **Self-TDD Mode** and FIRST writes the unit test file(s) defined in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` before editing application source code.`}
+3. **Surgical Implementation & Verification Gate**:
+   - **${implementer.persona} (${implementer.shortTitle})** reads \`## 3. Implementation Checklist\`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items.
+   - ${hasQA ? '**Stanley (QA Engineer)** runs destructive functional checks (and visual checks for UI tasks) and appends verification logs to `## 4. Verification & Audit Log`.' : `**${implementer.persona} (${implementer.shortTitle})** runs self-verification checks and logs verification results in \`## 4. Verification & Audit Log\`.`}
 4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
    - Di lingkup \`/apply-work\`, task file **TETAP berada di \`in-progress/\`**!
    - AI DILARANG me-rename atau memindahkan task ke \`done/\` secara sepihak.
@@ -355,7 +395,7 @@ ${doneTaskBullets.join('\n')}
 When Bos asks to create a feature, fix a bug, or write code in chat without typing \`/share-knowledge\` or \`/apply-work\`:
 1. **Front-Desk Reception (${triageActors})**:
    - Assess technical feasibility and identify target file touchpoints.
-   - Generate a pending task ticket on disk at \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`.
+   - Generate a 4-section pending task ticket on disk at \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` (\`## 1. Objective & Context\`, \`## 2. Unit Test Plan\`, \`## 3. Implementation Checklist\`, \`## 4. Verification & Audit Log\`).
 2. **Strict Anti-Slop Enforcement**:
    - **${implementer.persona}** is STRICTLY PROHIBITED from writing code directly into the project without a task ticket.
    - Do NOT dump raw unformatted code in chat.
@@ -395,6 +435,9 @@ export function renderWorkflowFiles(
   const hasQA = sortedActive.includes('qa');
 
   const activeNamesSummary = activeRoleObjs.map((r) => `${r.persona} (${r.shortTitle})`).join(', ');
+  const unitTestOwnerHeader = hasQA
+    ? 'Stanley / QA'
+    : `${implementer.persona} / Self-TDD`;
 
   // 1. share-knowledge.md
   const deliberationSteps: string[] = [];
@@ -440,9 +483,12 @@ Even when Bos converses in Indonesian or other languages in the chat room, alway
    - Only use the installed active role(s):
 ${deliberationSteps.join('\n')}
 ${specSection}
-3. **Log Pending Kanban Task Ticket**:
-   - **${coordinator.persona} (${coordinator.shortTitle})**: Writes \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\`.
-   - Mandatory: Specify target file paths and exact line ranges (\`File:Line\`).
+3. **Log Pending 4-Section Kanban Task Ticket**:
+   - **${coordinator.persona} (${coordinator.shortTitle})**: Writes \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` with these 4 mandatory sections:
+     - \`## 1. Objective & Context\`: State the concrete **Objective**, technical **Context**, and **Task Type** (\`logic\` | \`ui-interactive\` | \`style-only\` | \`docs-config\`).
+     - \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerHeader})\`: For \`logic\` and \`ui-interactive\` tasks, list the unit test file(s) and assertions derived from \`Objective & Context\`. For \`style-only\` and \`docs-config\` tasks, mark \`- [x] N/A (Bypassed: style-only/docs-config task — verified via visual/build check)\`.
+     - \`## 3. Implementation Checklist (${implementer.persona} / ${implementer.shortTitle})\`: Specify exact target file paths and line ranges (\`File:Line\`).
+     - \`## 4. Verification & Audit Log\`: Placeholder for post-implementation verification.
 
 4. **DO NOT Write Application Code**:
    - Zero application source code files may be modified during this phase.
@@ -467,15 +513,25 @@ ${specSection}
     ? `   - For Frontend/UI tasks, adhere 100% to Squidward's **Design Tokens Table** in \`DESIGN.md\`. For Backend-only tasks, skip UI rules.\n`
     : `   - If the task touches Frontend/UI files, apply clean semantic CSS tokens, 375px mobile responsiveness, and >= 44x44px touch targets directly in code without creating any design markdown. If the task is Backend-only, focus 100% on backend logic and skip all UI checks.\n`;
 
+  const applyPreTestSection = hasQA
+    ? `2. **Execute Pre-Implementation Unit Test Gate (Stanley — QA Engineer)**:
+   - Inspect \`## 1. Objective & Context\` and \`## 2. Unit Test Plan\` in the active task file.
+   - **If \`Task Type\` is \`logic\` or \`ui-interactive\`**: **Stanley** writes the unit test file(s) asserting the expected behavior from \`Objective & Context\` BEFORE any application source code is modified, and updates \`## 2. Unit Test Plan\` checkboxes from \`[ ]\` to \`[x]\`.
+   - **If \`Task Type\` is \`style-only\` or \`docs-config\`**: Confirm \`## 2. Unit Test Plan\` is marked \`N/A (Bypassed)\` and proceed directly to Step 3.`
+    : `2. **Execute Pre-Implementation Self-TDD Gate (${implementer.persona} — Self-TDD)**:
+   - Inspect \`## 1. Objective & Context\` and \`## 2. Unit Test Plan\` in the active task file.
+   - **If \`Task Type\` is \`logic\` or \`ui-interactive\`**: **${implementer.persona}** writes the unit test file(s) asserting the expected behavior from \`Objective & Context\` BEFORE modifying any application source code, and updates \`## 2. Unit Test Plan\` checkboxes from \`[ ]\` to \`[x]\`.
+   - **If \`Task Type\` is \`style-only\` or \`docs-config\`**: Confirm \`## 2. Unit Test Plan\` is marked \`N/A (Bypassed)\` and proceed directly to Step 3.`;
+
   const applyVerificationSection = hasQA
-    ? `3. **Run Verification (Stanley${hasLead ? ' & Garry' : ''})**:
-   - **Pillar A (Functional Destructive Testing)**: Stanley verifies functional behavior, boundary cases, null values, and runs project test/build suites.
+    ? `4. **Run Verification & Audit Log (Stanley${hasLead ? ' & Garry' : ''})**:
+   - **Pillar A (Functional Destructive Testing)**: Stanley verifies functional behavior, boundary cases, null values, and runs project test/build suites confirming all unit tests pass.
    - **Pillar B (Visual Fidelity Audit — Frontend/UI Tasks Only)**: Skip if the task is strictly Backend/API/CLI. If the task touches Frontend/UI, Stanley verifies 375px mobile responsiveness, WCAG AA contrast, touch targets (\`>= 44x44px\`), and zero em dashes (\`—\`).
-${hasLead ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs to the task file in \`tasks/in-progress/\`.`
-    : `3. **Run Self-Verification (${implementer.persona}${hasLead && implementer.id !== 'tech-lead' ? ' & Garry' : ''})**:
-   - Verify functional correctness, edge cases, and run project build/test suites.
+${hasLead ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs under \`## 4. Verification & Audit Log\` in the task file in \`tasks/in-progress/\`.`
+    : `4. **Run Self-Verification (${implementer.persona}${hasLead && implementer.id !== 'tech-lead' ? ' & Garry' : ''})**:
+   - Verify functional correctness, edge cases, and run project build/test suites confirming all unit tests pass.
    - If the task touches Frontend/UI files, verify clean rendering at the 375px mobile viewport.
-${hasLead && implementer.id !== 'tech-lead' ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs to the task file in \`tasks/in-progress/\`.`;
+${hasLead && implementer.id !== 'tech-lead' ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs under \`## 4. Verification & Audit Log\` in the task file in \`tasks/in-progress/\`.`;
 
   const applyWorkMd = `---
 description: Execute a pending task ticket from tasks/pending/, move to in-progress/, and verify cleanliness.
@@ -495,18 +551,20 @@ All written code, code comments, task checklist updates, and verification logs *
    - If NO pending tasks exist, inform Bos: *"Tidak ada tiket pending di antrean saat ini, Bos! Ketik \`/share-knowledge\` atau sampaikan tugas yang ingin dikerjakan."*
    - **Move to In-Progress**: Move the selected task file to \`/.myemployee/tasks/in-progress/<filename>\`.
 
-2. **Execute Implementation (${implementer.persona})**:
-   - Read target files and exact line ranges from the task file.
-${applySpecLine}${applyUiLine}   - Execute surgical line edits. Update task checkboxes from \`[ ]\` to \`[x]\`.
+${applyPreTestSection}
+
+3. **Execute Implementation (${implementer.persona})**:
+   - Read target files and exact line ranges under \`## 3. Implementation Checklist\` in the task file.
+${applySpecLine}${applyUiLine}   - Execute surgical line edits until all unit tests in \`## 2. Unit Test Plan\` pass. Update \`## 3. Implementation Checklist\` checkboxes from \`[ ]\` to \`[x]\`.
 
 ${applyVerificationSection}
 
-4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
+5. **FOUNDER SOVEREIGNTY (HARD STOP)**:
    - **DO NOT MOVE TO \`done/\`**: The task file MUST REMAIN in \`/.myemployee/tasks/in-progress/\`. Task completion is the exclusive sovereignty of Bos via \`/done-task\`.
    - **DO NOT GIT PUSH**: Do NOT run \`git push\` and do NOT ask Bos whether to push. Pushing is reserved only for explicit commands in Bos's chat.
 
-5. **Report to Bos**:
-   - Report concise completion of coding and verification with clickable markdown file links \`[file](file:///...)\`.
+6. **Report to Bos**:
+   - Report concise completion of unit tests, coding, and verification with clickable markdown file links \`[file](file:///...)\`.
    - Promptly await Bos's inspection.
 `;
 
@@ -598,13 +656,18 @@ async function compileSquadArtifacts(
   templateBase?: string,
   adapterBase?: string
 ): Promise<void> {
-  const blueprint = await loadSquadBlueprint(templateBase);
+  const blueprint = await loadSquadBlueprint(templateBase, activeRoles);
   const sortedActive = sortActiveRoles(activeRoles, blueprint.standardOrder);
 
-  // 1. Compile each active role's default-skill.md
+  // 1. Compile each active role's default-skill.md & ensure blueprint.json is never left in workspace
   for (const role of sortedActive) {
-    const roleSkillDir = path.join(destinationMyEmployee, 'roles', role, 'skill');
-    if (await fs.pathExists(path.join(destinationMyEmployee, 'roles', role))) {
+    const roleDir = path.join(destinationMyEmployee, 'roles', role);
+    const roleSkillDir = path.join(roleDir, 'skill');
+    if (await fs.pathExists(roleDir)) {
+      const strayBlueprint = path.join(roleDir, 'blueprint.json');
+      if (await fs.pathExists(strayBlueprint)) {
+        await fs.remove(strayBlueprint);
+      }
       await fs.ensureDir(roleSkillDir);
       const compiledDefaultSkill = renderRoleDefaultSkill(role, sortedActive, blueprint);
       await fs.writeFile(path.join(roleSkillDir, 'default-skill.md'), compiledDefaultSkill, 'utf8');
@@ -685,10 +748,10 @@ export async function ensureUniversalAgentsRule(targetDir: string = process.cwd(
 export async function ensureGitignore(targetDir: string = process.cwd()): Promise<boolean> {
   const gitignorePath = path.join(targetDir, '.gitignore');
   const requiredEntries = [
-    { entry: '.myemployee/', matches: ['.myemployee', '.myemployee/', '/.myemployee', '/.myemployee/'] },
-    { entry: 'myemployee/', matches: ['myemployee', 'myemployee/', '/myemployee', '/myemployee/'] },
-    { entry: '.agent*', matches: ['.agent*', '/.agent*'] },
-    { entry: 'AGENTS.md', matches: ['AGENTS.md', '/AGENTS.md'] },
+    { entry: '/.myemployee/', matches: ['.myemployee', '.myemployee/', '/.myemployee', '/.myemployee/'] },
+    { entry: '/myemployee/', matches: ['myemployee', 'myemployee/', '/myemployee', '/myemployee/'] },
+    { entry: '/.agent*', matches: ['.agent*', '/.agent*'] },
+    { entry: '/AGENTS.md', matches: ['AGENTS.md', '/AGENTS.md'] },
     { entry: 'settings.json', matches: ['settings.json', '/settings.json', '**/settings.json'] },
   ];
 
@@ -768,14 +831,18 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
     await fs.copy(tasksSource, tasksDest, { overwrite: false, errorOnExist: false });
   }
 
-  // 2. Copy ONLY selected squad roles
+  // 2. Copy ONLY selected squad roles (excluding internal blueprint.json)
   const rolesRoot = path.join(destinationMyEmployee, 'roles');
   await fs.ensureDir(rolesRoot);
   for (const role of rolesToInstall) {
     const roleSource = path.join(templateBase, 'roles', role);
     const roleDest = path.join(rolesRoot, role);
     if (await fs.pathExists(roleSource)) {
-      await fs.copy(roleSource, roleDest, { overwrite: false, errorOnExist: false });
+      await fs.copy(roleSource, roleDest, {
+        overwrite: false,
+        errorOnExist: false,
+        filter: (src) => path.basename(src) !== 'blueprint.json',
+      });
     }
   }
 
@@ -821,7 +888,10 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
       const singleRoleSource = path.join(templateBase, 'roles', role);
       const singleRoleDest = path.join(rolesDest, role);
       if (await fs.pathExists(singleRoleSource)) {
-        await fs.copy(singleRoleSource, singleRoleDest, { overwrite: true });
+        await fs.copy(singleRoleSource, singleRoleDest, {
+          overwrite: true,
+          filter: (src) => path.basename(src) !== 'blueprint.json',
+        });
       }
     }
   }
@@ -901,7 +971,10 @@ export async function addRoleToWorkspace(role: string, targetDir: string = proce
     throw new Error(`Role "${role}" does not exist in template library.`);
   }
 
-  await fs.copy(roleSource, roleDest, { overwrite: false });
+  await fs.copy(roleSource, roleDest, {
+    overwrite: false,
+    filter: (src) => path.basename(src) !== 'blueprint.json',
+  });
 
   // Conditionally ensure PRD.md or features/ if adding a spec-producing role
   if (role === 'product-owner') {

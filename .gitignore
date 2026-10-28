@@ -8,8 +8,10 @@ dist/
 openspec/
 
 # employee-agents squad workspace
-.myemployee/
-myemployee/
-.agent*
-AGENTS.md
+/.myemployee/
+/myemployee/
+!templates/myemployee/
+!templates/myemployee/**
+/.agent*
+/AGENTS.md
 settings.json

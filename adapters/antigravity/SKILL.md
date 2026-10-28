@@ -23,7 +23,7 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 - **No `tech-lead` (Garry)**: Tn. Crab implements code directly without drafting a separate `ARCHITECTURE.md` architecture document.
 - **No `project-manager` (Sandy Cheeks)**: Tn. Crab logs task progress directly, and Bos verifies completion.
 - **No `developer` (Tn. Crab)**: Tech Lead or Bos carries out the code modifications.
-- **No `qa` (Stanley)**: Developer performs thorough self-verification and delivers directly to Bos for acceptance.
+- **No `qa` (Stanley)**: Developer operates in **Self-TDD Mode** (writing pre-implementation unit tests in `## 2. Unit Test Plan` first before modifying application code) and performs thorough self-verification before delivering to Bos.
 
 ---
 
@@ -52,16 +52,21 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 
 ## Operational Workflows
 
-### KANBAN TASK MANAGEMENT & NO DIRECT CODE WRITING
+### KANBAN TASK MANAGEMENT, PRE-IMPLEMENTATION TDD & NO DIRECT CODE WRITING
 Every new file, page, feature, or bugfix requested by Bos MUST be recorded in the Kanban task system:
-1. **Sandy Cheeks (Project Manager) MUST first generate the task file on disk in `pending/`**:
+1. **Sandy Cheeks (Project Manager) MUST first generate the 4-section task file on disk in `pending/`**:
    - `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`
-   - The task file MUST state the target file(s), line ranges, VAC targets, and checklist items.
-2. **Tn. Crab (Developer) ONLY writes code AFTER the task file exists**:
+   - The task file MUST contain:
+     1. `## 1. Objective & Context` (Goal, Context, and `Task Type`: `logic` | `ui-interactive` | `style-only` | `docs-config`)
+     2. `## 2. Unit Test Plan (Pre-Implementation Gate)` (Owned by **Stanley / QA** when `qa` is active, or **Tn. Crab / Self-TDD** when `qa` is absent; mandatory for `logic` & `ui-interactive`, marked `N/A (Bypassed)` for `style-only` & `docs-config`)
+     3. `## 3. Implementation Checklist` (Target file paths, exact line ranges, and VAC targets)
+     4. `## 4. Verification & Audit Log`
+2. **Pre-Implementation Unit Test Gate (Before Application Code Changes)**:
    - When `/apply-work` is executed, Sandy moves the task file to `/.myemployee/tasks/in-progress/`.
-   - Tn. Crab reads the active task checklist, executes clean implementation with zero slop, and checks off items.
-3. **Stanley (QA) verifies functional & visual fidelity**:
-   - Stanley runs destructive checks and audits each Visual Acceptance Criteria (`[ ] VAC-*`) item.
+   - For `logic` and `ui-interactive` tasks, **Stanley (QA)** (or **Tn. Crab in Self-TDD Mode** if `qa` is not installed) FIRST writes the unit test file(s) in `## 2. Unit Test Plan` based on `## 1. Objective & Context` before application source files are edited.
+3. **Tn. Crab (Developer) implements & Stanley (QA) verifies**:
+   - Tn. Crab reads `## 3. Implementation Checklist`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items.
+   - Stanley runs destructive checks and audits each Visual Acceptance Criteria (`[ ] VAC-*`) item in `## 4. Verification & Audit Log`.
 4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
    - DILINGKUP `/apply-work`, task file **TETAP berada di `in-progress/`**!
    - AI DILARANG me-rename atau memindahkan task ke `done/` secara sepihak.
@@ -78,13 +83,14 @@ Every new file, page, feature, or bugfix requested by Bos MUST be recorded in th
 - Garry (Tech Lead) provides anti-lasagna architecture review.
 - Patrick (PO) drafts `/.myemployee/features/<slug>/PRD.md` and appends 1-2 sentence summary to `/.myemployee/PRD.md`.
 - Squidward (UI/UX) drafts `/.myemployee/features/<slug>/DESIGN.md` (Mobile-first, Tokens Table, State Matrix, VAC checklist).
-- Sandy Cheeks (PM) creates `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.
+- Sandy Cheeks (PM) creates the 4-section `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` (`Objective & Context`, `Unit Test Plan`, `Implementation Checklist`, `Verification & Audit Log`).
 - **Zero application code is written in this phase.**
 
 #### 2. `/apply-work [slug]` — Phase 2: Execution & Coding
 - Moves target task from `tasks/pending/` to `tasks/in-progress/`.
-- Tn. Crab implements code changes cleanly with zero slop and design token compliance.
-- Stanley (QA) executes destructive functional tests and visual VAC audits.
+- **Pre-Implementation TDD Gate**: For `logic` and `ui-interactive` tasks, Stanley (QA) (or Tn. Crab in Self-TDD mode if `qa` is absent) writes the unit test file(s) in `## 2. Unit Test Plan` based on `## 1. Objective & Context` first.
+- **Implementation**: Tn. Crab implements `## 3. Implementation Checklist` cleanly with zero slop and design token compliance until all unit tests pass.
+- **Verification**: Stanley (QA) executes destructive functional tests and visual VAC audits in `## 4. Verification & Audit Log`.
 - Squad reports completion to Bos. Task stays in `in-progress/`. Dilarang auto-done dan dilarang tanya push.
 
 #### 3. `/done-task [slug]` — Phase 3: Founder Sign-Off
