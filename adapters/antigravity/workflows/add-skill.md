@@ -26,12 +26,12 @@ Garry (Tech Lead) and Sandy Cheeks (PM) assist Bos in leveling up an employee wi
    - If selected from catalog:
      - Check local `additional-skills/<role>/<skill-slug>.md` or fetch from:
        `https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/<role>/<skill-slug>.md`
-     - Save directly to `/myemployee/roles/<role>/skill/<skill-slug>.md`.
+     - Save directly to `/.myemployee/roles/<role>/skill/<skill-slug>.md`.
    - If custom:
-     - Generate a clean, 100% English markdown template under `/myemployee/roles/<role>/skill/<skill-slug>.md` with guidelines, triggers, and procedures.
+     - Generate a clean, 100% English markdown template under `/.myemployee/roles/<role>/skill/<skill-slug>.md` with guidelines, triggers, and procedures.
 
 4. Register the skill:
-   - Update `/myemployee/roles/<role>/role.md` to append the new skill under `- **Active Skills**:`.
+   - Update `/.myemployee/roles/<role>/role.md` to append the new skill under `- **Active Skills**:`.
 
 5. Confirm completion:
    - Announce the newly leveled-up employee capability to Bos!

@@ -10,7 +10,7 @@
 
 **A Virtual Software Engineering Team Framework**: Run an autonomous, 7-role engineering squad (Technical Analyst, Product Owner, UI/UX Designer, Tech Lead, Project Manager, Developer, QA Engineer) directly inside your AI coding assistant.
 
-[Quick Start](#-quick-start) • [The Squad](#-the-squad-roster) • [Slash Commands](#-built-in-slash-commands) • [Operational Lifecycle](#-operational-lifecycle) • [Directory Structure](#-directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
+[Prerequisites](#prerequisites) • [Quick Start](#quick-start) • [Hands-On Tutorial](TUTORIAL.md) • [The Squad](#the-squad-roster) • [Slash Commands](#built-in-slash-commands) • [Operational Lifecycle](#operational-lifecycle) • [Directory Structure](#directory-structure) • [Token Footprint](TOKEN_FOOTPRINT.md) • [Acknowledgments](ACKNOWLEDGMENTS.md) • [Roadmap](ROADMAP.md)
 
 </div>
 
@@ -34,46 +34,46 @@ This leads to:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                      LEAD ARCHITECT / FOUNDER (User)                   │
-│         "Build feature X"  •  "Fix bug Y"  •  "Langsung sekarang!"     │
+│                    LEAD ARCHITECT / FOUNDER (User)                     │
+│        "Build feature X" • "Fix bug Y" • "Langsung sekarang!"          │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │
                                     ▼
        ┌────────────────────────────────────────────────────────┐
        │             ADAPTER LAYER (.agent/skills/)             │
-       │  - Reads Living Master PRD (/myemployee/PRD.md)        │
-       │  - Evaluates Intent: Feature, Bug, or Fast-Track       │
+       │   - Reads Living Master PRD (/.myemployee/PRD.md)       │
+       │   - Evaluates Intent: Feature, Bug, or Fast-Track      │
        └────────────────────────────┬───────────────────────────┘
                                     │
                  ┌──────────────────┴──────────────────┐
                  ▼                                     ▼
-      [ PHASE 1: /share-knowledge ]          [ FAST-TRACK / BUG PIPELINE ]
+      [ PHASE 1: /share-knowledge ]         [ FAST-TRACK / BUG PIPELINE ]
                  │                                     │
-    1. Larry (Technical Analyst)             1. Larry (Technical Analyst)
-       -> Feasibility & Data Boundaries         -> 30-Sec Feasibility Check
+    1. Larry (Technical Analyst)          1. Larry (Technical Analyst)
+       -> Feasibility & Data Boundaries      -> 30-Sec Feasibility Check
                  │                                     │
-    2. Patrick (Product Owner)               2. Patrick & Sandy
-       -> features/<slug>/PRD.md                -> Micro-PRD (10-15 lines)
-       -> Syncs Master PRD                      -> tasks/pending/TASK-*.md
+    2. Patrick (Product Owner)            2. Patrick & Sandy
+       -> features/<slug>/PRD.md             -> Micro-PRD (10-15 lines)
+       -> Syncs Master PRD                   -> tasks/pending/TASK-*.md
                  │                                     │
     3. Squidward (UI/UX)                               ▼
-       -> Mobile-First Tokens & VAC          [ PHASE 2: /apply-work ]
+       -> Mobile-First Tokens & VAC         [ PHASE 2: /apply-work ]
                  │                                     │
-    4. Garry (Tech Lead)                     3. Sandy Cheeks (PM)
-       -> Architecture & Anti-Lasagna           -> Moves to: tasks/in-progress/
+    4. Garry (Tech Lead)                  3. Sandy Cheeks (PM)
+       -> Architecture & Anti-Lasagna        -> Moves to: tasks/in-progress/
                  │                                     │
-    5. Sandy Cheeks (PM)                     4. Tn. Crab (Developer)
-       -> tasks/pending/TASK-*.md               -> Surgical token-adherent code
+    5. Sandy Cheeks (PM)                  4. Tn. Crab (Developer)
+       -> tasks/pending/TASK-*.md            -> Surgical token-adherent code
                  │                                     │
-                 ▼                           5. Stanley (QA Engineer)
-      [ PHASE 2: /apply-work ]                  -> Destructive tests & VAC audit
+                 ▼                        5. Stanley (QA Engineer)
+      [ PHASE 2: /apply-work ]               -> Destructive tests & VAC audit
                  │                                     │
     6. Sandy moves task to:                            ▼
-       tasks/in-progress/                    [ PHASE 3: /done-task ]
+       tasks/in-progress/                   [ PHASE 3: /done-task ]
                  │                                     │
-    7. Tn. Crab implements code              6. Founder Sign-Off (HARD STOP)
-                 │                              -> Sandy moves to: tasks/done/
-    8. Stanley audits VAC & QA                  -> Updates PRD to DONE
+    7. Tn. Crab implements code           6. Founder Sign-Off (HARD STOP)
+                 │                           -> Sandy moves to: tasks/done/
+    8. Stanley audits VAC & QA               -> Updates PRD to DONE
                  │                                     │
                  ▼                                     ▼
       [ PHASE 3: /done-task ]               [ Zero Auto-Push Guarantee ]
@@ -98,6 +98,19 @@ This leads to:
 
 ---
 
+## Prerequisites
+
+Before using `employee-agents`, ensure your development environment has:
+
+1. **Node.js**: Version `>= 20.0.0` ([Download Node.js LTS](https://nodejs.org/en/download)) with `npm` / `npx`.
+2. **AI Coding Assistant**: **Google Antigravity** (Antigravity IDE or Antigravity CLI `agy`) with an active AI model (e.g. Gemini 1.5 Pro / Flash). *(Cursor, Claude Code, Cline support on roadmap)*.
+3. **Version Control**: Git `>= 2.30.0` ([Download Git](https://git-scm.com/downloads)) initialized in your target project.
+4. **Operating System**: macOS, Linux, or Windows (via WSL2 or PowerShell).
+
+> **Hands-On Tutorial**: For a complete step-by-step walkthrough covering your first feature from planning to ship, see **[TUTORIAL.md](TUTORIAL.md)**.
+
+---
+
 ## Quick Start
 
 ### 1. Initialize a Workspace
@@ -111,8 +124,10 @@ npx employee-agents
 npx employee-agents --lang id
 ```
 
+> **Automatic Git Protection**: `employee-agents` automatically appends `/.myemployee/` to your `.gitignore` upon initialization (and untracks it from git cache if previously staged), guaranteeing that local task tickets, PRD drafts, and squad states are never accidentally pushed to remote repositories.
+
 ### 2. Update an Existing Workspace
-To safely upgrade an already initialized `/myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
+To safely upgrade an already initialized `/.myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
 
 ```bash
 # Via terminal:
@@ -152,6 +167,19 @@ npx employee-agents add-role tech-analyst
 npx employee-agents remove-role developer
 ```
 
+### 5. Hide or Show the Workspace Folder (Clean Sidebar Mode)
+Keep your project root clean in your IDE file explorer sidebar. Toggle workspace visibility non-destructively anytime without affecting git history or background AI operations:
+
+```bash
+# Hide /.myemployee and .vscode from the IDE file explorer sidebar:
+npx employee-agents hide
+
+# Restore /.myemployee back to the IDE file explorer sidebar:
+npx employee-agents show
+```
+
+> **Note**: Running `npx employee-agents hide` configures `files.exclude` inside `.vscode/settings.json`, automatically hiding `/.myemployee` and `.vscode` itself so your IDE sidebar stays completely clutter-free. Running `npx employee-agents show` restores `/.myemployee` and automatically cleans up `.vscode/settings.json` and the `.vscode/` directory if no other custom IDE settings exist (zero residue). The AI squad continues to read, write, and track tasks in `/.myemployee/` seamlessly in the background while hidden.
+
 ---
 
 ## Built-In Slash Commands (`/`)
@@ -164,78 +192,78 @@ When using Antigravity, the framework equips you with interactive slash commands
 | **`/apply-work`** | Sandy (PM), Tn. Crab (Dev), Stanley (QA) | **Phase 2: Execution**. Moves target task to `tasks/in-progress/`, surgically implements code, and executes QA & VAC audits. Task stays in `in-progress/` (zero auto-done, zero nagging for git push). |
 | **`/done-task`** | Sandy Cheeks (PM) | **Phase 3: Founder Sign-Off**. Founder's dedicated command to mark a verified task complete. Moves task from `tasks/in-progress/` to `tasks/done/` and updates Master PRD feature status to `DONE`. |
 | **`/my-task`** | Sandy Cheeks (PM) | **Kanban Dashboard**. Inspects `tasks/` and displays active in-progress ticket, prioritized pending tasks, and paused tickets. Preserves tokens by ignoring `done/`. |
-| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/myemployee/roles/<role>/skill/`. |
+| **`/add-skill`** | Garry & Sandy | Interactive workflow to level up any employee with a new modular skill under `/.myemployee/roles/<role>/skill/`. |
 | **`/status-token`** | Garry (Tech Lead) | Reports the active AI model, total context window capacity (1M tokens), estimated tokens consumed, remaining quota, and efficiency advice. |
 | **`/update-me`** | Garry & Sandy | Safely upgrades your squad roles, anti-slop skills, and workflows to the latest release while keeping your PRDs and tasks intact. |
 
 ---
 
-## Directory Structure (`/myemployee/`)
+## Directory Structure (`/.myemployee/`)
 
 Each role possesses a clean **`role.md`** defining its identity, and an extensible **`skill/`** folder containing its technical capabilities:
 
 ```text
-myemployee/
-├── PRD.md                         # Living Master PRD (Founder Goal & Auto-Updating Feature Index)
-├── config.json                    # Project configuration & active roles
+.myemployee/
+├── PRD.md # Living Master PRD (Founder Goal & Auto-Updating Feature Index)
+├── config.json # Project configuration & active roles
 │
-├── features/                      # Modular Feature Specs created during /share-knowledge
-│   └── <feature-slug>/
-│       ├── PRD.md                 # User Stories & Acceptance Criteria (Patrick)
-│       ├── DESIGN.md              # Mobile-First Tokens, State Matrix & VAC Checklists (Squidward)
-│       └── ARCHITECTURE.md        # Architecture, ADRs & Anti-Lasagna Boundaries (Garry)
+├── features/ # Modular Feature Specs created during /share-knowledge
+│ └── <feature-slug>/
+│ ├── PRD.md # User Stories & Acceptance Criteria (Patrick)
+│ ├── DESIGN.md # Mobile-First Tokens, State Matrix & VAC Checklists (Squidward)
+│ └── ARCHITECTURE.md # Architecture, ADRs & Anti-Lasagna Boundaries (Garry)
 │
-├── tasks/                         # Kanban task subdirectories managed by Sandy Cheeks (PM)
-│   ├── pending/                   # Backlog tickets awaiting execution
-│   ├── in-progress/               # Active task currently being coded by Tn. Crab
-│   ├── paused/                    # Suspended tasks during priority shifts
-│   └── done/                      # Verified tasks archived by founder via /done-task
+├── tasks/ # Kanban task subdirectories managed by Sandy Cheeks (PM)
+│ ├── pending/ # Backlog tickets awaiting execution
+│ ├── in-progress/ # Active task currently being coded by Tn. Crab
+│ ├── paused/ # Suspended tasks during priority shifts
+│ └── done/ # Verified tasks archived by founder via /done-task
 │
-└── roles/                         # Modular Role Definitions & Capabilities
+└── roles/ # Modular Role Definitions & Capabilities
     ├── tech-analyst/
-    │   ├── role.md                # Persona: Larry | Focus: Technical Feasibility & Fast-Track
-    │   └── skill/
-    │       └── default-skill.md   # API boundaries, schema triage & fast-track checks
+    │ ├── role.md # Persona: Larry | Focus: Technical Feasibility & Fast-Track
+    │ └── skill/
+    │ └── default-skill.md # API boundaries, schema triage & fast-track checks
     ├── product-owner/
-    │   ├── role.md                # Persona: Patrick | Focus: Product Vision & User Stories
-    │   └── skill/
-    │       └── default-skill.md   # PRD & User Story drafting, Master PRD sync
+    │ ├── role.md # Persona: Patrick | Focus: Product Vision & User Stories
+    │ └── skill/
+    │ └── default-skill.md # PRD & User Story drafting, Master PRD sync
     ├── ui-ux/
-    │   ├── role.md                # Persona: Squidward | Focus: Mobile-First Systems & VAC
-    │   └── skill/
-    │       └── default-skill.md   # 375px compact layout, design tokens, VAC checklists
+    │ ├── role.md # Persona: Squidward | Focus: Mobile-First Systems & VAC
+    │ └── skill/
+    │ └── default-skill.md # 375px compact layout, design tokens, VAC checklists
     ├── tech-lead/
-    │   ├── role.md                # Persona: Garry | Focus: System Architecture & ADRs
-    │   └── skill/
-    │       └── default-skill.md   # Anti-lasagna architecture, context-switch guard
+    │ ├── role.md # Persona: Garry | Focus: System Architecture & ADRs
+    │ └── skill/
+    │ └── default-skill.md # Anti-lasagna architecture, context-switch guard
     ├── project-manager/
-    │   ├── role.md                # Persona: Sandy Cheeks | Focus: Kanban Task Management
-    │   └── skill/
-    │       └── default-skill.md   # Kanban tracking, file:line targeting, dashboard
+    │ ├── role.md # Persona: Sandy Cheeks | Focus: Kanban Task Management
+    │ └── skill/
+    │ └── default-skill.md # Kanban tracking, file:line targeting, dashboard
     ├── developer/
-    │   ├── role.md                # Persona: Tn. Crab | Focus: Clean Code & Surgical Editing
-    │   └── skill/
-    │       └── default-skill.md   # Token-adherent coding & 375px visual self-testing
+    │ ├── role.md # Persona: Tn. Crab | Focus: Clean Code & Surgical Editing
+    │ └── skill/
+    │ └── default-skill.md # Token-adherent coding & 375px visual self-testing
     └── qa/
-        ├── role.md                # Persona: Stanley | Focus: QA & VAC Auditing
+        ├── role.md # Persona: Stanley | Focus: QA & VAC Auditing
         └── skill/
-            └── default-skill.md   # Destructive testing & Visual Acceptance Criteria audit
+            └── default-skill.md # Destructive testing & Visual Acceptance Criteria audit
 ```
 
 ---
 
 ## Operational Lifecycle
 
-### 1. Three-Phase Feature Workflow (`/share-knowledge` ➔ `/apply-work` ➔ `/done-task`)
+### 1. Three-Phase Feature Workflow (`/share-knowledge` `/apply-work` `/done-task`)
 
 To prevent AI from prematurely generating unreviewed code, features strictly follow a three-phase gated process:
 
 #### Phase 1: Thinking & Spec (`/share-knowledge`)
 1. **Larry (Tech Analyst)** evaluates technical feasibility, data schemas, and API boundaries.
-2. **Patrick (PO)** writes `/myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria, and syncs an executive summary to the Living Master PRD (`/myemployee/PRD.md`).
-3. **Squidward (UI/UX)** writes `/myemployee/features/<slug>/DESIGN.md` defining Mobile-First design tokens (360px–375px), state matrices, and binary Visual Acceptance Criteria (`[ ] VAC-*`).
-4. **Garry (Tech Lead)** writes `/myemployee/features/<slug>/ARCHITECTURE.md` defining libraries, schema, security, and target files with zero boilerplate lasagna.
-5. **Sandy Cheeks (PM)** generates the task ticket on disk in `/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
+2. **Patrick (PO)** writes `/.myemployee/features/<slug>/PRD.md` with User Stories & Acceptance Criteria, and syncs an executive summary to the Living Master PRD (`/.myemployee/PRD.md`).
+3. **Squidward (UI/UX)** writes `/.myemployee/features/<slug>/DESIGN.md` defining Mobile-First design tokens (360px–375px), state matrices, and binary Visual Acceptance Criteria (`[ ] VAC-*`).
+4. **Garry (Tech Lead)** writes `/.myemployee/features/<slug>/ARCHITECTURE.md` defining libraries, schema, security, and target files with zero boilerplate lasagna.
+5. **Sandy Cheeks (PM)** generates the task ticket on disk in `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` with **mandatory target file and line ranges**:
    ```markdown
    - [ ] Implement Google OAuth Callback Handler
      - File: `src/api/auth/google/callback.ts`
@@ -255,7 +283,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 #### Phase 3: Founder Sign-Off (`/done-task`)
 1. Founder reviews the squad's work and triggers `/done-task <slug>`.
 2. **Sandy Cheeks (PM)** moves the task file from `tasks/in-progress/` to `tasks/done/`.
-3. Sandy updates the feature status in `/myemployee/PRD.md` to `DONE`.
+3. Sandy updates the feature status in `/.myemployee/PRD.md` to `DONE`.
 4. Git push is executed **only if the founder prompt explicitly commands** *"sekalian dipush ke git"* or *"push ke git"*.
 
 ---
@@ -264,7 +292,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 - **30-Second Fast-Track**: When the founder requests immediate coding (*"Langsung kerjakan sekarang!"*), Larry provides a 3-bullet technical feasibility triage, Patrick writes a lean 10–15 line Micro-PRD on disk, Sandy creates `tasks/pending/TASK-*.md`, and Tn. Crab begins implementation immediately without context drift.
 - **Urgent Bug Workflow**: Sandy logs the bug ticket directly in `tasks/pending/TASK-DDMMYYYY-<slug>.md` with `[BUG]` tag. Garry and Tn. Crab bypass reading the Master PRD, inspect *only* the targeted bug ticket, and apply surgical line edits. Stanley reproduces and verifies the fix with zero regressions.
-- **Context-Switch Guard**: When the founder shifts priorities mid-stream (e.g. pivoting from Bug A to Feature B), Garry reports repository status and presents 2 clean options: wrap up in 1 minute or park active work into `/myemployee/tasks/paused/`.
+- **Context-Switch Guard**: When the founder shifts priorities mid-stream (e.g. pivoting from Bug A to Feature B), Garry reports repository status and presents 2 clean options: wrap up in 1 minute or park active work into `/.myemployee/tasks/paused/`.
 
 ---
 
@@ -272,7 +300,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 
 `employee-agents` uses a **lean, modular architecture**: each persona's operational rules are isolated in a compact `role.md` and `skill/default-skill.md`. Monolithic framework bloat is avoided through lazy role loading, Kanban subfolder isolation, and Living Master PRD index tables.
 
-### 📊 Estimated Context Consumption Ranges
+### Estimated Context Consumption Ranges
 
 | Operational Scenario | Active Personas / Artifacts | Estimated Context Range |
 |---|---|---|
@@ -282,7 +310,7 @@ To prevent AI from prematurely generating unreviewed code, features strictly fol
 | **Phase 2: Feature Execution** *(`/apply-work`)* | Tn. Crab (Dev) + Stanley (QA) | **~900 – 2,000 tokens** |
 | **All 7 Roles Combined (Base Footprint)** | All 7 personas (`role.md` + `default-skill.md`) | **~4,500 – 5,500 tokens** *(< 0.6% of 1M context)* |
 
-> 📖 **Deep Dive**: For complete breakdown methodology, architectural drivers, and comparisons with monolithic multi-agent frameworks, see **[TOKEN_FOOTPRINT.md](TOKEN_FOOTPRINT.md)**.
+> **Deep Dive**: For complete breakdown methodology, architectural drivers, and comparisons with monolithic multi-agent frameworks, see **[TOKEN_FOOTPRINT.md](TOKEN_FOOTPRINT.md)**.
 
 ---
 

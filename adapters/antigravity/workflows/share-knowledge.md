@@ -6,7 +6,7 @@ Larry the Lobster (Tech Analyst), Patrick (Product Owner), Squidward (UI/UX), Ga
 
 > Also accepts alias `/share-knowladge`.
 
-⚠️ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
+ **MANDATORY LANGUAGE DIRECTIVE (ZERO SLOP)**:
 All generated markdown files (`PRD.md`, `DESIGN.md`, `ARCHITECTURE.md`, `TASK-*.md`) **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
 Even when Bos converses in Indonesian or other languages in the chat room, the squad MUST ALWAYS write all markdown specifications, tickets, and code in English. Leaking Indonesian words into markdown files is strictly prohibited.
 
@@ -20,19 +20,22 @@ Even when Bos converses in Indonesian or other languages in the chat room, the s
      - `[SQUIDWARD - UI/UX]`: Mobile-first visual direction and responsive fluid expansion.
 
 2. **Draft Feature Specs (Physical File Writing Mandatory)**:
-   - **Patrick**: Writes `/myemployee/features/<slug>/PRD.md` with Given-When-Then AC and scope boundaries.
-   - **Living Master PRD Sync**: Patrick appends a new row to `/myemployee/PRD.md` with a 1–2 sentence executive summary.
-   - **Squidward**: Writes `/myemployee/features/<slug>/DESIGN.md` (Mobile-First, Design Tokens Table, Component State Matrix, `[ ] VAC-*` checklist).
-   - **Garry**: Writes `/myemployee/features/<slug>/ARCHITECTURE.md` (contracts, schema changes).
+   - **Patrick**: Writes `/.myemployee/features/<slug>/PRD.md` with Given-When-Then AC and scope boundaries.
+   - **Living Master PRD Sync**: Patrick appends a new row to `/.myemployee/PRD.md` with a 1–2 sentence executive summary.
+   - **Squidward**: Writes `/.myemployee/features/<slug>/DESIGN.md` (Mobile-First, Design Tokens Table, Component State Matrix, `[ ] VAC-*` checklist).
+   - **Garry**: Writes `/.myemployee/features/<slug>/ARCHITECTURE.md` (contracts, schema changes).
 
-3. **Log Pending Kanban Task Ticket**:
-   - **Sandy Cheeks**: Writes `/myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.
-   - Mandatory: Specify target file paths, line ranges (`File:Line`), and linked `VAC-*` criteria.
+3. **Log Pending 4-Section Kanban Task Ticket**:
+   - **Sandy Cheeks**: Writes `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md` with these 4 mandatory sections:
+     - `## 1. Objective & Context`: State the concrete **Objective**, technical **Context**, and **Task Type** (`logic` | `ui-interactive` | `style-only` | `docs-config`).
+     - `## 2. Unit Test Plan (Pre-Implementation — Stanley / QA, or Tn. Crab / Self-TDD if QA is absent)`: For `logic` and `ui-interactive` tasks, list the unit test file(s) and assertions derived from `Objective & Context`. For `style-only` and `docs-config` tasks, mark `- [x] N/A (Bypassed: style-only/docs-config task — verified via visual/build check)`.
+     - `## 3. Implementation Checklist`: Specify target file paths, exact line ranges (`File:Line`), and any linked `VAC-*` criteria.
+     - `## 4. Verification & Audit Log`: Placeholder for post-implementation verification.
 
 4. **Fast-Track Protocol ("Langsung Kerjakan Sekarang!")**:
    - If Bos demands immediate execution:
      - Larry delivers a 3-bullet feasibility check in 30 seconds.
-     - Patrick writes a 10–15 line Micro-PRD to `/myemployee/features/<slug>/PRD.md`.
+     - Patrick writes a 10–15 line Micro-PRD to `/.myemployee/features/<slug>/PRD.md`.
      - Sandy logs the ticket directly into `tasks/pending/`.
 
 5. **DO NOT Write Application Code**:

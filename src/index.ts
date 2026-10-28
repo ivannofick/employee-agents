@@ -13,18 +13,23 @@ import {
   getSkillCatalog,
   addRoleToWorkspace,
   removeRoleFromWorkspace,
+  hideWorkspaceFromIde,
+  showWorkspaceInIde,
+  resolveWorkspaceDir,
 } from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
 
 async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents: add-role'));
-    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const workspaceDir = await resolveWorkspaceDir(process.cwd());
+    const rolesDir = path.join(workspaceDir, 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
       : [];
 
     const available = [
+      'tech-analyst',
       'product-owner',
       'ui-ux',
       'tech-lead',
@@ -34,7 +39,7 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
     ].filter((r) => !existing.includes(r));
 
     if (available.length === 0) {
-      p.note('All 6 roles are already active in your squad.', 'Squad Full');
+      p.note('All 7 roles are already active in your squad.', 'Squad Full');
       p.outro(pc.green('All roles are active.'));
       return;
     }
@@ -67,7 +72,8 @@ async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
 async function handleRemoveRole(roleArg?: string, options?: { lang?: string }) {
   try {
     p.intro(pc.cyan('employee-agents: remove-role'));
-    const rolesDir = path.join(process.cwd(), 'myemployee', 'roles');
+    const workspaceDir = await resolveWorkspaceDir(process.cwd());
+    const rolesDir = path.join(workspaceDir, 'roles');
     const existing = (await fs.pathExists(rolesDir))
       ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
       : [];
@@ -115,6 +121,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
       const selected = await p.select({
         message: dict.skillAdder.selectRole,
         options: [
+          { value: 'tech-analyst', label: 'tech-analyst (Larry the Lobster)' },
           { value: 'product-owner', label: 'product-owner (Patrick)' },
           { value: 'ui-ux', label: 'ui-ux (Squidward)' },
           { value: 'tech-lead', label: 'tech-lead (Garry)' },
@@ -188,7 +195,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
 
     const filePath = await addSkillToRole(role, skillSlug, (description as string) || '');
     s.stop(pc.green(`✔ ${dict.skillAdder.success} ${role}!`));
-    p.note(`Created: ${filePath}\nUpdated: /myemployee/roles/${role}/role.md`, 'Skill Registered');
+    p.note(`Created: ${filePath}\nUpdated: /.myemployee/roles/${role}/role.md`, 'Skill Registered');
     p.outro(pc.green('Skill registered successfully.'));
   } catch (err: any) {
     p.cancel(pc.red(`Failed to add skill: ${err.message}`));
@@ -223,8 +230,9 @@ async function handleInit(options: { lang?: string }) {
     const dict = getDictionary(lang);
 
     // If an existing workspace is detected, offer to update or re-init
-    const existingMyEmployee = path.join(process.cwd(), 'myemployee');
-    if (await fs.pathExists(existingMyEmployee)) {
+    const hasWorkspace = (await fs.pathExists(path.join(process.cwd(), '.myemployee'))) ||
+                         (await fs.pathExists(path.join(process.cwd(), 'myemployee')));
+    if (hasWorkspace) {
       p.intro(pc.cyan(dict.banner.title));
       const choice = await p.select({
         message: dict.updater.detectedPrompt,
@@ -253,11 +261,12 @@ async function handleInit(options: { lang?: string }) {
     const answers = await runSetupWizard(lang);
 
     const s = p.spinner();
-    s.start('Scaffolding /myemployee workspace and adapter...');
+    s.start('Scaffolding /.myemployee workspace and adapter...');
 
     await generateWorkspace(answers);
 
     s.stop(pc.green(`✔ ${dict.wizard.successMessage}`));
+    p.note(dict.wizard.gitProtection, 'Git Protection');
     p.outro(pc.green(dict.wizard.nextSteps));
   } catch (err: any) {
     p.cancel(pc.red(`Initialization failed: ${err.message}`));
@@ -270,7 +279,7 @@ const program = new Command();
 program
   .name('employee-agents')
   .description('Virtual multi-role engineering squad adapting native spec-driven workflows')
-  .version('1.0.1')
+  .version('1.0.4')
   .addHelpCommand('help [command]', 'Display help for employee-agents commands')
   .option('-l, --lang <language>', 'Language for CLI wizard (en | id)', 'en')
   .action(async (options) => {
@@ -287,7 +296,7 @@ program
 
 program
   .command('update-me')
-  .description('Update roles, skills, and slash commands in an existing /myemployee workspace')
+  .description('Update roles, skills, and slash commands in an existing /.myemployee workspace')
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);
@@ -295,7 +304,7 @@ program
 
 program
   .command('update')
-  .description('Update roles, skills, and slash commands in an existing /myemployee workspace (alias for update-me)')
+  .description('Update roles, skills, and slash commands in an existing /.myemployee workspace (alias for update-me)')
   .option('-l, --lang <language>', 'Language for updater (en | id)', 'en')
   .action(async (options) => {
     await handleUpdate(options);
@@ -323,6 +332,58 @@ program
   .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
   .action(async (role, options) => {
     await handleRemoveRole(role, options);
+  });
+
+async function handleHide(options?: { lang?: string }) {
+  try {
+    p.intro(pc.cyan('employee-agents hide'));
+    const s = p.spinner();
+    s.start('Hiding /.myemployee from IDE sidebar...');
+    await hideWorkspaceFromIde(process.cwd());
+    s.stop(pc.green('✔ Folder /.myemployee and .vscode hidden from IDE sidebar.'));
+    p.note(
+      'Configured in .vscode/settings.json (files.exclude).\nYour AI squad continues to run actively in the background.\nTo restore view in sidebar, run: npx employee-agents show',
+      'Workspace Hidden'
+    );
+    p.outro(pc.green('Done.'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to hide workspace: ${err.message}`));
+    process.exit(1);
+  }
+}
+
+async function handleShow(options?: { lang?: string }) {
+  try {
+    p.intro(pc.cyan('employee-agents show'));
+    const s = p.spinner();
+    s.start('Restoring /.myemployee to IDE sidebar...');
+    await showWorkspaceInIde(process.cwd());
+    s.stop(pc.green('✔ Folder /.myemployee restored to IDE sidebar.'));
+    p.note(
+      'Removed exclusion from .vscode/settings.json (auto-cleaned if empty).\nFolder /.myemployee is now visible in the file explorer.',
+      'Workspace Visible'
+    );
+    p.outro(pc.green('Done.'));
+  } catch (err: any) {
+    p.cancel(pc.red(`Failed to restore workspace: ${err.message}`));
+    process.exit(1);
+  }
+}
+
+program
+  .command('hide')
+  .description('Hide /.myemployee workspace folder from IDE file explorer sidebar')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (options) => {
+    await handleHide(options);
+  });
+
+program
+  .command('show')
+  .description('Restore /.myemployee workspace folder to IDE file explorer sidebar')
+  .option('-l, --lang <language>', 'Language for prompt (en | id)', 'en')
+  .action(async (options) => {
+    await handleShow(options);
   });
 
 program.parse(process.argv);

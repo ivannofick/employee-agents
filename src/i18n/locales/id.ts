@@ -36,7 +36,8 @@ export const id: LocaleDictionary = {
       'developer': 'developer (Tn. Crab - Clean Code Execution)',
       'qa': 'qa (Stanley - Destructive Testing & Edge Cases)',
     },
-    successMessage: 'Berhasil menginisialisasi workspace /myemployee!',
+    successMessage: 'Berhasil menginisialisasi workspace /.myemployee!',
+    gitProtection: 'Menambahkan /.myemployee/ ke .gitignore (aman dari git push).\nMengonfigurasi ambient guardrail di AGENTS.md.',
     nextSteps: 'Workspace berhasil diinisialisasi. Buka sesi AI assistant Anda untuk memulai.',
   },
   updater: {
@@ -45,7 +46,7 @@ export const id: LocaleDictionary = {
     successMessage: 'Berhasil memperbarui roles, skills, dan slash commands!',
     safeNote: 'PRD.md, features/, tasks/, dan config.json kustom Anda tetap aman terjaga.',
     outro: 'Workspace berhasil diperbarui ke versi terbaru.',
-    detectedPrompt: 'Workspace /myemployee yang sudah ada terdeteksi. Apa yang ingin Anda lakukan?',
+    detectedPrompt: 'Workspace /.myemployee yang sudah ada terdeteksi. Apa yang ingin Anda lakukan?',
     optionUpdate: '1) Update roles, skills & slash commands (Aman, menjaga PRD dan task kustom Anda)',
     optionReinit: '2) Jalankan ulang setup wizard dari awal',
   },

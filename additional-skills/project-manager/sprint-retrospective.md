@@ -13,4 +13,4 @@
 ## Procedures
 - Step 1: Count completed tasks in `myemployee/tasks/done/` (with fallback to legacy subdirectories).
 - Step 2: Calculate ratio of planned work vs urgent bug interruptions.
-- Step 3: Publish retro notes to `/myemployee/RETRO-DDMMYYYY.md` and report to Bos.
+- Step 3: Publish retro notes to `/.myemployee/RETRO-DDMMYYYY.md` and report to Bos.

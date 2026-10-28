@@ -15,7 +15,7 @@ Monolithic multi-agent frameworks often suffer from severe **context bloat**—s
 
 ---
 
-## 📊 Estimated Token Footprint by Task & Phase
+## Estimated Token Footprint by Task & Phase
 
 The table below outlines the **estimated range** of tokens loaded into context depending on the action being performed:
 
@@ -30,7 +30,7 @@ The table below outlines the **estimated range** of tokens loaded into context d
 
 ---
 
-## ⚖️ Realistic Comparison: Monolithic Frameworks vs. employee-agents
+## Realistic Comparison: Monolithic Frameworks vs. employee-agents
 
 | Scenario | Monolithic Multi-Agent Setup | employee-agents (Gated & Modular) | Typical Context Savings |
 |---|---|---|---|
@@ -40,20 +40,20 @@ The table below outlines the **estimated range** of tokens loaded into context d
 
 ---
 
-## ⚡ Core Architectural Drivers of Token Efficiency
+## Core Architectural Drivers of Token Efficiency
 
 ### 1. Lazy Persona Invocation
 Personas are not all active simultaneously. The framework's turn-taking coordinator only activates the specific role needed for the current workflow phase. If you are asking Tn. Crab to style a button, Squidward, Garry, and Patrick consume **zero active context tokens**.
 
 ### 2. Kanban Subdirectory Isolation
 ```text
-myemployee/tasks/
-├── pending/       <-- AI reads only this backlog (~150 - 300 tokens per ticket)
-├── in-progress/   <-- AI reads ONLY the active ticket (~200 tokens)
-├── paused/        <-- Ignored during regular work
-└── done/          <-- Completely isolated; NEVER scanned during daily coding
+.myemployee/tasks/
+├── pending/ <-- AI reads only this backlog (~150 - 300 tokens per ticket)
+├── in-progress/ <-- AI reads ONLY the active ticket (~200 tokens)
+├── paused/ <-- Ignored during regular work
+└── done/ <-- Completely isolated; NEVER scanned during daily coding
 ```
 Whether your project has completed 5 tasks or 500 tasks, archived tickets in `tasks/done/` will **never pollute your active context window**.
 
 ### 3. Living Master PRD Summarization
-Instead of feeding 15 separate feature PRDs into the AI context (which can easily swallow 30,000+ tokens), `/myemployee/PRD.md` maintains a compact **Feature Index table** with 1–2 sentence summaries per feature. Full individual specs in `features/<slug>/` are only referenced when actively working on that specific feature.
+Instead of feeding 15 separate feature PRDs into the AI context (which can easily swallow 30,000+ tokens), `/.myemployee/PRD.md` maintains a compact **Feature Index table** with 1–2 sentence summaries per feature. Full individual specs in `features/<slug>/` are only referenced when actively working on that specific feature.

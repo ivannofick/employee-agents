@@ -35,6 +35,7 @@ export interface LocaleDictionary {
       'qa': string;
     };
     successMessage: string;
+    gitProtection: string;
     nextSteps: string;
   };
   updater: {
