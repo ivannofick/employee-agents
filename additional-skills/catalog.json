@@ -1,6 +1,44 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "skills": {
+    "shared": [
+      {
+        "slug": "test-web",
+        "name": "Web & API Automation Testing",
+        "description": "Token-efficient Playwright/Cypress web & API automation (with or without app repo) and clean test foldering.",
+        "sourceRole": "qa"
+      },
+      {
+        "slug": "test-mobile-apk",
+        "name": "Mobile Android (.apk) Automation",
+        "description": "Black-box/white-box Android APK testing via Maestro, Appium UiAutomator2, and filtered ADB hierarchy dumps.",
+        "sourceRole": "qa"
+      },
+      {
+        "slug": "test-mobile-ipa",
+        "name": "Mobile iOS (.ipa / Simulator) Automation",
+        "description": "Black-box/white-box iOS IPA & Xcode Simulator automation via Maestro, Appium XCUITest, and xcrun simctl.",
+        "sourceRole": "qa"
+      },
+      {
+        "slug": "test-desktop-windows",
+        "name": "Native Windows Desktop (.exe / .msi) Automation",
+        "description": "Native Windows desktop UI automation for Win32, WPF, WinForms, and WinUI apps via Pywinauto (UIA) and FlaUI.",
+        "sourceRole": "qa"
+      },
+      {
+        "slug": "test-desktop-mac",
+        "name": "Native macOS Desktop (.app / .dmg) Automation",
+        "description": "Native macOS desktop UI automation for SwiftUI, Cocoa, and AppKit bundles via Accessibility AXUIElement and Mac2Driver.",
+        "sourceRole": "qa"
+      },
+      {
+        "slug": "test-desktop-electron",
+        "name": "Electron Desktop App Automation",
+        "description": "Cross-platform Electron desktop automation (.app / .exe) via Playwright Electron (_electron.launch).",
+        "sourceRole": "qa"
+      }
+    ],
     "developer": [
       {
         "slug": "docker-containerization",
@@ -53,6 +91,36 @@
       }
     ],
     "qa": [
+      {
+        "slug": "test-web",
+        "name": "Web & API Automation Testing",
+        "description": "Token-efficient Playwright/Cypress web & API automation (with or without app repo) and clean test foldering."
+      },
+      {
+        "slug": "test-mobile-apk",
+        "name": "Mobile Android (.apk) Automation",
+        "description": "Black-box/white-box Android APK testing via Maestro, Appium UiAutomator2, and filtered ADB hierarchy dumps."
+      },
+      {
+        "slug": "test-mobile-ipa",
+        "name": "Mobile iOS (.ipa / Simulator) Automation",
+        "description": "Black-box/white-box iOS IPA & Xcode Simulator automation via Maestro, Appium XCUITest, and xcrun simctl."
+      },
+      {
+        "slug": "test-desktop-windows",
+        "name": "Native Windows Desktop (.exe / .msi) Automation",
+        "description": "Native Windows desktop UI automation for Win32, WPF, WinForms, and WinUI apps via Pywinauto (UIA) and FlaUI."
+      },
+      {
+        "slug": "test-desktop-mac",
+        "name": "Native macOS Desktop (.app / .dmg) Automation",
+        "description": "Native macOS desktop UI automation for SwiftUI, Cocoa, and AppKit bundles via Accessibility AXUIElement and Mac2Driver."
+      },
+      {
+        "slug": "test-desktop-electron",
+        "name": "Electron Desktop App Automation",
+        "description": "Cross-platform Electron desktop automation (.app / .exe) via Playwright Electron (_electron.launch)."
+      },
       {
         "slug": "load-stress-testing",
         "name": "Load & Stress Testing",

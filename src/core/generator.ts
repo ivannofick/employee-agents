@@ -1090,26 +1090,73 @@ export interface CatalogSkill {
   slug: string;
   name: string;
   description: string;
+  sourceRole?: string;
+}
+
+function getLocalAdditionalSkillsRoots(): string[] {
+  const roots: string[] = [];
+  const home = os.homedir();
+  const forceRemote =
+    process.env.EMPLOYEE_AGENTS_FORCE_REMOTE === 'true' ||
+    fs.existsSync(path.join(home, '.employee-agents', 'force-remote'));
+
+  if (!forceRemote) {
+    if (process.env.EMPLOYEE_AGENTS_DEV_ROOT) {
+      roots.push(path.join(process.env.EMPLOYEE_AGENTS_DEV_ROOT, 'additional-skills'));
+    }
+    try {
+      const devRootFile = path.join(home, '.employee-agents', 'dev-root');
+      if (fs.existsSync(devRootFile)) {
+        const devPath = fs.readFileSync(devRootFile, 'utf8').trim();
+        if (devPath) {
+          roots.push(path.join(devPath, 'additional-skills'));
+        }
+      }
+    } catch {}
+  }
+
+  roots.push(
+    path.resolve(process.cwd(), 'additional-skills'),
+    path.resolve(__dirname, '../../additional-skills'),
+    path.resolve(__dirname, '../additional-skills')
+  );
+  return roots;
+}
+
+function extractRoleAndSharedSkills(data: any, role?: string): CatalogSkill[] {
+  if (!data || !data.skills) return [];
+  const seen = new Set<string>();
+  const result: CatalogSkill[] = [];
+  const pushUnique = (items?: CatalogSkill[]) => {
+    if (!Array.isArray(items)) return;
+    for (const item of items) {
+      if (item && item.slug && !seen.has(item.slug)) {
+        seen.add(item.slug);
+        result.push(item);
+      }
+    }
+  };
+
+  if (role) {
+    pushUnique(data.skills[role]);
+    pushUnique(data.skills.shared);
+    return result;
+  }
+
+  Object.values(data.skills).forEach((list: any) => pushUnique(list));
+  return result;
 }
 
 export async function getSkillCatalog(role?: string): Promise<CatalogSkill[]> {
-  const possibleCatalogPaths = [
-    path.resolve(process.cwd(), 'additional-skills', 'catalog.json'),
-    path.resolve(__dirname, '../../additional-skills/catalog.json'),
-  ];
+  const roots = getLocalAdditionalSkillsRoots();
 
-  for (const catPath of possibleCatalogPaths) {
+  for (const root of roots) {
+    const catPath = path.join(root, 'catalog.json');
     if (await fs.pathExists(catPath)) {
       try {
         const data = await fs.readJson(catPath);
-        if (role && data.skills && data.skills[role]) {
-          return data.skills[role];
-        }
-        if (!role && data.skills) {
-          const all: CatalogSkill[] = [];
-          Object.values(data.skills).forEach((list: any) => all.push(...list));
-          return all;
-        }
+        const extracted = extractRoleAndSharedSkills(data, role);
+        if (extracted.length > 0) return extracted;
       } catch {}
     }
   }
@@ -1119,14 +1166,7 @@ export async function getSkillCatalog(role?: string): Promise<CatalogSkill[]> {
     const res = await fetch('https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/catalog.json');
     if (res.ok) {
       const data = (await res.json()) as any;
-      if (role && data.skills && data.skills[role]) {
-        return data.skills[role];
-      }
-      if (!role && data.skills) {
-        const all: CatalogSkill[] = [];
-        Object.values(data.skills).forEach((list: any) => all.push(...list));
-        return all;
-      }
+      return extractRoleAndSharedSkills(data, role);
     }
   } catch {}
 
@@ -1152,20 +1192,34 @@ export async function addSkillToRole(
   const skillFilePath = path.join(skillDir, `${cleanSlug}.md`);
 
   let skillContent = '';
+  const candidateFolders = Array.from(
+    new Set([role, 'qa', 'shared', 'developer', 'tech-lead', 'ui-ux', 'product-owner', 'project-manager', 'tech-analyst'])
+  );
 
-  const localAdditionalSkill = path.resolve(process.cwd(), 'additional-skills', role, `${cleanSlug}.md`);
-  if (await fs.pathExists(localAdditionalSkill)) {
-    skillContent = await fs.readFile(localAdditionalSkill, 'utf8');
+  // 1. Check local roots (dev-root, cwd, package dir) across candidate folders
+  for (const root of getLocalAdditionalSkillsRoots()) {
+    for (const folder of candidateFolders) {
+      const candidatePath = path.join(root, folder, `${cleanSlug}.md`);
+      if (await fs.pathExists(candidatePath)) {
+        skillContent = await fs.readFile(candidatePath, 'utf8');
+        break;
+      }
+    }
+    if (skillContent) break;
   }
 
+  // 2. Fallback: Fetch live markdown from GitHub across candidate folders (role first, then qa/shared)
   if (!skillContent) {
-    try {
-      const gitHubUrl = `https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/${role}/${cleanSlug}.md`;
-      const res = await fetch(gitHubUrl);
-      if (res.ok) {
-        skillContent = await res.text();
-      }
-    } catch {}
+    for (const folder of candidateFolders) {
+      try {
+        const gitHubUrl = `https://raw.githubusercontent.com/ivannofick/employee-agents/main/additional-skills/${folder}/${cleanSlug}.md`;
+        const res = await fetch(gitHubUrl);
+        if (res.ok) {
+          skillContent = await res.text();
+          break;
+        }
+      } catch {}
+    }
   }
 
   if (!skillContent) {

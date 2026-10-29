@@ -190,28 +190,51 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
 
     p.intro(pc.cyan(dict.skillAdder.title));
 
+    const workspaceDir = await resolveWorkspaceDir(process.cwd());
+    const rolesDir = path.join(workspaceDir, 'roles');
+    const installedRoles = (await fs.pathExists(rolesDir))
+      ? (await fs.readdir(rolesDir)).filter((r) => !r.startsWith('.'))
+      : [];
+
+    const allRoleLabels: Record<string, string> = {
+      'tech-analyst': 'tech-analyst (Larry the Lobster)',
+      'product-owner': 'product-owner (Patrick)',
+      'ui-ux': 'ui-ux (Squidward)',
+      'tech-lead': 'tech-lead (Garry)',
+      'project-manager': 'project-manager (Sandy Cheeks)',
+      'developer': 'developer (Tn. Crab)',
+      'qa': 'qa (Stanley)',
+    };
+
     let role = roleArg;
-    if (!role) {
-      const selected = await p.select({
-        message: dict.skillAdder.selectRole,
-        options: [
-          { value: 'tech-analyst', label: 'tech-analyst (Larry the Lobster)' },
-          { value: 'product-owner', label: 'product-owner (Patrick)' },
-          { value: 'ui-ux', label: 'ui-ux (Squidward)' },
-          { value: 'tech-lead', label: 'tech-lead (Garry)' },
-          { value: 'project-manager', label: 'project-manager (Sandy Cheeks)' },
-          { value: 'developer', label: 'developer (Tn. Crab)' },
-          { value: 'qa', label: 'qa (Stanley)' },
-        ],
-      });
-      if (p.isCancel(selected)) {
-        p.cancel('Cancelled.');
-        process.exit(0);
-      }
-      role = selected as string;
+    let skillSlug = skillArg;
+
+    // Support shorthand `employee-agents add-skill <skill-slug>` when only 1 role is installed
+    if (role && !skillSlug && installedRoles.length === 1 && !installedRoles.includes(role)) {
+      skillSlug = role;
+      role = installedRoles[0];
     }
 
-    let skillSlug = skillArg;
+    if (!role) {
+      if (installedRoles.length === 1) {
+        role = installedRoles[0];
+      } else {
+        const selectableRoles = installedRoles.length > 0 ? installedRoles : Object.keys(allRoleLabels);
+        const selected = await p.select({
+          message: dict.skillAdder.selectRole,
+          options: selectableRoles.map((r) => ({
+            value: r,
+            label: allRoleLabels[r] || r,
+          })),
+        });
+        if (p.isCancel(selected)) {
+          p.cancel('Cancelled.');
+          process.exit(0);
+        }
+        role = selected as string;
+      }
+    }
+
     let description = '';
 
     if (!skillSlug) {

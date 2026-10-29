@@ -36,10 +36,29 @@ To keep your workspace ultra-lean and context windows optimized, these skills ar
 
 ---
 
+## Cross-Role Automation Testing Skills (Available to Any Active Role: `qa`, `developer`, `tech-lead`, etc.)
+
+| Skill Slug | Name | Description |
+|---|---|---|
+| **`test-web`** | Web & API Automation Testing | Token-efficient Playwright/Cypress web & API automation (with or without app repo) and clean test foldering. |
+| **`test-mobile-apk`** | Mobile Android (`.apk`) Automation | Black-box/white-box Android APK testing via Maestro, Appium UiAutomator2, and filtered ADB hierarchy dumps. |
+| **`test-mobile-ipa`** | Mobile iOS (`.ipa` / Simulator) Automation | Black-box/white-box iOS IPA & Xcode Simulator automation via Maestro, Appium XCUITest, and `xcrun simctl`. |
+| **`test-desktop-windows`** | Native Windows Desktop (`.exe` / `.msi`) Automation | Native Windows desktop UI automation for Win32, WPF, WinForms, and WinUI apps via Pywinauto (UIA) and FlaUI. |
+| **`test-desktop-mac`** | Native macOS Desktop (`.app` / `.dmg`) Automation | Native macOS desktop UI automation for SwiftUI, Cocoa, and AppKit bundles via Accessibility AXUIElement and Mac2Driver. |
+| **`test-desktop-electron`** | Electron Desktop App Automation | Cross-platform Electron desktop automation (`.app` / `.exe`) via Playwright Electron (`_electron.launch`). |
+
+---
+
 ## QA Engineer (`qa` - Stanley)
 
 | Skill Slug | Name | Description |
 |---|---|---|
+| **`test-web`** | Web & API Automation Testing | Token-efficient Playwright/Cypress web & API automation (with or without app repo) and clean test foldering. |
+| **`test-mobile-apk`** | Mobile Android (`.apk`) Automation | Black-box/white-box Android APK testing via Maestro, Appium UiAutomator2, and filtered ADB hierarchy dumps. |
+| **`test-mobile-ipa`** | Mobile iOS (`.ipa` / Simulator) Automation | Black-box/white-box iOS IPA & Xcode Simulator automation via Maestro, Appium XCUITest, and `xcrun simctl`. |
+| **`test-desktop-windows`** | Native Windows Desktop (`.exe` / `.msi`) Automation | Native Windows desktop UI automation for Win32, WPF, WinForms, and WinUI apps via Pywinauto (UIA) and FlaUI. |
+| **`test-desktop-mac`** | Native macOS Desktop (`.app` / `.dmg`) Automation | Native macOS desktop UI automation for SwiftUI, Cocoa, and AppKit bundles via Accessibility AXUIElement and Mac2Driver. |
+| **`test-desktop-electron`** | Electron Desktop App Automation | Cross-platform Electron desktop automation (`.app` / `.exe`) via Playwright Electron (`_electron.launch`). |
 | **`load-stress-testing`** | Load & Stress Testing | Concurrency benchmarking, rate limit threshold checks, and failure recovery. |
 | **`e2e-playwright`** | E2E Playwright Automation | Headless browser end-to-end integration tests for critical user journeys. |
 
