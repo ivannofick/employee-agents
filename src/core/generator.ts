@@ -815,17 +815,6 @@ export async function ensureGlobalCliShim(): Promise<boolean> {
     const home = os.homedir();
     if (!home) return false;
 
-    if (process.platform === 'win32') {
-      const appDataNpm = process.env.APPDATA ? path.join(process.env.APPDATA, 'npm') : '';
-      if (appDataNpm && (await fs.pathExists(appDataNpm))) {
-        const cmdPath = path.join(appDataNpm, 'employee-agents.cmd');
-        if (!(await fs.pathExists(cmdPath))) {
-          await fs.writeFile(cmdPath, '@echo off\r\nnpx --yes employee-agents@latest %*\r\n', 'utf8');
-        }
-      }
-      return true;
-    }
-
     const posixShim = `#!/usr/bin/env sh
 # employee-agents auto-registered global CLI launcher
 if [ -f "$HOME/.employee-agents/dev-root" ] && [ ! -f "$HOME/.employee-agents/force-remote" ]; then
@@ -837,6 +826,39 @@ fi
 exec npx --yes employee-agents@latest "$@"
 `;
 
+    if (process.platform === 'win32') {
+      const cmdShim = `@echo off\r\nsetlocal\r\nif exist "%USERPROFILE%\\.employee-agents\\dev-root" (\r\n  if not exist "%USERPROFILE%\\.employee-agents\\force-remote" (\r\n    set /p DEV_ROOT=<"%USERPROFILE%\\.employee-agents\\dev-root"\r\n    if exist "%DEV_ROOT%\\dist\\index.js" (\r\n      node "%DEV_ROOT%\\dist\\index.js" %*\r\n      exit /b %ERRORLEVEL%\r\n    )\r\n  )\r\n)\r\ncall npx --yes employee-agents@latest %*\r\n`;
+
+      const winDirs = new Set<string>();
+      if (process.env.APPDATA) {
+        winDirs.add(path.join(process.env.APPDATA, 'npm'));
+      }
+      if (process.env.LOCALAPPDATA) {
+        winDirs.add(path.join(process.env.LOCALAPPDATA, 'Microsoft', 'WindowsApps'));
+      }
+      try {
+        const { execSync } = await import('node:child_process');
+        const npmPrefix = execSync('npm prefix -g', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+        if (npmPrefix) {
+          winDirs.add(npmPrefix);
+        }
+      } catch {}
+
+      for (const dir of winDirs) {
+        try {
+          await fs.ensureDir(dir);
+          // 1. .cmd launcher for Windows CMD & PowerShell
+          const cmdPath = path.join(dir, 'employee-agents.cmd');
+          await fs.writeFile(cmdPath, cmdShim, 'utf8');
+          // 2. Extensionless sh launcher for Git Bash / MSYS2 / Mingw64 on Windows
+          const shPath = path.join(dir, 'employee-agents');
+          await fs.writeFile(shPath, posixShim, { encoding: 'utf8', mode: 0o755 });
+        } catch {}
+      }
+      return true;
+    }
+
+    // macOS / Linux:
     // 1. Always install in ~/.local/bin/employee-agents (survives NVM node switches)
     const localBinDir = path.join(home, '.local', 'bin');
     await fs.ensureDir(localBinDir);
