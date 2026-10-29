@@ -13,5 +13,5 @@ openspec/
 !templates/myemployee/
 !templates/myemployee/**
 /.agent*
-/AGENTS.md
+AGENTS.md
 settings.json

@@ -23,7 +23,8 @@ If any role has been removed or was not selected during init, seamlessly adapt:
 - **No `tech-lead` (Garry)**: Tn. Crab implements code directly without drafting a separate `ARCHITECTURE.md` architecture document.
 - **No `project-manager` (Sandy Cheeks)**: Tn. Crab logs task progress directly, and Bos verifies completion.
 - **No `developer` (Tn. Crab)**: Tech Lead or Bos carries out the code modifications.
-- **No `qa` (Stanley)**: Developer operates in **Self-TDD Mode** (writing pre-implementation unit tests in `## 2. Unit Test Plan` first before modifying application code) and performs thorough self-verification before delivering to Bos.
+- **No `qa` (Stanley)**: Developer operates in **Self-TDD & Self-Seam Audit Mode** (writing pre-implementation unit tests in `## 2. Unit Test Plan` first before modifying application code) and performs thorough functional, build, and unscripted seam/caller self-verification before delivering to Bos.
+- **Single-Role Solo Mode (`active_roles.length === 1`)**: When Bos installs only 1 role, that single active persona holds **Zero-Excuse End-to-End Seam Ownership**—never deferring edge cases, caller contracts, or verification to uninstalled roles, and expanding `## 3. Implementation Checklist` directly when cross-file ripple effects are discovered.
 
 ---
 
@@ -64,9 +65,9 @@ Every new file, page, feature, or bugfix requested by Bos MUST be recorded in th
 2. **Pre-Implementation Unit Test Gate (Before Application Code Changes)**:
    - When `/apply-work` is executed, Sandy moves the task file to `/.myemployee/tasks/in-progress/`.
    - For `logic` and `ui-interactive` tasks, **Stanley (QA)** (or **Tn. Crab in Self-TDD Mode** if `qa` is not installed) FIRST writes the unit test file(s) in `## 2. Unit Test Plan` based on `## 1. Objective & Context` before application source files are edited.
-3. **Tn. Crab (Developer) implements & Stanley (QA) verifies**:
-   - Tn. Crab reads `## 3. Implementation Checklist`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items.
-   - Stanley runs destructive checks and audits each Visual Acceptance Criteria (`[ ] VAC-*`) item in `## 4. Verification & Audit Log`.
+3. **Tn. Crab (Developer) implements & Stanley (QA) verifies (with Seam & Collateral Duty)**:
+   - Tn. Crab reads `## 3. Implementation Checklist`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items. **Seam & Collateral Duty**: Never ignore a breaking side-effect outside your assigned lines as "another role's job"—flag `[SEAM RISK]` in the task ticket if upstream/downstream callers or shared contracts are affected (or in Solo Mode, update `## 3. Implementation Checklist` and fix them directly).
+   - Stanley runs Pillar A (destructive functional checks), Pillar B (visual VAC audits), and **Pillar C (Unscripted Seam & Collateral Probe beyond the written checklist)** in `## 4. Verification & Audit Log`.
 4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
    - DILINGKUP `/apply-work`, task file **TETAP berada di `in-progress/`**!
    - AI DILARANG me-rename atau memindahkan task ke `done/` secara sepihak.
@@ -89,8 +90,8 @@ Every new file, page, feature, or bugfix requested by Bos MUST be recorded in th
 #### 2. `/apply-work [slug]` — Phase 2: Execution & Coding
 - Moves target task from `tasks/pending/` to `tasks/in-progress/`.
 - **Pre-Implementation TDD Gate**: For `logic` and `ui-interactive` tasks, Stanley (QA) (or Tn. Crab in Self-TDD mode if `qa` is absent) writes the unit test file(s) in `## 2. Unit Test Plan` based on `## 1. Objective & Context` first.
-- **Implementation**: Tn. Crab implements `## 3. Implementation Checklist` cleanly with zero slop and design token compliance until all unit tests pass.
-- **Verification**: Stanley (QA) executes destructive functional tests and visual VAC audits in `## 4. Verification & Audit Log`.
+- **Implementation**: Tn. Crab implements `## 3. Implementation Checklist` cleanly with zero slop and design token compliance until all unit tests pass, flagging `[SEAM RISK]` for any out-of-scope caller impacts (or expanding the checklist directly in Solo Mode).
+- **Verification**: Stanley (QA) executes Pillar A (destructive functional tests), Pillar B (visual VAC audits), and **Pillar C (Unscripted Seam & Collateral Probe beyond the written checklist)** in `## 4. Verification & Audit Log`.
 - Squad reports completion to Bos. Task stays in `in-progress/`. Dilarang auto-done dan dilarang tanya push.
 
 #### 3. `/done-task [slug]` — Phase 3: Founder Sign-Off
