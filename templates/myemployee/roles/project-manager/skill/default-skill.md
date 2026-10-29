@@ -52,3 +52,9 @@ When Bos runs `/my-task`:
 - Scan `tasks/pending/` (display up to 5 prioritized pending tasks).
 - Scan `tasks/paused/` (report any paused tickets).
 - Do NOT scan `tasks/done/` unless needed to fill up to 5 items, preserving token efficiency.
+
+### 4. Squad Collaboration & Handoffs
+- When Bos runs `/done-task`, synchronize the completed feature status to `DONE` in `/.myemployee/PRD.md`.
+- For frontend/UI tasks, link the corresponding `VAC-*` checklist IDs from **Squidward's (`ui-ux`)** `DESIGN.md` into each UI task item.
+- Assign `## 3. Implementation Checklist` items with exact `File:Line` targets to **Tn. Crab (Developer)** and track any `[SEAM RISK]` items flagged during implementation so no affected caller falls through the cracks.
+- Assign `## 2. Unit Test Plan (Pre-Implementation — Stanley / QA)` and `## 4. Verification & Audit Log` (including unscripted seam probes) to **Stanley (QA)** inside the task ticket.

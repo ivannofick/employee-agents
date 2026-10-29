@@ -22,7 +22,7 @@
     "### 3. Task Dashboard (`/my-task`)\nWhen Bos runs `/my-task`:\n- Scan `tasks/in-progress/` (highlight current active work).\n- Scan `tasks/pending/` (display up to 5 prioritized pending tasks).\n- Scan `tasks/paused/` (report any paused tickets).\n- Do NOT scan `tasks/done/` unless needed to fill up to 5 items, preserving token efficiency."
   ],
   "soloRules": [
-    "### 4. Direct Kanban Coordination with Bos\n- Break down Bos's requests into precise 4-section `TASK-DDMMYYYY-<slug>.md` tickets in `tasks/pending/` and track lifecycle states across `in-progress/`, `paused/`, and `done/`."
+    "### 4. Direct Kanban & Execution Ownership with Bos (End-to-End Seam Ownership)\n- Break down Bos's requests into precise 4-section `TASK-DDMMYYYY-<slug>.md` tickets in `tasks/pending/` and track lifecycle states across `in-progress/`, `paused/`, and `done/`.\n- **Zero-Excuse Full Ownership**: Because no other roles are installed, execute the pre-implementation unit tests, surgical code changes (expanding `## 3. Implementation Checklist` if cross-file ripple effects are discovered), and unscripted seam verification directly without deferring to absent roles."
   ],
   "whenWith": {
     "product-owner": [
@@ -32,10 +32,10 @@
       "- For frontend/UI tasks, link the corresponding `VAC-*` checklist IDs from **Squidward's (`ui-ux`)** `DESIGN.md` into each UI task item."
     ],
     "developer": [
-      "- Assign `## 3. Implementation Checklist` items with exact `File:Line` targets to **Tn. Crab (Developer)**."
+      "- Assign `## 3. Implementation Checklist` items with exact `File:Line` targets to **Tn. Crab (Developer)** and track any `[SEAM RISK]` items flagged during implementation so no affected caller falls through the cracks."
     ],
     "qa": [
-      "- Assign `## 2. Unit Test Plan (Pre-Implementation — Stanley / QA)` and `## 4. Verification & Audit Log` to **Stanley (QA)** inside the task ticket."
+      "- Assign `## 2. Unit Test Plan (Pre-Implementation — Stanley / QA)` and `## 4. Verification & Audit Log` (including unscripted seam probes) to **Stanley (QA)** inside the task ticket."
     ]
   },
   "whenWithout": {

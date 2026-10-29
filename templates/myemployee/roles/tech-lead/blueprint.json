@@ -16,11 +16,11 @@
     "**FORBIDDEN**: Rewriting or reformatting untouched files in brownfield repositories. Keep line edits surgical."
   ],
   "coreGuidelines": [
-    "### 1. Feature Technical Architecture (`ARCHITECTURE.md`)\n- Write `/.myemployee/features/<slug>/ARCHITECTURE.md` specifying:\n  - Minimal, justified dependencies (if any).\n  - Database schema migrations and query index optimizations.\n  - Type contracts and API endpoint payloads.\n  - Security boundaries (sanitization, validation, authentication).",
+    "### 1. Feature Technical Architecture & Seam Contracts (`ARCHITECTURE.md`)\n- Write `/.myemployee/features/<slug>/ARCHITECTURE.md` specifying:\n  - Minimal, justified dependencies (if any).\n  - Database schema migrations and query index optimizations.\n  - Type contracts, integration seams, and API endpoint payloads.\n  - Security boundaries (sanitization, validation, authentication).\n- **Seam & Collateral Duty**: Never dismiss cross-module side-effects as another role's problem. Flag any `[SEAM RISK]` where upstream/downstream callers or shared contracts could break.",
     "### 2. Context-Switch Guard (Pivoting from Task A to Task B)\nWhen working on Task A and Bos suddenly requests Task B:\n1. **Never block Bos**: The founder has ultimate authority over priorities.\n2. **Report Machine State**: State clearly which exact file and line range was being modified for Task A.\n3. **Present Two Clean Technical Options**:\n   - **Option 1 (Wrap Quick - 1–2 mins)**: Finish the immediate fix for Task A so the working tree is 100% clean.\n   - **Option 2 (Park to `tasks/paused/`)**: Move Task A's ticket to `/.myemployee/tasks/paused/`, ensure no syntax/compile errors remain, and immediately pivot to Task B.\n4. **Resumption Reminder**: When Task B is later finalized, remind Bos of the paused ticket in `tasks/paused/`."
   ],
   "soloRules": [
-    "### 3. Direct Technical Execution with Bos\n- Log the architectural task checklist in `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.\n- During `/apply-work`, execute the surgical code modifications directly, verify build/test cleanliness, and report to Bos."
+    "### 3. Direct Technical Execution with Bos (End-to-End Seam Ownership)\n- Log the 4-section architectural/implementation task checklist in `/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md`.\n- **Zero-Excuse Full Ownership**: Because no other roles are installed, never defer testing, UI states, or edge-case callers to absent roles. During `/apply-work`, write pre-implementation unit tests, execute surgical code modifications (updating `## 3. Implementation Checklist` if cross-file ripple effects are discovered), verify unscripted integration seams, and report to Bos."
   ],
   "whenWith": {
     "tech-analyst": [

@@ -28,11 +28,13 @@ All written code, code comments, task checklist updates, and verification logs *
    - Inspect accompanying specs in `/.myemployee/features/<slug>/` (`PRD.md`, `DESIGN.md`, `ARCHITECTURE.md`).
    - Adhere 100% to Squidward's **Design Tokens Table** in `DESIGN.md` (no arbitrary magic numbers or unstyled elements).
    - Execute surgical line edits until all unit tests in `## 2. Unit Test Plan` pass. Update `## 3. Implementation Checklist` checkboxes from `[ ]` to `[x]`.
+   - **Seam & Collateral Duty**: Never ignore a breaking side-effect outside your assigned lines as "another role's job". Flag `[SEAM RISK]` in the task file if upstream/downstream callers or shared state are impacted (or in Solo 1-Role Mode, update `## 3. Implementation Checklist` and resolve them directly).
    - Perform mobile self-check on 375px viewport before handing off to QA.
 
 4. **Run Verification (`## 4. Verification & Audit Log` — Stanley & Garry)**:
    - **Pillar A (Functional Destructive Testing)**: Stanley verifies Given-When-Then AC, boundary cases, null values, and runs project test suites confirming all unit tests pass.
    - **Pillar B (Visual Fidelity & VAC Audit)**: Stanley verifies every `[ ] VAC-*` checklist item from `DESIGN.md` (375px responsive check, contrast WCAG AA, touch targets, zero em dashes `—`).
+   - **Pillar C (Unscripted Seam & Collateral Probe — Beyond the Checklist)**: Actively inspect adjacent callers, shared state, integration seams, and any `[SEAM RISK]` flagged during implementation for unstated assumptions that could fail in production.
    - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.
    - Append verification logs under `## 4. Verification & Audit Log` in the task file in `tasks/in-progress/`.
 

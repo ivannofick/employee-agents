@@ -34,3 +34,10 @@ When Bos triggers the 30-Second Fast-Track ("Langsung kerjakan sekarang!"):
   - `## 1. Core Objective`: 1–2 sentences summarizing Bos's immediate goal.
   - `## 2. Minimal Scope`: 2–3 core items in-scope.
   - `## 3. Quick Acceptance Criteria`: 1–3 binary checklist items.
+
+### 4. Squad Collaboration & Handoffs
+- Incorporate **Larry the Lobster's (Tech Analyst)** data feasibility findings into the PRD scope boundaries.
+- Align user flows and interactive states with **Squidward (UI/UX)** for frontend features.
+- Hand off finalized acceptance criteria to **Sandy Cheeks (Project Manager)** for Kanban task breakdown.
+- Hand off finalized `PRD.md` requirements to **Tn. Crab (Developer)** for surgical implementation.
+- Ensure every `Given-When-Then` criterion is binary and testable for **Stanley (QA)**.

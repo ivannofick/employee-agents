@@ -5,6 +5,9 @@ import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import fs from 'fs-extra';
 import path from 'node:path';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { runSetupWizard } from './cli/prompts.js';
 import {
   generateWorkspace,
@@ -18,6 +21,77 @@ import {
   resolveWorkspaceDir,
 } from './core/generator.js';
 import { getDictionary } from './i18n/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function getCurrentCliVersion(): string {
+  try {
+    const pkgPath = path.resolve(__dirname, '../package.json');
+    if (fs.existsSync(pkgPath)) {
+      const pkg = fs.readJsonSync(pkgPath);
+      if (pkg && typeof pkg.version === 'string') return pkg.version;
+    }
+  } catch {}
+  return '1.0.4';
+}
+
+function isNewerSemver(current: string, remote: string): boolean {
+  const c = current.replace(/^v/, '').split('.').map(Number);
+  const r = remote.replace(/^v/, '').split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const cv = c[i] || 0;
+    const rv = r[i] || 0;
+    if (rv > cv) return true;
+    if (rv < cv) return false;
+  }
+  return false;
+}
+
+async function maybeHandoffToLatestCli(lang?: string): Promise<boolean> {
+  try {
+    if (process.env.EMPLOYEE_AGENTS_SKIP_SELF_UPDATE === '1' || process.env.EMPLOYEE_AGENTS_DEV_ROOT) {
+      return false;
+    }
+    const home = os.homedir();
+    const devRootFile = path.join(home, '.employee-agents', 'dev-root');
+    const forceRemoteFile = path.join(home, '.employee-agents', 'force-remote');
+    if (fs.existsSync(devRootFile) && !fs.existsSync(forceRemoteFile)) {
+      return false;
+    }
+    if (fs.existsSync(path.join(process.cwd(), 'templates', 'myemployee'))) {
+      return false;
+    }
+
+    const currentVersion = getCurrentCliVersion();
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 1500);
+    const res = await fetch('https://registry.npmjs.org/employee-agents/latest', {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) return false;
+    const data = (await res.json()) as { version?: string };
+    if (!data?.version || !isNewerSemver(currentVersion, data.version)) {
+      return false;
+    }
+
+    const args = ['--yes', `employee-agents@${data.version}`, 'update'];
+    if (lang) {
+      args.push('--lang', lang);
+    }
+    const child = spawnSync('npx', args, {
+      stdio: 'inherit',
+      shell: process.platform === 'win32',
+      env: { ...process.env, EMPLOYEE_AGENTS_SKIP_SELF_UPDATE: '1' },
+    });
+    if (child.status === 0) {
+      process.exit(0);
+    }
+  } catch {}
+  return false;
+}
 
 async function handleAddRole(roleArg?: string, options?: { lang?: string }) {
   try {
@@ -206,6 +280,7 @@ async function handleAddSkill(roleArg?: string, skillArg?: string, options?: { l
 async function handleUpdate(options?: { lang?: string }) {
   try {
     const lang = options?.lang || 'en';
+    await maybeHandoffToLatestCli(lang);
     const dict = getDictionary(lang);
 
     p.intro(pc.cyan(dict.updater.title));
@@ -248,6 +323,7 @@ async function handleInit(options: { lang?: string }) {
       }
 
       if (choice === 'update') {
+        await maybeHandoffToLatestCli(lang);
         const s = p.spinner();
         s.start(dict.updater.starting);
         await updateWorkspace(process.cwd());

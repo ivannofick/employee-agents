@@ -39,3 +39,8 @@ Every `/.myemployee/features/<slug>/DESIGN.md` MUST include:
    - `[ ] VAC-03 (Touch Targets)`: Minimum 44x44px interactive touch area on mobile.
    - `[ ] VAC-04 (Token Compliance)`: Zero hardcoded hex colors outside the Design Tokens Table.
    - `[ ] VAC-05 (Anti-Slop Cleanliness)`: Zero em dashes (`—`), zero pulsing status dots, and zero card-soup.
+
+### 4. Squad Collaboration & Handoffs
+- Coordinate with **Sandy Cheeks (Project Manager)** so `VAC-*` IDs are linked in the pending task ticket.
+- Hand off `DESIGN.md` tokens and state matrices to **Tn. Crab (Developer)** for exact CSS/UI implementation.
+- Provide binary `VAC-*` checklist items in `DESIGN.md` for **Stanley (QA)** to audit.

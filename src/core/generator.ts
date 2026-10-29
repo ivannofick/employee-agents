@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { resolveAssetRoots } from './downloader.js';
 import type { SetupAnswers } from '../cli/prompts.js';
@@ -276,6 +277,11 @@ export function renderAgentSkill(activeRoles: string[], blueprint?: SquadBluepri
   );
   shareKnowledgeBullets.push(`- **Zero application code is written in this phase.**`);
 
+  const isSolo = sortedActive.length === 1;
+  const seamImplementationNote = isSolo
+    ? `**Solo End-to-End Seam Ownership**: Never defer edge cases or ripple effects to uninstalled roles; if an edit exposes broken callers or shared state outside the initial lines, update \`## 3. Implementation Checklist\` in the active task ticket and resolve them directly.`
+    : `**Seam & Collateral Duty**: Never ignore a breaking side-effect outside your assigned lines as "another role's job"—if an edit impacts upstream/downstream callers, contracts, or shared state outside the ticket scope, flag \`[SEAM RISK]\` in the task ticket and escalate to the squad/Bos.`;
+
   // Build /apply-work bullets dynamically
   const applyWorkBullets: string[] = [
     `- Moves target task from \`tasks/pending/\` to \`tasks/in-progress/\`.`,
@@ -283,14 +289,14 @@ export function renderAgentSkill(activeRoles: string[], blueprint?: SquadBluepri
   if (hasQA) {
     applyWorkBullets.push(
       `- **Pre-Implementation Unit Test Gate (Stanley — QA Engineer)**: For \`logic\` and \`ui-interactive\` tasks, **Stanley** writes the unit test file(s) in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` BEFORE implementation code is edited (\`style-only\` and \`docs-config\` tasks bypass unit test creation as \`N/A\`).`,
-      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass.`,
-      `- **Verification (Stanley — QA Engineer)**: Executes destructive functional tests (and visual audits if the task touches Frontend/UI) and records results in \`## 4. Verification & Audit Log\`.`
+      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass. ${seamImplementationNote}`,
+      `- **Verification (Stanley — QA Engineer)**: Executes Pillar A (destructive functional tests), Pillar B (visual audits if Frontend/UI), and **Pillar C (Unscripted Seam & Collateral Probe beyond the checklist)**, recording results in \`## 4. Verification & Audit Log\`.`
     );
   } else {
     applyWorkBullets.push(
       `- **Pre-Implementation Self-TDD Gate (${implementer.persona} — ${implementer.shortTitle})**: For \`logic\` and \`ui-interactive\` tasks, **${implementer.persona}** writes the unit test file(s) in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` BEFORE editing application source files (\`style-only\` and \`docs-config\` tasks bypass unit test creation as \`N/A\`).`,
-      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass.`,
-      `- **Self-Verification (${implementer.persona} — ${implementer.shortTitle})**: Performs functional and build self-verification and records results in \`## 4. Verification & Audit Log\`.`
+      `- **Implementation (${implementer.persona} — ${implementer.shortTitle})**: Implements surgical code changes in \`## 3. Implementation Checklist\` cleanly with zero slop until all unit tests pass. ${seamImplementationNote}`,
+      `- **Self-Verification & Unscripted Seam Probe (${implementer.persona} — ${implementer.shortTitle})**: Performs functional, build, and **Pillar C (Unscripted Seam & Collateral Probe across adjacent callers and unstated assumptions)** self-verification, recording results in \`## 4. Verification & Audit Log\`.`
     );
   }
   applyWorkBullets.push(
@@ -361,9 +367,9 @@ Every new file, page, feature, or bugfix requested by Bos MUST be recorded in th
 2. **Pre-Implementation Unit Test Gate (Before Application Code Changes)**:
    - When \`/apply-work\` is executed, move the task file to \`/.myemployee/tasks/in-progress/\`.
    - ${hasQA ? `For \`logic\` and \`ui-interactive\` tasks, **Stanley (QA Engineer)** FIRST writes the unit test file(s) defined in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` before application source code is modified.` : `For \`logic\` and \`ui-interactive\` tasks, **${implementer.persona} (${implementer.shortTitle})** operates in **Self-TDD Mode** and FIRST writes the unit test file(s) defined in \`## 2. Unit Test Plan\` based on \`## 1. Objective & Context\` before editing application source code.`}
-3. **Surgical Implementation & Verification Gate**:
-   - **${implementer.persona} (${implementer.shortTitle})** reads \`## 3. Implementation Checklist\`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items.
-   - ${hasQA ? '**Stanley (QA Engineer)** runs destructive functional checks (and visual checks for UI tasks) and appends verification logs to `## 4. Verification & Audit Log`.' : `**${implementer.persona} (${implementer.shortTitle})** runs self-verification checks and logs verification results in \`## 4. Verification & Audit Log\`.`}
+3. **Surgical Implementation, Seam Ownership & Verification Gate**:
+   - **${implementer.persona} (${implementer.shortTitle})** reads \`## 3. Implementation Checklist\`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items. ${seamImplementationNote}
+   - ${hasQA ? '**Stanley (QA Engineer)** runs Pillar A (destructive functional checks), Pillar B (visual checks for UI tasks), and **Pillar C (Unscripted Seam & Collateral Probe beyond the written checklist)**, appending verification logs to `## 4. Verification & Audit Log`.' : `**${implementer.persona} (${implementer.shortTitle})** runs self-verification checks—including **Pillar C (Unscripted Seam & Collateral Probe across adjacent callers and unstated assumptions)**—and logs verification results in \`## 4. Verification & Audit Log\`.`}
 4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
    - Di lingkup \`/apply-work\`, task file **TETAP berada di \`in-progress/\`**!
    - AI DILARANG me-rename atau memindahkan task ke \`done/\` secara sepihak.
@@ -523,14 +529,21 @@ ${specSection}
    - **If \`Task Type\` is \`logic\` or \`ui-interactive\`**: **${implementer.persona}** writes the unit test file(s) asserting the expected behavior from \`Objective & Context\` BEFORE modifying any application source code, and updates \`## 2. Unit Test Plan\` checkboxes from \`[ ]\` to \`[x]\`.
    - **If \`Task Type\` is \`style-only\` or \`docs-config\`**: Confirm \`## 2. Unit Test Plan\` is marked \`N/A (Bypassed)\` and proceed directly to Step 3.`;
 
+  const isSolo = sortedActive.length === 1;
+  const applySeamRuleLine = isSolo
+    ? `   - **Solo End-to-End Seam Ownership**: Never excuse skipped checks on uninstalled roles. If your edit reveals broken upstream/downstream callers or shared state outside the initial lines, update \`## 3. Implementation Checklist\` in the active task file and fix them directly.\n`
+    : `   - **Seam & Collateral Duty**: Never silently ignore a breaking side-effect outside your assigned lines as "another role's job". If an edit impacts upstream/downstream callers, type contracts, or shared state outside the ticket scope, log \`[SEAM RISK]\` in the task file and coordinate with the squad/Bos.\n`;
+
   const applyVerificationSection = hasQA
     ? `4. **Run Verification & Audit Log (Stanley${hasLead ? ' & Garry' : ''})**:
    - **Pillar A (Functional Destructive Testing)**: Stanley verifies functional behavior, boundary cases, null values, and runs project test/build suites confirming all unit tests pass.
    - **Pillar B (Visual Fidelity Audit — Frontend/UI Tasks Only)**: Skip if the task is strictly Backend/API/CLI. If the task touches Frontend/UI, Stanley verifies 375px mobile responsiveness, WCAG AA contrast, touch targets (\`>= 44x44px\`), and zero em dashes (\`—\`).
+   - **Pillar C (Unscripted Seam & Collateral Probe — Beyond the Checklist)**: Do not stop at written checklist items. Actively inspect adjacent callers, shared state, integration seams, and any \`[SEAM RISK]\` flagged during implementation for unstated assumptions that could fail in production.
 ${hasLead ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs under \`## 4. Verification & Audit Log\` in the task file in \`tasks/in-progress/\`.`
-    : `4. **Run Self-Verification (${implementer.persona}${hasLead && implementer.id !== 'tech-lead' ? ' & Garry' : ''})**:
-   - Verify functional correctness, edge cases, and run project build/test suites confirming all unit tests pass.
-   - If the task touches Frontend/UI files, verify clean rendering at the 375px mobile viewport.
+    : `4. **Run Self-Verification & Unscripted Seam Probe (${implementer.persona}${hasLead && implementer.id !== 'tech-lead' ? ' & Garry' : ''})**:
+   - **Pillar A (Functional & Build Verification)**: Verify functional correctness, edge cases, and run project build/test suites confirming all unit tests pass.
+   - **Pillar B (Visual Check — Frontend/UI Tasks Only)**: If the task touches Frontend/UI files, verify clean rendering at the 375px mobile viewport.
+   - **Pillar C (Unscripted Seam & Collateral Probe — Beyond the Checklist)**: Do not stop at written checklist items. Actively inspect upstream/downstream callers, shared state, integration seams, and unstated assumptions outside the checklist that could break.
 ${hasLead && implementer.id !== 'tech-lead' ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs under \`## 4. Verification & Audit Log\` in the task file in \`tasks/in-progress/\`.`;
 
   const applyWorkMd = `---
@@ -555,7 +568,7 @@ ${applyPreTestSection}
 
 3. **Execute Implementation (${implementer.persona})**:
    - Read target files and exact line ranges under \`## 3. Implementation Checklist\` in the task file.
-${applySpecLine}${applyUiLine}   - Execute surgical line edits until all unit tests in \`## 2. Unit Test Plan\` pass. Update \`## 3. Implementation Checklist\` checkboxes from \`[ ]\` to \`[x]\`.
+${applySpecLine}${applyUiLine}${applySeamRuleLine}   - Execute surgical line edits until all unit tests in \`## 2. Unit Test Plan\` pass. Update \`## 3. Implementation Checklist\` checkboxes from \`[ ]\` to \`[x]\`.
 
 ${applyVerificationSection}
 
@@ -797,6 +810,60 @@ export async function ensureGitignore(targetDir: string = process.cwd()): Promis
   return true;
 }
 
+export async function ensureGlobalCliShim(): Promise<boolean> {
+  try {
+    const home = os.homedir();
+    if (!home) return false;
+
+    if (process.platform === 'win32') {
+      const appDataNpm = process.env.APPDATA ? path.join(process.env.APPDATA, 'npm') : '';
+      if (appDataNpm && (await fs.pathExists(appDataNpm))) {
+        const cmdPath = path.join(appDataNpm, 'employee-agents.cmd');
+        if (!(await fs.pathExists(cmdPath))) {
+          await fs.writeFile(cmdPath, '@echo off\r\nnpx --yes employee-agents@latest %*\r\n', 'utf8');
+        }
+      }
+      return true;
+    }
+
+    const posixShim = `#!/usr/bin/env sh
+# employee-agents auto-registered global CLI launcher
+if [ -f "$HOME/.employee-agents/dev-root" ] && [ ! -f "$HOME/.employee-agents/force-remote" ]; then
+  DEV_ROOT="$(cat "$HOME/.employee-agents/dev-root" 2>/dev/null)"
+  if [ -n "$DEV_ROOT" ] && [ -f "$DEV_ROOT/dist/index.js" ]; then
+    exec node "$DEV_ROOT/dist/index.js" "$@"
+  fi
+fi
+exec npx --yes employee-agents@latest "$@"
+`;
+
+    // 1. Always install in ~/.local/bin/employee-agents (survives NVM node switches)
+    const localBinDir = path.join(home, '.local', 'bin');
+    await fs.ensureDir(localBinDir);
+    const localBinShim = path.join(localBinDir, 'employee-agents');
+    await fs.writeFile(localBinShim, posixShim, { encoding: 'utf8', mode: 0o755 });
+    await fs.chmod(localBinShim, 0o755);
+
+    // 2. Also ensure active npm global bin has employee-agents so current shell session finds it immediately
+    try {
+      const { execSync } = await import('node:child_process');
+      const npmPrefix = execSync('npm prefix -g', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+      if (npmPrefix) {
+        const globalBinDir = path.join(npmPrefix, 'bin');
+        const globalBinTarget = path.join(globalBinDir, 'employee-agents');
+        if ((await fs.pathExists(globalBinDir)) && !(await fs.pathExists(globalBinTarget))) {
+          await fs.writeFile(globalBinTarget, posixShim, { encoding: 'utf8', mode: 0o755 });
+          await fs.chmod(globalBinTarget, 0o755);
+        }
+      }
+    } catch {}
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function generateWorkspace(answers: SetupAnswers, targetDir: string = process.cwd()): Promise<void> {
   const { templateBase, adapterBase } = await resolveAssetRoots();
   const destinationMyEmployee = path.join(targetDir, '.myemployee');
@@ -868,6 +935,9 @@ export async function generateWorkspace(answers: SetupAnswers, targetDir: string
 
   // 6. Ensure .gitignore excludes /.myemployee/
   await ensureGitignore(targetDir);
+
+  // 7. Auto-register global `employee-agents` CLI shim so `employee-agents update` works without npx
+  await ensureGlobalCliShim();
 }
 
 export async function updateWorkspace(targetDir: string = process.cwd()): Promise<{ updatedRoles: boolean; updatedAdapter: boolean; updatedWorkflows: boolean; activeRoles: string[] }> {
@@ -928,6 +998,9 @@ export async function updateWorkspace(targetDir: string = process.cwd()): Promis
 
   // 5. Ensure .gitignore excludes /.myemployee/
   await ensureGitignore(targetDir);
+
+  // 6. Ensure global `employee-agents` CLI shim is registered on PATH
+  await ensureGlobalCliShim();
 
   return { updatedRoles: true, updatedAdapter: true, updatedWorkflows: true, activeRoles };
 }
