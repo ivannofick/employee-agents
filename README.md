@@ -117,12 +117,14 @@ Before using `employee-agents`, ensure your development environment has:
 Run directly in your project root:
 
 ```bash
-# Direct run (English setup wizard)
+# Direct run via npx (English setup wizard)
 npx employee-agents
 
 # Or with Indonesian language setup wizard
 npx employee-agents --lang id
 ```
+
+> **Universal Global Launcher**: Upon initialization, `employee-agents` automatically installs a lightweight executable launcher into your user PATH (`~/.local/bin/employee-agents` on macOS/Linux, and `%APPDATA%\npm` / `%LOCALAPPDATA%\Microsoft\WindowsApps` on Windows supporting CMD, PowerShell, and Git Bash). Subsequent commands can be typed directly as `employee-agents <command>` without needing `npx`!
 
 > **Automatic Git Protection**: `employee-agents` automatically appends `/.myemployee/` to your `.gitignore` upon initialization (and untracks it from git cache if previously staged), guaranteeing that local task tickets, PRD drafts, and squad states are never accidentally pushed to remote repositories.
 
@@ -130,8 +132,8 @@ npx employee-agents --lang id
 To safely upgrade an already initialized `/.myemployee/` workspace to the latest squad skills, rules, and slash commands without touching your custom PRDs or tasks:
 
 ```bash
-# Via terminal:
-npx employee-agents update-me
+# Via terminal (works directly or via npx):
+employee-agents update
 # (or alias: npx employee-agents update)
 ```
 
@@ -141,15 +143,25 @@ Or trigger it directly inside your AI assistant chat room:
 ```
 
 ### 3. Add Skills to an Employee (On-Demand Registry)
-Each role comes with a lean `default-skill.md` out of the box to preserve context window capacity. Browse our full [Additional Skills Catalog](additional-skills/README.md) to selectively level up any employee:
+Each role comes with a lean `default-skill.md` out of the box to preserve context window capacity. Browse our full [Additional Skills Catalog](additional-skills/README.md) to selectively level up any employee with domain-specific or cross-role testing automation skills:
 
 ```bash
-# Interactive CLI wizard:
-npx employee-agents add-skill
+# Interactive CLI wizard (auto-detects installed roles & cross-role skills):
+employee-agents add-skill
 
 # Direct installation from catalog:
-npx employee-agents add-skill developer docker-containerization
+employee-agents add-skill developer docker-containerization
+employee-agents add-skill developer test-web
+employee-agents add-skill qa test-mobile-apk
 ```
+
+> **Cross-Role Testing Automation**: We provide 6 modular, platform-specific automation skills in `additional-skills/` that can be installed on **any active role** (`developer`, `qa`, `tech-lead`, etc.) for testing websites, mobile apps, and desktop software without bloating default token usage:
+> - `test-web`: Token-efficient Playwright / Cypress Web & API automation with clean test foldering (`tests/web/{pages,fixtures}`).
+> - `test-mobile-apk`: Android `.apk` automation via Maestro, Appium UiAutomator2, and filtered ADB hierarchy dumps.
+> - `test-mobile-ipa`: iOS `.ipa` / Xcode Simulator automation via Maestro and Appium XCUITest.
+> - `test-desktop-windows`: Native Windows `.exe` / `.msi` automation (Win32, WPF, WinForms, WinUI) via Pywinauto (UIA) and FlaUI.
+> - `test-desktop-mac`: Native macOS `.app` / `.dmg` automation (SwiftUI, Cocoa, AppKit) via Accessibility AXUIElement and Mac2Driver.
+> - `test-desktop-electron`: Cross-platform Electron desktop app automation via Playwright Electron (`_electron.launch`).
 
 Or trigger it interactively inside your AI assistant chat room:
 ```text
