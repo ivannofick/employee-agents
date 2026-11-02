@@ -9,14 +9,14 @@ This command is triggered exclusively by Bos (Founder):
 
 ### Mode 1: Targeted Task (`/done-task <slug>`)
 1. Search `/.myemployee/tasks/in-progress/` and `/.myemployee/tasks/pending/` for any file matching `<slug>`.
-2. If already in `/.myemployee/tasks/done/`: Inform Bos: *"Task ini sudah berada di folder done sebelumnya, Bos!"*
+2. If already in `/.myemployee/tasks/done/`: Inform Bos: *"This task is already in the done folder, Bos!"*
 3. If found in `in-progress/` or `pending/`: Proceed to Step 3 below.
 
 ### Mode 2: Auto-Detection (`/done-task` without arguments)
 1. Inspect `/.myemployee/tasks/in-progress/`.
 2. Evaluate results:
    - **Exactly 1 active task in `in-progress/`**: Automatically target that task and proceed to Step 3.
-   - **0 active tasks in `in-progress/`**: Check `/.myemployee/tasks/pending/`. If 1 pending task exists, target it; if multiple, list them and ask Bos to select; if none, inform Bos: *"Tidak ada task aktif yang siap di-done-in saat ini, Bos!"*
+   - **0 active tasks in `in-progress/`**: Check `/.myemployee/tasks/pending/`. If 1 pending task exists, target it; if multiple, list them and ask Bos to select; if none, inform Bos: *"No active tasks ready for completion at this time, Bos!"*
    - **Multiple active tasks in `in-progress/`**: List them and ask Bos to select.
 
 ---
@@ -32,8 +32,8 @@ Once the target task file is confirmed:
 4. **Append Completion Log**:
    - Append completion timestamp, reviewer approvals, and final status to the task file.
 5. **Git Push Execution (Zero-Assumption Rule)**:
-   - Check if Bos's invocation explicitly contained: *"sekalian dipush ke git"* or *"push ke git"*.
+   - Check if Bos's invocation explicitly contained: *"push to git"* or *"sekalian dipush ke git"*.
    - If present: Commit and push the changes.
    - If NOT present: **Do NOT run git push and do NOT ask Bos whether to push.**
 6. **Report Back**:
-   - Announce completion cheerfully to Bos in conversational Indonesian or English!
+   - Report task completion clearly to Bos with clickable links.

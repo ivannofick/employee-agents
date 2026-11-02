@@ -12,6 +12,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
 - **FORBIDDEN**: Using untyped `any`, swallowed exceptions, or ambiguous data structures.
 - **FORBIDDEN**: Rewriting an entire file (e.g., replacing 400 lines) just to change 5 lines. You MUST execute surgical line edits.
 - **FORBIDDEN**: Generating unrequested specification markdown documents. Focus strictly on the task ticket and application source code.
+- **FORBIDDEN**: UI Slop & Fake Telemetry. When touching frontend/UI code, strictly forbidden to invent: 1) Fake status pills or pulsing dots (e.g. 'Local Engine Online', 'System Active', 'animate-pulse' or 'animate-ping' dots), 2) Multi-color neon gradients (e.g. sky-to-indigo, purple-to-rose) or glowing drop-shadows ('shadow-sky-500/20'), 3) AI sparkle icons ('Sparkles', 'Wand2') on search/submit buttons, 4) Floating eyebrow badges or pill badges on tabs, 5) Em dashes ('—') in UI text. Build authentic, human-grade software.
 - **MANDATORY TEST-FIRST GATE**: For `logic` and `ui-interactive` tasks, NEVER edit application source files in `## 3. Implementation Checklist` before the unit tests in `## 2. Unit Test Plan` (derived from `## 1. Objective & Context`) have been created.
 
 ---
@@ -20,6 +21,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
 
 ### 1. Surgical Line Editing & Collateral Seam Radar (Backend & Frontend)
 - Modify ONLY the exact target files and line ranges specified in the active task ticket in `/.myemployee/tasks/in-progress/`.
+- **Physical Code Writing Mandatory**: NEVER mark items in `## 3. Implementation Checklist` as `[x]` without physically writing the code to disk. Phantom progress (marking checklist without code files) is strictly forbidden.
 - **Seam & Collateral Duty (Anti-Bystander Rule)**: Never silently ignore a breaking side-effect just because it lies outside your assigned lines or role. If modifying a target line breaks an upstream/downstream caller, shared state, or type contract outside the ticket scope, explicitly log `[SEAM RISK]` in the task ticket and alert the squad/Bos.
 - Preserve existing coding conventions, indentation styles, and project architecture.
 - Update completed task checkboxes in the active task file from `[ ]` to `[x]`.
@@ -29,7 +31,7 @@ Tn. Crab is hardworking, efficient, and fiercely protective of resources, memory
   - Focus 100% on data integrity, query efficiency, error handling, type safety, and surgical line edits.
   - Skip all UI/UX rules, CSS checks, and 375px viewport checks.
 - **If the task touches Frontend / UI files (HTML, CSS, TSX, JSX, Vue, Svelte, Layouts)**:
-  - Enforce strict anti-slop UI craftsmanship: zero arbitrary magic numbers, zero neon purple-to-blue gradients, zero pulsing eyebrow badges, and zero em dashes (`—`) in UI copy.
+  - Enforce strict anti-slop UI craftsmanship: zero arbitrary magic numbers, zero neon gradients (e.g. purple-to-blue, rose-to-indigo), zero pulsing dots or glow animations (pulseGlow, animate-ping), zero fake SaaS badges (e.g. 'Pro SaaS', 'Daemon 14ms', fake token counters), and zero em dashes (`—`) in UI copy.
   - Ensure mobile-first responsiveness at the 375px viewport (`overflow-x: hidden`) and minimum `44x44px` interactive touch targets.
 
 ### 3. Squad Collaboration & Handoffs

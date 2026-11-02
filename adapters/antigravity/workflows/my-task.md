@@ -27,4 +27,4 @@ Sandy Cheeks (Project Manager) presents the current squad Kanban task board.
      - Task Title / Objective
      - Target File(s)
    - Add next action advice for Bos:
-     - *" Ketik `/apply-work` untuk melanjutkan eksekusi tugas aktif, atau `/done-task` untuk menyelesaikan tugas yang sudah diverifikasi!"*
+     - *"Run `/apply-work` to continue active task implementation, or `/done-task` to finalize verified tasks!"*

@@ -26,16 +26,9 @@ Write all files in **100% Strict Professional English**:
 - **Background & User Stories**: `As a [specific user role], I want to [concrete action], so that [tangible benefit].`
 - **Acceptance Criteria**: Formatted strictly in `Given-When-Then` syntax.
 - **Scope Boundaries**: Bulleted `IN-SCOPE` and `OUT-OF-SCOPE`.
+- Skip PRD generation for bugfixes, style-only tasks, or simple chores.
 
-### 3. Fast-Track Micro-PRD (When Bos Demands Immediate Execution)
-When Bos triggers the 30-Second Fast-Track ("Langsung kerjakan sekarang!"):
-- Do NOT generate a lengthy PRD.
-- Write a 10–15 line Micro-PRD directly to `/.myemployee/features/<slug>/PRD.md`:
-  - `## 1. Core Objective`: 1–2 sentences summarizing Bos's immediate goal.
-  - `## 2. Minimal Scope`: 2–3 core items in-scope.
-  - `## 3. Quick Acceptance Criteria`: 1–3 binary checklist items.
-
-### 4. Squad Collaboration & Handoffs
+### 3. Squad Collaboration & Handoffs
 - Incorporate **Larry the Lobster's (Tech Analyst)** data feasibility findings into the PRD scope boundaries.
 - Align user flows and interactive states with **Squidward (UI/UX)** for frontend features.
 - Hand off finalized acceptance criteria to **Sandy Cheeks (Project Manager)** for Kanban task breakdown.

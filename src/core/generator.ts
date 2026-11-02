@@ -241,46 +241,21 @@ export function renderAgentSkill(activeRoles: string[], blueprint?: SquadBluepri
       ? `- **Single-Persona Voice**: Respond directly as \`${activeRoleObjs[0].chatTag}\` without inventing or roleplaying any other personas.`
       : `- **Multi-Persona Turn-Taking**: When deliberating in chat, structure responses by active persona (${activeRoleObjs.map((r) => `\`${r.chatTag}\``).join(', ')}). Never collapse into a monolithic block and never invent absent personas.`;
 
-  // Build /share-knowledge bullets dynamically
-  const shareKnowledgeBullets: string[] = [];
-  if (hasTA) {
-    shareKnowledgeBullets.push(
-      `- **Larry the Lobster (Technical Analyst)** evaluates technical feasibility, data models, and API boundaries.`
-    );
-  }
-  if (hasLead) {
-    shareKnowledgeBullets.push(
-      `- **Garry (Technical Lead)** provides anti-lasagna architecture review and drafts \`/.myemployee/features/<slug>/ARCHITECTURE.md\`.`
-    );
-  }
-  if (hasPO) {
-    shareKnowledgeBullets.push(
-      `- **Patrick (Product Owner)** drafts \`/.myemployee/features/<slug>/PRD.md\` and appends a 1–2 sentence summary to \`/.myemployee/PRD.md\`.`
-    );
-  }
-  if (hasUI) {
-    shareKnowledgeBullets.push(
-      `- **Squidward (UI/UX Designer)** drafts \`/.myemployee/features/<slug>/DESIGN.md\` (Mobile-first, Tokens Table, State Matrix, VAC checklist) ONLY when the task touches Frontend/UI; skipped for Backend-only tasks.`
-    );
-  }
-  if (!hasTA && !hasLead && !hasPO && !hasUI) {
-    shareKnowledgeBullets.push(
-      `- **${coordinator.persona} (${coordinator.shortTitle})** analyzes Bos's technical request, identifies target files and line ranges, and outlines the implementation plan.`
-    );
-  }
   const unitTestOwnerLabel = hasQA
     ? 'Stanley / QA'
     : `${implementer.persona} / Self-TDD`;
 
-  shareKnowledgeBullets.push(
-    `- **${coordinator.persona} (${coordinator.shortTitle})** creates \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` using the 4-section structure (\`## 1. Objective & Context\` with \`Task Type\`, \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerLabel})\`, \`## 3. Implementation Checklist\`, and \`## 4. Verification & Audit Log\`).`
-  );
-  shareKnowledgeBullets.push(`- **Zero application code is written in this phase.**`);
+  // Build /share-knowledge bullets dynamically
+  const shareKnowledgeBullets: string[] = [
+    `- **Mode 1 (Consultation & Brainstorming)**: When Bos asks questions, feasibility checks, or opinions (e.g., *"is this overkill?"*, *"which approach is better?"*, or casual queries like *"kira-kira overkill ga?"*), squad deliberates strictly in chat. **ZERO files are written to disk.**`,
+    `- **Mode 2 (Structured Spec Planning)**: When Bos requests feature planning, Patrick drafts \`PRD.md\`, Squidward drafts \`DESIGN.md\` (if UI), Garry drafts \`ARCHITECTURE.md\`, and ${coordinator.persona} logs the 4-section ticket in \`tasks/pending/\`.`,
+    `- **Zero Application Code**: Application code is never modified during \`/share-knowledge\`. Implementation is strictly reserved for \`/apply-work\`.`
+  ];
 
   const isSolo = sortedActive.length === 1;
   const seamImplementationNote = isSolo
-    ? `**Solo End-to-End Seam Ownership**: Never defer edge cases or ripple effects to uninstalled roles; if an edit exposes broken callers or shared state outside the initial lines, update \`## 3. Implementation Checklist\` in the active task ticket and resolve them directly.`
-    : `**Seam & Collateral Duty**: Never ignore a breaking side-effect outside your assigned lines as "another role's job"—if an edit impacts upstream/downstream callers, contracts, or shared state outside the ticket scope, flag \`[SEAM RISK]\` in the task ticket and escalate to the squad/Bos.`;
+    ? `**Cross-File Impact**: If modifying target code impacts adjacent files or type contracts, update \`## 3. Implementation Checklist\` in the active task ticket and resolve them directly.`
+    : `**Cross-File Impact**: If an edit impacts upstream/downstream callers or shared types outside the ticket, flag \`[SEAM RISK]\` in the ticket and coordinate with the squad/Bos.`;
 
   // Build /apply-work bullets dynamically
   const applyWorkBullets: string[] = [
@@ -300,7 +275,7 @@ export function renderAgentSkill(activeRoles: string[], blueprint?: SquadBluepri
     );
   }
   applyWorkBullets.push(
-    `- Reports completion to Bos. Task stays in \`in-progress/\`. Dilarang auto-done dan dilarang tanya push.`
+    `- Reports completion to Bos. Task stays in \`in-progress/\`. Autonomous marking as done and unsolicited push prompts are strictly forbidden.`
   );
 
   // Build /done-task bullets dynamically
@@ -371,11 +346,15 @@ Every new file, page, feature, or bugfix requested by Bos MUST be recorded in th
    - **${implementer.persona} (${implementer.shortTitle})** reads \`## 3. Implementation Checklist\`, executes clean surgical code changes with zero slop until all unit tests pass, and checks off items. ${seamImplementationNote}
    - ${hasQA ? '**Stanley (QA Engineer)** runs Pillar A (destructive functional checks), Pillar B (visual checks for UI tasks), and **Pillar C (Unscripted Seam & Collateral Probe beyond the written checklist)**, appending verification logs to `## 4. Verification & Audit Log`.' : `**${implementer.persona} (${implementer.shortTitle})** runs self-verification checks—including **Pillar C (Unscripted Seam & Collateral Probe across adjacent callers and unstated assumptions)**—and logs verification results in \`## 4. Verification & Audit Log\`.`}
 4. **FOUNDER SOVEREIGNTY (HARD STOP)**:
-   - Di lingkup \`/apply-work\`, task file **TETAP berada di \`in-progress/\`**!
-   - AI DILARANG me-rename atau memindahkan task ke \`done/\` secara sepihak.
-   - AI DILARANG menjalankan \`git push\` atau cerewet bertanya *"apakah mau dipush?"*.
-   - Hanya ketika Bos menjalankan \`/done-task\`, **${coordinator.persona}** memindahkan task ke \`/.myemployee/tasks/done/\`.
-   - \`git push\` HANYA dijalankan jika prompt Bos eksplisit berisi kata *"sekalian dipush ke git"* atau *"push ke git"*.
+   - Within \`/apply-work\`, the task file **MUST REMAIN in \`in-progress/\`**!
+   - The AI is STRICTLY FORBIDDEN from renaming or moving tasks to \`done/\` autonomously.
+   - The AI is STRICTLY FORBIDDEN from executing \`git push\` or asking Bos whether to push.
+   - Only when Bos explicitly runs \`/done-task\` will **${coordinator.persona}** move the task file to \`/.myemployee/tasks/done/\`.
+   - \`git push\` is ONLY executed if Bos explicitly instructs to push (e.g., *"push to git"* or *"sekalian dipush ke git"*).
+5. **HARD REALITY GATE (ZERO FAKE WORK / ZERO PHANTOM PROGRESS)**:
+   - **Physical Tool Invocations Mandatory**: **${implementer.persona}** MUST physically create and edit code files on disk via tool calls for all items in \`## 3. Implementation Checklist\`. Checking off \`[x]\` without physical file edits is strictly forbidden.
+   - **Zero Fabricated Test Logs**: Verification logs in \`## 4. Verification & Audit Log\` MUST come from real commands executed via terminal tool calls. Never hallucinate test runs (e.g., claiming "pytest passed in 0.21s") if the command was not physically run.
+   - **Strict Anti-Slop UI Craftsmanship**: Frontend files MUST NOT contain generic AI slop: zero fake status pills or pulsing dots (e.g. 'Local Engine Online', 'System Active', \`animate-pulse\` or \`animate-ping\` green dots), zero decorative sparkle icons (\`Sparkles\`, \`Wand2\`) on utility buttons, zero neon gradients or glow drop-shadows (e.g. purple-to-blue, rose-to-indigo, sky-to-indigo, \`shadow-sky-500/20\`), zero fake SaaS fluff ('Pro SaaS', 'Daemon 14ms', fake token counters), and zero em dashes (\`—\`) in UI copy. Deliver clean, authentic, human-grade software.
 
 ---
 
@@ -398,16 +377,21 @@ ${doneTaskBullets.join('\n')}
 ---
 
 ## Ambient Triage Protocol (Handling Casual Prompts Without Commands)
-When Bos asks to create a feature, fix a bug, or write code in chat without typing \`/share-knowledge\` or \`/apply-work\`:
-1. **Front-Desk Reception (${triageActors})**:
-   - Assess technical feasibility and identify target file touchpoints.
-   - Generate a 4-section pending task ticket on disk at \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` (\`## 1. Objective & Context\`, \`## 2. Unit Test Plan\`, \`## 3. Implementation Checklist\`, \`## 4. Verification & Audit Log\`).
-2. **Strict Anti-Slop Enforcement**:
+When Bos interacts in chat without typing slash commands:
+1. **Consultation & Second Opinions (Chat Only — Zero Disk Writes)**:
+   - If Bos asks questions, seeks technical advice, compares tools, or explores feasibility (e.g., *"is this overkill?"*, *"which stack is better?"*, or casual queries like *"kira-kira overkill ga?"*):
+     - **${triageActors}** answer warmly and analytically in chat.
+     - **STRICT ZERO-DISK-TOUCH**: Do NOT create task tickets, PRDs, or files on disk. Keep workspace clean.
+2. **Feature & Bugfix Requests (Ticket Creation)**:
+   - If Bos explicitly asks to build, modify, or fix something concrete:
+     - Assess technical feasibility and identify target file touchpoints.
+     - Generate a 4-section pending task ticket on disk at \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` (\`## 1. Objective & Context\`, \`## 2. Unit Test Plan\`, \`## 3. Implementation Checklist\`, \`## 4. Verification & Audit Log\`).
+3. **Strict Anti-Slop Enforcement**:
    - **${implementer.persona}** is STRICTLY PROHIBITED from writing code directly into the project without a task ticket.
    - Do NOT dump raw unformatted code in chat.
-3. **Guiding Bos to Next Phase**:
-   - Report warmly to Bos in chat that the ticket has been created in \`tasks/pending/\`.
-   - Ask Bos: *"Draf tiket sudah disiapkan di \`tasks/pending/\`. Apakah Bos mau kita bedah lebih detail lewat \`/share-knowledge\` atau langsung eksekusi via \`/apply-work <slug>\`?"*
+4. **Guiding Bos to Next Phase**:
+   - For feature/bugfix tickets created in \`tasks/pending/\`, report clearly to Bos in chat.
+   - Ask Bos: *"Draft ticket logged in \`tasks/pending/\`. Would you like to review specs via \`/share-knowledge\` or proceed with execution via \`/apply-work <slug>\`?"*
 
 ---
 
@@ -472,10 +456,10 @@ export function renderWorkflowFiles(
       : `\n2. **Direct Task Planning**:\n   - Focus directly on the Kanban task ticket below without generating extra specification markdown files.\n`;
 
   const shareKnowledgeMd = `---
-description: Plan with Bos, evaluate technical touchpoints, and log a pending task ticket.
+description: Brainstorm with Bos, evaluate technical touchpoints, draft specs, and log a pending task ticket.
 ---
 
-${activeNamesSummary} sync with Bos to plan the requested feature or fix.
+${activeNamesSummary} sync with Bos to plan or discuss.
 
 > Also accepts alias \`/share-knowladge\`.
 
@@ -483,25 +467,40 @@ ${activeNamesSummary} sync with Bos to plan the requested feature or fix.
 All generated markdown files and task tickets **MUST BE WRITTEN IN 100% STRICT PROFESSIONAL ENGLISH**!
 Even when Bos converses in Indonesian or other languages in the chat room, always write all markdown files, tickets, and code in English.
 
-## Instructions
+## Instructions: 2-Mode Intent Handling
 
-1. **Deliberation in Chat (Active Squad Only)**:
-   - Only use the installed active role(s):
+Triage Bos's request into one of two modes based on intent:
+
+---
+
+### Mode 1: Consultation & Brainstorming (Default for Questions / Opinions)
+- **Triggers**: Bos asks questions, seeks technical opinions, compares tools, or explores feasibility (e.g., *"is this overkill?"*, *"which approach is better?"*, or casual queries like *"kira-kira overkill ga?"*).
+- **Deliberation in Chat (Active Squad Only)**:
 ${deliberationSteps.join('\n')}
+- **STRICT ZERO-DISK-TOUCH MANDATE**:
+  - **DO NOT create or modify any files on disk!** (NO \`PRD.md\`, NO \`DESIGN.md\`, NO \`ARCHITECTURE.md\`, NO task tickets).
+  - Keep the workspace completely clean and untouched.
+- **Actionable Recommendation**:
+  - Provide a concise, clear technical answer evaluating trade-offs, overhead, and alternatives.
+  - End with a clean prompt: *"Whenever you'd like us to draft the formal specs and task tickets, just let us know, Bos!"*
+
+---
+
+### Mode 2: Specification & Planning (When Bos Wants to Specify a Feature)
+- **Triggers**: Bos explicitly asks to plan, specify, or architect a feature (e.g., *"let's plan feature X"*, *"draft specs / PRD"*, *"design the architecture"*, or casual requests like *"kita rencanakan fitur X"*).
+- **Draft Feature Specs (Physical File Writing)**:
 ${specSection}
-3. **Log Pending 4-Section Kanban Task Ticket**:
-   - **${coordinator.persona} (${coordinator.shortTitle})**: Writes \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` with these 4 mandatory sections:
-     - \`## 1. Objective & Context\`: State the concrete **Objective**, technical **Context**, and **Task Type** (\`logic\` | \`ui-interactive\` | \`style-only\` | \`docs-config\`).
-     - \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerHeader})\`: For \`logic\` and \`ui-interactive\` tasks, list the unit test file(s) and assertions derived from \`Objective & Context\`. For \`style-only\` and \`docs-config\` tasks, mark \`- [x] N/A (Bypassed: style-only/docs-config task — verified via visual/build check)\`.
-     - \`## 3. Implementation Checklist (${implementer.persona} / ${implementer.shortTitle})\`: Specify exact target file paths and line ranges (\`File:Line\`).
-     - \`## 4. Verification & Audit Log\`: Placeholder for post-implementation verification.
-
-4. **DO NOT Write Application Code**:
-   - Zero application source code files may be modified during this phase.
-
-5. **Report Summary to Bos**:
-   - Provide clickable links to \`tasks/pending/TASK-*.md\`${specSteps.length > 0 ? ' and any generated spec documents' : ''}.
-   - Remind Bos: *"Ketik \`/apply-work <slug>\` (atau \`/apply-work\`) jika Bos sudah siap mengeksekusinya!"*
+- **Log Pending 4-Section Kanban Task Ticket**:
+  - **${coordinator.persona} (${coordinator.shortTitle})**: Writes \`/.myemployee/tasks/pending/TASK-DDMMYYYY-<slug>.md\` with these 4 mandatory sections:
+    - \`## 1. Objective & Context\`: State the concrete **Objective**, technical **Context**, and **Task Type** (\`logic\` | \`ui-interactive\` | \`style-only\` | \`docs-config\`).
+    - \`## 2. Unit Test Plan (Pre-Implementation — ${unitTestOwnerHeader})\`: For \`logic\` and \`ui-interactive\` tasks, list the unit test file(s) and assertions derived from \`Objective & Context\`. For \`style-only\` and \`docs-config\` tasks, mark \`- [x] N/A (Bypassed: style-only/docs-config task — verified via visual/build check)\`.
+    - \`## 3. Implementation Checklist (${implementer.persona} / ${implementer.shortTitle})\`: Specify exact target file paths and line ranges (\`File:Line\`).
+    - \`## 4. Verification & Audit Log\`: Placeholder for post-implementation verification.
+- **DO NOT Write Application Code**:
+  - Zero application source code files may be modified during this phase. Coding is strictly reserved for \`/apply-work\`.
+- **Report Summary to Bos**:
+  - Provide clickable links to \`tasks/pending/TASK-*.md\`${specSteps.length > 0 ? ' and any generated spec documents' : ''}.
+  - Remind Bos: *"Run \`/apply-work <slug>\` (or \`/apply-work\`) whenever you are ready to execute!"*
 `;
 
   // 2. apply-work.md
@@ -531,16 +530,18 @@ ${specSection}
 
   const isSolo = sortedActive.length === 1;
   const applySeamRuleLine = isSolo
-    ? `   - **Solo End-to-End Seam Ownership**: Never excuse skipped checks on uninstalled roles. If your edit reveals broken upstream/downstream callers or shared state outside the initial lines, update \`## 3. Implementation Checklist\` in the active task file and fix them directly.\n`
-    : `   - **Seam & Collateral Duty**: Never silently ignore a breaking side-effect outside your assigned lines as "another role's job". If an edit impacts upstream/downstream callers, type contracts, or shared state outside the ticket scope, log \`[SEAM RISK]\` in the task file and coordinate with the squad/Bos.\n`;
+    ? `   - **Cross-File Impact**: If your edit impacts upstream/downstream callers or shared state, update \`## 3. Implementation Checklist\` in the active task file and fix them directly.\n`
+    : `   - **Cross-File Impact**: If an edit impacts upstream/downstream callers, type contracts, or shared state outside the ticket scope, log \`[SEAM RISK]\` in the task file and coordinate with the squad/Bos.\n`;
 
   const applyVerificationSection = hasQA
     ? `4. **Run Verification & Audit Log (Stanley${hasLead ? ' & Garry' : ''})**:
+   - **REAL TERMINAL EXECUTION MANDATORY (ZERO FAKE LOGS)**: Every pass/fail claim in \`## 4. Verification & Audit Log\` MUST come from an actual terminal command executed via tool calls. NEVER fabricate or hallucinate execution logs (e.g., claiming "pytest passed in 0.21s" or "Vite compiled in 53ms" without physically running the command). If test files or test runner do not exist, run real setup/test commands or state the true status honestly.
    - **Pillar A (Functional Destructive Testing)**: Stanley verifies functional behavior, boundary cases, null values, and runs project test/build suites confirming all unit tests pass.
    - **Pillar B (Visual Fidelity Audit — Frontend/UI Tasks Only)**: Skip if the task is strictly Backend/API/CLI. If the task touches Frontend/UI, Stanley verifies 375px mobile responsiveness, WCAG AA contrast, touch targets (\`>= 44x44px\`), and zero em dashes (\`—\`).
    - **Pillar C (Unscripted Seam & Collateral Probe — Beyond the Checklist)**: Do not stop at written checklist items. Actively inspect adjacent callers, shared state, integration seams, and any \`[SEAM RISK]\` flagged during implementation for unstated assumptions that could fail in production.
 ${hasLead ? '   - Garry (Tech Lead) confirms architectural cleanliness and anti-lasagna standards.\n' : ''}   - Append verification logs under \`## 4. Verification & Audit Log\` in the task file in \`tasks/in-progress/\`.`
     : `4. **Run Self-Verification & Unscripted Seam Probe (${implementer.persona}${hasLead && implementer.id !== 'tech-lead' ? ' & Garry' : ''})**:
+   - **REAL TERMINAL EXECUTION MANDATORY (ZERO FAKE LOGS)**: Every pass/fail claim in \`## 4. Verification & Audit Log\` MUST come from an actual terminal command executed via tool calls. NEVER fabricate or hallucinate execution logs (e.g., claiming "pytest passed in 0.21s" or "Vite compiled in 53ms" without physically running the command). If test files or test runner do not exist, run real setup/test commands or state the true status honestly.
    - **Pillar A (Functional & Build Verification)**: Verify functional correctness, edge cases, and run project build/test suites confirming all unit tests pass.
    - **Pillar B (Visual Check — Frontend/UI Tasks Only)**: If the task touches Frontend/UI files, verify clean rendering at the 375px mobile viewport.
    - **Pillar C (Unscripted Seam & Collateral Probe — Beyond the Checklist)**: Do not stop at written checklist items. Actively inspect upstream/downstream callers, shared state, integration seams, and unstated assumptions outside the checklist that could break.
@@ -561,13 +562,23 @@ All written code, code comments, task checklist updates, and verification logs *
    - Inspect \`/.myemployee/tasks/pending/\` for task tickets.
    - If Bos specified a slug or task name (e.g., \`/apply-work payment\`), find the matching file.
    - If Bos ran \`/apply-work\` without arguments, select the oldest or highest priority task in \`tasks/pending/\`.
-   - If NO pending tasks exist, inform Bos: *"Tidak ada tiket pending di antrean saat ini, Bos! Ketik \`/share-knowledge\` atau sampaikan tugas yang ingin dikerjakan."*
+   - If NO pending tasks exist, inform Bos: *"No pending tasks found in the queue, Bos! Run \`/share-knowledge\` to plan a new feature."*
    - **Move to In-Progress**: Move the selected task file to \`/.myemployee/tasks/in-progress/<filename>\`.
 
 ${applyPreTestSection}
 
 3. **Execute Implementation (${implementer.persona})**:
    - Read target files and exact line ranges under \`## 3. Implementation Checklist\` in the task file.
+   - **PHYSICAL CODE WRITING MANDATORY (ZERO FAKE WORK / ZERO PHANTOM PROGRESS)**:
+     - **${implementer.persona}** MUST physically create and modify source code files on disk via tool calls for all items in \`## 3. Implementation Checklist\`.
+     - NEVER mark checkboxes as \`[x]\` without physically writing the code to disk. Marking checklist items without file edits is strictly prohibited.
+   - **Strict Anti-Slop UI Craftsmanship**:
+     - If the task touches Frontend/UI files, enforce genuine human-grade craftsmanship:
+       - **ZERO fake status pills or pulsing dots** (e.g. 'Local Engine Online', 'System Active', \`animate-pulse\`, \`animate-ping\`).
+       - **ZERO decorative sparkle icons** (\`Sparkles\`, \`Wand2\`) on search, inspect, or submit buttons.
+       - **ZERO neon gradients or glow drop-shadows** (e.g. purple-to-blue, rose-to-indigo, sky-to-indigo, \`shadow-sky-500/20\`). Solid, intentional backgrounds only.
+       - **ZERO fake SaaS badges or telemetry fluff** ('Pro SaaS', 'Daemon: Connected 14ms', fake token counters, floating eyebrow badges on tabs).
+       - **ZERO em dashes (\`—\`)** in UI copy.
 ${applySpecLine}${applyUiLine}${applySeamRuleLine}   - Execute surgical line edits until all unit tests in \`## 2. Unit Test Plan\` pass. Update \`## 3. Implementation Checklist\` checkboxes from \`[ ]\` to \`[x]\`.
 
 ${applyVerificationSection}
@@ -597,14 +608,14 @@ This command is triggered exclusively by Bos (Founder):
 
 ### Mode 1: Targeted Task (\`/done-task <slug>\`)
 1. Search \`/.myemployee/tasks/in-progress/\` and \`/.myemployee/tasks/pending/\` for any file matching \`<slug>\`.
-2. If already in \`/.myemployee/tasks/done/\`: Inform Bos: *"Task ini sudah berada di folder done sebelumnya, Bos!"*
+2. If already in \`/.myemployee/tasks/done/\`: Inform Bos: *"This task is already in the done folder, Bos!"*
 3. If found in \`in-progress/\` or \`pending/\`: Proceed to Finalization below.
 
 ### Mode 2: Auto-Detection (\`/done-task\` without arguments)
 1. Inspect \`/.myemployee/tasks/in-progress/\`.
 2. Evaluate results:
    - **Exactly 1 active task in \`in-progress/\`**: Automatically target that task and proceed to Finalization.
-   - **0 active tasks in \`in-progress/\`**: Check \`/.myemployee/tasks/pending/\`. If 1 pending task exists, target it; if multiple, list them and ask Bos to select; if none, inform Bos: *"Tidak ada task aktif yang siap di-done-in saat ini, Bos!"*
+   - **0 active tasks in \`in-progress/\`**: Check \`/.myemployee/tasks/pending/\`. If 1 pending task exists, target it; if multiple, list them and ask Bos to select; if none, inform Bos: *"No active tasks ready for completion at this time, Bos!"*
    - **Multiple active tasks in \`in-progress/\`**: List them and ask Bos to select.
 
 ---
@@ -618,11 +629,11 @@ Once the target task file is confirmed:
 3. **Append Completion Log**:
    - Append completion timestamp and final status \`DONE\` to the task file.
 4. **Git Push Execution (Zero-Assumption Rule)**:
-   - Check if Bos's invocation explicitly contained: *"sekalian dipush ke git"* or *"push ke git"*.
+   - Check if Bos's invocation explicitly contained: *"push to git"* or *"sekalian dipush ke git"*.
    - If present: Commit and push the changes.
    - If NOT present: **Do NOT run git push and do NOT ask Bos whether to push.**
 5. **Report Back**:
-   - Announce completion cheerfully to Bos in conversational Indonesian or English!
+   - Report task completion clearly to Bos with clickable links.
 `;
 
   // 4. my-task.md
@@ -651,7 +662,7 @@ ${coordinator.persona} (${coordinator.shortTitle}) presents the current Kanban t
    - Render clickable markdown file links: \`[filename](file:///absolute/path/to/task)\`.
    - Show brief metadata for each item (Status, Task Title, Target File(s)).
    - Add next action advice for Bos:
-     - *"Ketik \`/apply-work\` untuk melanjutkan eksekusi tugas aktif, atau \`/done-task\` untuk menyelesaikan tugas yang sudah diverifikasi!"*
+     - *"Run \`/apply-work\` to continue active task implementation, or \`/done-task\` to finalize verified tasks!"*
 `;
 
   return {

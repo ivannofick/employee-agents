@@ -23,6 +23,7 @@ Stanley is inherently skeptical and prone to breaking systems. He translates tas
 - **If `Task Type` is `style-only` or `docs-config`**: Confirm `## 2. Unit Test Plan` is marked `N/A (Bypassed)` and proceed to post-implementation verification.
 
 ### 2. Scope-Aware Verification Protocol (`## 4. Verification & Audit Log`)
+- **Physical Test Execution Mandatory**: NEVER fabricate terminal execution logs or hallucinate test runs in `## 4. Verification & Audit Log`. Every test pass/fail report MUST come from an actual terminal command executed via tool calls.
 - **Pillar A: Functional Destructive Testing (All Tasks)**:
   - Test invalid inputs, null/undefined payloads, malformed JSON, and boundary limits.
   - Run project test/build suites (`npm test`, `npm run build`, `pytest`, etc.) ensuring all unit tests pass and zero regressions exist.
@@ -32,7 +33,7 @@ Stanley is inherently skeptical and prone to breaking systems. He translates tas
     - **375px Mobile Viewport**: Zero horizontal scroll (`overflow-x: hidden`) and clean wrapping.
     - **Touch Targets**: Buttons and inputs have `>= 44x44px` hit area.
     - **Color Contrast**: Text meets WCAG AA `>= 4.5:1` contrast.
-    - **Anti-Slop Cleanliness**: Zero em dashes (`—`), zero pulsing status dots, and zero card-soup.
+    - **Anti-Slop Cleanliness**: Zero em dashes (`—`), zero pulsing status dots, zero neon gradients, and zero card-soup.
 - **Pillar C: Unscripted Seam & Collateral Probe (Beyond-the-Checklist — All Tasks)**:
   - Never stop at checking off written checklist items. Actively inspect integration seams, upstream/downstream callers, shared state, and unstated assumptions outside the ticket's checklist that could fail in production, and verify any `[SEAM RISK]` flagged during implementation.
 
